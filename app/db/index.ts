@@ -1,4 +1,14 @@
-import "dotenv/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 
-const db = drizzle(process.env.DATABASE_URL!);
+import * as schema from "./schema";
+
+const globalForDb = globalThis as unknown as {
+  conn: postgres.Sql | undefined;
+};
+
+const conn =
+  globalForDb.conn ?? postgres(process.env.NEXT_PUBLIC_DATABASE_URL ?? "");
+if (process.env.NODE_ENV !== "production") globalForDb.conn = conn;
+
+export const db = drizzle(conn, { schema });

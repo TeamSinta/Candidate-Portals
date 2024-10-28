@@ -1,9 +1,9 @@
 #!/bin/bash
 
-DB_CONTAINER_NAME="demo-postgres"
+DB_CONTAINER_NAME="candidate-portals"
 DB_NAME="sinta-candidate-portals"
 DB_USER="postgres"
-DB_PORT="5432"
+DB_PORT="5433"
 ENV_FILE=".env"
 
 # Check for Docker installation
