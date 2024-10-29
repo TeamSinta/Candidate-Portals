@@ -122,6 +122,11 @@ const navigation: SidebarNavItems[] = [
                 icon: LayoutDashboardIcon,
                 href: siteUrls.dashboard.home,
             },
+            {
+                label: "Evan Playground",
+                icon: LayoutDashboardIcon,
+                href: siteUrls.playground,
+            },
         ],
     },
     {
