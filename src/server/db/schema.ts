@@ -370,7 +370,6 @@ export const tags = createTable(
     {
         candidateId: varchar("candidateId", { length: 255 })
             .notNull()
-            .primaryKey()
             .references(() => candidate.id, { onDelete: "cascade" }),
         tagName: varchar("tagName", { length: 255 }).notNull(),
     },
