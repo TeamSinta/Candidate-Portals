@@ -11,8 +11,9 @@ import { NumberedList, BulletedList, TodoList } from "@yoopta/lists";
 import ActionMenuList, {
     DefaultActionMenuRender,
 } from "@yoopta/action-menu-list";
+import Embed, { EmbedCommands, EmbedElement } from "@yoopta/embed";
 
-const plugins = [Paragraph, NumberedList, BulletedList, TodoList];
+const plugins = [Paragraph, NumberedList, BulletedList, TodoList, Embed];
 const tools = {
     ActionMenu: {
         render: DefaultActionMenuRender,
@@ -32,7 +33,7 @@ export default function Editor() {
     };
 
     return (
-        <div className="my-8 w-full border-2 bg-slate-200 p-4">
+        <div className="my-8 flex w-full items-center justify-center border-2 bg-slate-200 p-4">
             <YooptaEditor
                 editor={editor}
                 placeholder="Type text.."
@@ -42,6 +43,7 @@ export default function Editor() {
                 plugins={plugins}
                 tools={tools}
             />
+            {/* <div>{JSON.stringify("value", editor.getEditorValue())}</div> */}
         </div>
     );
 }

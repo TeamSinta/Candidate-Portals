@@ -49,6 +49,7 @@
         "@uploadthing/react": "^6.4.4",
         "@yoopta/action-menu-list": "^4.9.0",
         "@yoopta/editor": "^4.9.0",
+        "@yoopta/embed": "^4.9.0",
         "@yoopta/lists": "^4.9.0",
         "@yoopta/paragraph": "^4.9.0",
         "autoprefixer": "^10.4.19",
