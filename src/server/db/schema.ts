@@ -22,7 +22,7 @@ import { z } from "zod";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = pgTableCreator(
-    (name) => `rapidlaunch-saas-starterkit_${name}`,
+    (name) => `sinta-candidate-portals_${name}`,
 );
 
 export const usersRoleEnum = pgEnum("role", ["User", "Admin", "Super Admin"]);
@@ -346,4 +346,77 @@ export const waitlistUsers = createTable("waitlistUser", {
 export const waitlistUsersSchema = createInsertSchema(waitlistUsers, {
     email: z.string().email("Email must be a valid email address"),
     name: z.string().min(3, "Name must be at least 3 characters long"),
+});
+
+export const candidate = createTable("candidate", {
+    id: varchar("id", { length: 255 })
+        .notNull()
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    organizationId: varchar("organizationId", { length: 255 })
+        .notNull()
+        .references(() => organizations.id, { onDelete: "cascade" }),
+    name: varchar("name", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }).notNull().unique(),
+    role: varchar("role", { length: 255 }).notNull(),
+    stage: varchar("stage", { length: 255 }).notNull(),
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+    notes: jsonb("notes"), // This is a field to be used with results of the notion like editor
+});
+
+export const tags = createTable(
+    "tags",
+    {
+        candidateId: varchar("candidateId", { length: 255 })
+            .notNull()
+            .references(() => candidate.id, { onDelete: "cascade" }),
+        tagName: varchar("tagName", { length: 255 }).notNull(),
+    },
+    (table) => ({
+        primaryKey: primaryKey({ columns: [table.candidateId, table.tagName] }),
+    }),
+);
+
+export const template = createTable("template", {
+    id: varchar("id", { length: 255 })
+        .notNull()
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    orgId: varchar("organizationId", { length: 255 })
+        .notNull()
+        .references(() => organizations.id, { onDelete: "cascade" }),
+    ownerId: varchar("ownerId", { length: 255 })
+        .notNull()
+        .references(() => users.id, { onDelete: "cascade" }),
+});
+
+export const section = createTable("section", {
+    id: varchar("id", { length: 255 })
+        .notNull()
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    templateId: varchar("templateId", { length: 255 })
+        .notNull()
+        .references(() => template.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 255 }),
+    content: jsonb("content"),
+});
+
+export const candidatePortal = createTable("candidatePortal", {
+    id: varchar("id", { length: 255 })
+        .notNull()
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    candidateId: varchar("candidateId", { length: 255 })
+        .notNull()
+        .unique()
+        .references(() => candidate.id, { onDelete: "cascade" }),
+    templateId: varchar("templateId", { length: 255 })
+        .notNull()
+        .references(() => template.id, { onDelete: "cascade" }),
+    url: varchar("url", { length: 255 }).unique(),
+    customContent: jsonb("customContent"), // If the user makes edits unique to this candidate
+    createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
+    updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
 });
