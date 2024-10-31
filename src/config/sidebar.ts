@@ -1,5 +1,6 @@
 import {
     BarChart4Icon,
+    BlocksIcon,
     BookTextIcon,
     Building2Icon,
     ClipboardListIcon,
@@ -122,7 +123,7 @@ const navigation: SidebarNavItems[] = [
 
           {
             label: "Portals",
-            icon: Square,
+            icon: BlocksIcon,
             href: siteUrls.dashboard.home,
         },
             {
