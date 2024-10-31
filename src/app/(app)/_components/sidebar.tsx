@@ -56,19 +56,17 @@ export async function AppSidebar({
     return (
       <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader className="w-full">
-          {showLogo && (
-              <Link href={siteUrls.dashboard.home} className="flex items-center gap-3 p-4 w-full">
-                  <Icons.logo className="w-24 h-6 fill-primary" />
-              </Link>
-          )}
-      </SidebarHeader>
 
-      <SidebarContent>
-          {showOrgSwitcher && (
-              <div className="px-4 py-2">
+      {showOrgSwitcher && (
+              <div className="py-2">
                   <OrgSelectDropdown userOrgs={urgOrgsData} currentOrg={currentOrg} />
               </div>
           )}
+
+      </SidebarHeader>
+
+      <SidebarContent>
+
           <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
               <SidebarNav
                   sidebarNavIncludeIds={sidebarNavIncludeIds}
@@ -79,6 +77,11 @@ export async function AppSidebar({
       </SidebarContent>
 
       <SidebarFooter>
+      {/* {showLogo && (
+              <Link href={siteUrls.dashboard.home} className="flex items-center gap-3 p-4 w-full">
+                  <Icons.logo className="w-24 h-6 fill-primary" />
+              </Link>
+          )} */}
           <UserDropdown user={user} />
       </SidebarFooter>
       <SidebarRail />

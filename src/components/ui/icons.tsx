@@ -34,8 +34,8 @@ export const Icons = {
                 <span
                     className={cn(
                         "font-bold",
-                        "text-2xl",
-                        "font-heading",
+                        "text-xl",
+
                         hideTextOnMobile && "hidden sm:block",
                     )}
                 >

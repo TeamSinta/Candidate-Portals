@@ -5,6 +5,7 @@ import {
     SidebarMenuItem,
     SidebarGroup,
     SidebarGroupLabel,
+    SidebarMenuButton,
 } from "@/components/ui/sidebar";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { ChevronRight, ExternalLinkIcon } from "lucide-react";
@@ -34,16 +35,18 @@ export function SidebarNav({ sidebarNavIncludeIds, sidebarNavRemoveIds }: Sideba
     return (
         <SidebarGroup>
             {sidebarNavItems.map((nav) => (
-                <div key={nav.id}>
-                    {nav.showLabel && <SidebarGroupLabel>{nav.label}</SidebarGroupLabel>}
+                <div key={nav.id} className="mb-4">
+                    {nav.showLabel && (
+                        <SidebarGroupLabel className="px-2">{nav.label}</SidebarGroupLabel>
+                    )}
                     <SidebarMenu>
                         {nav.items.map((item) => (
                             <SidebarMenuItem key={item.label}>
                                 {item.subMenu ? (
                                     <Accordion type="single" collapsible>
                                         <AccordionItem value={item.label}>
-                                            {/* Single arrow on dropdown to avoid double arrow issue */}
-                                            <AccordionTrigger className="flex items-center gap-2">
+                                            {/* Accordion Trigger to handle dropdown items */}
+                                            <AccordionTrigger className="flex items-center gap-2 w-full">
                                                 <item.icon className="h-5 w-5 flex-shrink-0" />
                                                 <span className="flex-grow truncate">{item.label}</span>
                                                 <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200" />
@@ -70,7 +73,12 @@ export function SidebarNav({ sidebarNavIncludeIds, sidebarNavRemoveIds }: Sideba
                                 ) : (
                                     <Tooltip>
                                         <TooltipTrigger asChild>
-                                            <NavLink {...item} active={pathname === item.href} />
+                                            <div className="w-full">
+                                                <NavLink
+                                                    {...item}
+                                                    active={pathname === item.href}
+                                                />
+                                            </div>
                                         </TooltipTrigger>
                                         <TooltipContent side="right">
                                             {item.label}
@@ -98,13 +106,15 @@ function NavLink({ href, label, icon: Icon, active }: NavLinkProps) {
         <Link
             href={href}
             className={cn("flex items-center gap-3 px-2 py-2 rounded transition-colors", {
-                "bg-border text-black font-bold": active,
+                "bg-border text-black font-semibold": active,
                 "hover:bg-muted": !active,
             })}
         >
-            <Icon className="h-5 w-5 flex-shrink-0" />
-            <span className="flex-grow truncate">{label}</span>
-            {href.startsWith("http") && <ExternalLinkIcon className="ml-2 h-4 w-4 text-muted-foreground" />}
+            <Icon className="h-4 w-4 flex-shrink-0" />
+            <span className="flex-grow truncate font-heading">{label}</span>
+            {href.startsWith("http") && (
+                <ExternalLinkIcon className="ml-2 h-4 w-4 text-muted-foreground" />
+            )}
         </Link>
     );
 }

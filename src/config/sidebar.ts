@@ -120,21 +120,16 @@ const navigation: SidebarNavItems[] = [
         showLabel: true,
         items: [
 
-            {
-              label: "Activity Feed",
-              icon: ZapIcon,
-              href: siteUrls.organization.plansAndBilling,
-          },
           {
             label: "Portals",
             icon: Square,
             href: siteUrls.dashboard.home,
         },
-        {
-          label: "Candidates",
-          icon: LayoutDashboardIcon,
-          href: siteUrls.organization.members.home,
-      },
+            {
+              label: "Analytics",
+              icon: ZapIcon,
+              href: siteUrls.organization.plansAndBilling,
+          },
         ],
     },
     {
