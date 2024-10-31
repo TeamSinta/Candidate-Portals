@@ -77,15 +77,18 @@ export function OrgSelectDropdown({
                             size="lg"
                             className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center gap-2"
                         >
-                            <Avatar className="h-8 w-8 rounded-sm">
-                                                        <AvatarImage src={currentOrg.image ?? ""} />
-                                                        <AvatarFallback>
-                                                        <div className="flex aspect-square size-8 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
-
-                              <GalleryVerticalEnd className="size-4" />
-                          </div>
-                                                        </AvatarFallback>
-                                                        </Avatar>
+                      <Avatar className="h-8 w-8 rounded-sm">
+    {currentOrg?.image ? (
+        <AvatarImage src={currentOrg.image} />
+    ) : (
+        <AvatarFallback>
+            <div className="flex aspect-square size-8 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
+                {/* Default fallback icon or text */}
+                <GalleryVerticalEnd className="size-4" />
+                           </div>
+        </AvatarFallback>
+    )}
+</Avatar>
 
                             <div className="grid flex-1 text-left text-md leading-tight">
                                 <span className="truncate text-lg font-semibold">{currentOrg?.name}</span>
@@ -126,7 +129,7 @@ export function OrgSelectDropdown({
                                                     <Avatar className="h-5 w-5 mr-2">
                                                         <AvatarImage src={org.image ?? ""} />
                                                         <AvatarFallback>
-                                                            <SquareTerminalIcon className="size-4" />
+                                                        {currentOrg?.name?.charAt(0).toUpperCase() ?? "N/A"}
                                                         </AvatarFallback>
                                                     </Avatar>
                                                     {org.name}
