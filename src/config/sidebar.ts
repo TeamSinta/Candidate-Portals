@@ -129,7 +129,7 @@ const navigation: SidebarNavItems[] = [
             {
               label: "Analytics",
               icon: ZapIcon,
-              href: siteUrls.organization.plansAndBilling,
+              href: siteUrls.analytics,
           },
         ],
     },

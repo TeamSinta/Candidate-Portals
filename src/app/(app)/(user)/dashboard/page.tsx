@@ -1,19 +1,13 @@
 import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import { dashboardPageConfig } from "@/app/(app)/(user)/dashboard/_constants/page-config";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-    ActivityIcon,
-    CreditCardIcon,
-    DollarSignIcon,
-    GlassesIcon,
+
     SproutIcon,
-    Users2Icon,
 } from "lucide-react";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, FolderPlusIcon } from "lucide-react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 
 export default function DashboardPage() {
     return (
