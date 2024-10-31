@@ -5,6 +5,7 @@ import { SubsChart } from "@/app/(app)/admin/dashboard/_components/subs-chart";
 import { UsersChart } from "@/app/(app)/admin/dashboard/_components/users-chart";
 import { adminDashConfig } from "@/app/(app)/admin/dashboard/_constants/page-config";
 import { buttonVariants } from "@/components/ui/button";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 import { siteUrls } from "@/config/urls";
 import { cn } from "@/lib/utils";
 import {
@@ -39,6 +40,8 @@ export default async function AdminDashPage() {
             title={adminDashConfig.title}
             description={adminDashConfig.description}
         >
+                <SidebarTrigger />
+
             <div className="grid w-full gap-8">
                 <p className="text-sm">
                     This a simple dashboard with Analytics, to see detailed

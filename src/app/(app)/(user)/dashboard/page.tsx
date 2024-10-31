@@ -7,6 +7,7 @@ import {
     DollarSignIcon,
     Users2Icon,
 } from "lucide-react";
+import { SidebarTrigger } from "@/components/ui/sidebar";
 
 export default function DashboardPage() {
     return (
@@ -14,6 +15,8 @@ export default function DashboardPage() {
             title={dashboardPageConfig.title}
             description={dashboardPageConfig.description}
         >
+              <SidebarTrigger />
+
             <div className="grid gap-6">
                 <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
                     <Card>

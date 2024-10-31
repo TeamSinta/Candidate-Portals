@@ -1,7 +1,9 @@
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { Loader2Icon } from "lucide-react";
+import Image from "next/image";
 import { type ElementType } from "react";
+import CompanyLogo from "../../../public/SintaLogoCircle.png"
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -22,17 +24,18 @@ export const Icons = {
             <Comp
                 className={cn("flex items-center space-x-2 text-lg", className)}
             >
-                <Icons.logoIcon
-                    className={cn(
-                        "fill-primary",
-                        iconProps?.className,
-                        hideTextOnMobile ? "h-6 w-6 sm:h-5 sm:w-5" : "h-5 w-5",
-                    )}
-                    {...iconProps}
+            <Image
+                    src={CompanyLogo}
+                    alt="Company Logo"
+                    width={28} // Adjust size as needed
+                    height={30}
+                    className="rounded-full"
                 />
                 <span
                     className={cn(
                         "font-bold",
+                        "text-2xl",
+                        "font-heading",
                         hideTextOnMobile && "hidden sm:block",
                     )}
                 >
