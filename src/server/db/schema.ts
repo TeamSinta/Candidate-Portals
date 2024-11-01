@@ -14,6 +14,7 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
 import { z } from "zod";
+import { enumToPgEnum } from "./utils";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -391,11 +392,17 @@ export const portal = createTable("portal", {
         .references(() => users.id, { onDelete: "cascade" }),
 });
 
-const sectionContentType = pgEnum("section-content-type", [
-    "yoopta",
-    "url",
-    "doc",
-]);
+export enum SectionContentType {
+    YOOPTA = "yoopta",
+    URL = "url",
+    DOC = "doc",
+}
+
+export const sectionContentType = pgEnum(
+    "role",
+    enumToPgEnum(SectionContentType),
+);
+
 export const section = createTable("section", {
     id: varchar("id", { length: 255 })
         .notNull()

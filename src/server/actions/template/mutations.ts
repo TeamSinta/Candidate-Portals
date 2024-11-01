@@ -1,47 +1,50 @@
 "use server";
 import { db } from "@/server/db";
-import { section, template } from "@/server/db/schema";
+import { portal, section, SectionContentType } from "@/server/db/schema";
 import { protectedProcedure } from "@/server/procedures";
 import { getOrganizations } from "../organization/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 
 // Templates should be initialized with an initial section
-export async function createTemplate() {
+export async function createPortal() {
     const { user } = await protectedProcedure();
     const { currentOrg } = await getOrganizations();
 
     if (!currentOrg.id || !user.id) throw new Error("Missing data");
 
-    const [newTemplate] = await db
-        .insert(template)
+    const [newPortal] = await db
+        .insert(portal)
         .values({ orgId: currentOrg.id, ownerId: user.id })
         .returning()
         .execute();
 
-    if (!newTemplate?.id) throw new Error("Failed to create template");
+    if (!newPortal?.id) throw new Error("Failed to create template");
 
     const newSection = await db.insert(section).values({
-        templateId: newTemplate.id,
+        portalId: newPortal.id,
         title: "title",
         content: {},
+        contentType: SectionContentType.YOOPTA,
     });
-    return newTemplate;
+    return newPortal;
 }
 
 export async function updateSectionContent({
     id,
-    templateId,
+    portalId,
     title,
     content,
+    contentType,
 }: {
     id: string;
-    templateId: string;
+    portalId: string;
     title: string;
     content: YooptaContentValue;
+    contentType: SectionContentType;
 }) {
     return await db
         .insert(section)
-        .values({ id, templateId, title, content })
+        .values({ id, portalId, title, content, contentType })
         .onConflictDoUpdate({ target: section.id, set: { content, title } })
         .execute();
 }

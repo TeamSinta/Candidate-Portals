@@ -1,12 +1,12 @@
 import Editor from "@/components/editor";
-import { getTemplateQuery } from "@/server/actions/template/queries";
+import { getPortalQuery } from "@/server/actions/template/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 import { notFound } from "next/navigation";
 import React from "react";
 
 async function page({ params }: { params: { templateId: string } }) {
-    const data = await getTemplateQuery(params.templateId);
-    if (!data.template) return notFound();
+    const data = await getPortalQuery(params.templateId);
+    if (!data.portal) return notFound();
     return (
         <>
             {/* <Editor /> */}

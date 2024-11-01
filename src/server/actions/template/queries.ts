@@ -1,38 +1,33 @@
 import { db } from "@/server/db";
-import {
-    candidate,
-    candidatePortal,
-    section,
-    template,
-} from "@/server/db/schema";
+import { candidate, link, section, portal } from "@/server/db/schema";
 import { eq } from "drizzle-orm";
 
-export async function getTemplateQuery(templateId: string) {
-    const templateObject = await db.query.template.findFirst({
-        where: eq(template.id, templateId),
+export async function getPortalQuery(portalId: string) {
+    const portalObject = await db.query.portal.findFirst({
+        where: eq(portal.id, portalId),
     });
-    if (!templateObject) return {};
+    if (!portalObject) return {};
 
     const sections = await db.query.section.findMany({
-        where: eq(section.templateId, templateId),
+        where: eq(section.portalId, portalId),
     });
-    return { template: templateObject, sections };
+    return { portal: portalObject, sections };
 }
 
-export async function getTemplateByURLQuery(url: string) {
+export async function getPortalByURLQuery(url: string) {
     const [portal] = await db
         .select()
-        .from(candidatePortal)
-        .leftJoin(candidate, eq(candidate.id, candidatePortal.candidateId))
-        .where(eq(candidatePortal.url, url))
+        .from(link)
+        .leftJoin(candidate, eq(candidate.id, link.candidateId))
+        .where(eq(link.url, url))
         .limit(1)
         .execute();
 
-    const templateId = portal?.candidatePortal?.templateId;
-    if (!templateId) return {};
+    const portalId = portal?.link?.portalId;
+    if (!portalId) return {};
 
     return {
         candidate: portal,
-        template: await getTemplateQuery(templateId),
+        portal: await getPortalQuery(portalId),
     };
 }

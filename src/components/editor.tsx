@@ -14,6 +14,7 @@ import ActionMenuList, {
 import Embed from "@yoopta/embed";
 import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
 import { useMemo, useState } from "react";
+import { SectionContentType } from "@/server/db/schema";
 
 const plugins = [Paragraph, NumberedList, BulletedList, TodoList, Embed];
 const tools = {
@@ -25,12 +26,12 @@ const tools = {
 
 export default function Editor({
     content,
-    templateId,
+    portalId,
     sectionId,
     editable = true,
 }: {
     content: YooptaContentValue;
-    templateId: string;
+    portalId: string;
     sectionId: string;
     editable: boolean;
 }) {
@@ -40,9 +41,10 @@ export default function Editor({
     const handleSave = async () => {
         await updateSectionContent({
             id: sectionId,
-            templateId: templateId,
+            portalId: portalId,
             title: "title",
             content: editor.getEditorValue(),
+            contentType: SectionContentType.YOOPTA,
         });
     };
 

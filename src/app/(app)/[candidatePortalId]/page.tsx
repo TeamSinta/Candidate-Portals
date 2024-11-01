@@ -1,5 +1,5 @@
 import Editor from "@/components/editor";
-import { getTemplateByURLQuery } from "@/server/actions/template/queries";
+import { getPortalByURLQuery } from "@/server/actions/template/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 import { notFound } from "next/navigation";
 
@@ -9,15 +9,15 @@ export default async function page({
 }: {
     params: { candidatePortalURL: string };
 }) {
-    const data = await getTemplateByURLQuery(params.candidatePortalURL);
-    if (!data.template) return notFound();
+    const data = await getPortalByURLQuery(params.candidatePortalURL);
+    if (!data.portal) return notFound();
     return (
         <>
             {/* <Editor /> */}
-            {data.template.sections?.map((section) => (
+            {data.portal.sections?.map((section) => (
                 <Editor
                     sectionId={section.id}
-                    templateId={section.templateId}
+                    portalId={section.portalId}
                     key={section.id}
                     content={section.content as YooptaContentValue}
                     editable={false}
