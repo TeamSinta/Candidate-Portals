@@ -27,7 +27,7 @@ set -a
 source .env
 
 DB_PASSWORD=$(echo $DATABASE_URL | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
-
+echo "Database password: $DB_PASSWORD"
 if [ "$DB_PASSWORD" = "password" ]; then
   echo "You are using the default database password"
   read -p "Should we generate a random password for you? [y/N]: " -r REPLY

@@ -2,16 +2,20 @@
 import YooptaEditor, {
     createYooptaEditor,
     YooptaContentValue,
+    YooptaEventChangePayload,
     YooptaOnChangeOptions,
 } from "@yoopta/editor";
 import Paragraph from "@yoopta/paragraph";
 // import Blockquote from '@yoopta/blockquote';
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { NumberedList, BulletedList, TodoList } from "@yoopta/lists";
 import ActionMenuList, {
     DefaultActionMenuRender,
 } from "@yoopta/action-menu-list";
 import Embed, { EmbedCommands, EmbedElement } from "@yoopta/embed";
+import { useDebounce } from "@/hooks/use-debounce";
+import { updateSectionContent } from "@/server/actions/template/mutations";
+import { Button } from "@/components/ui/button";
 
 const plugins = [Paragraph, NumberedList, BulletedList, TodoList, Embed];
 const tools = {
@@ -21,9 +25,18 @@ const tools = {
     },
 };
 
-export default function Editor() {
+export default function Editor({ content }: { content: YooptaContentValue }) {
     const editor = useMemo(() => createYooptaEditor(), []);
-    const [value, setValue] = useState<YooptaContentValue>();
+    const [value, setValue] = useState<YooptaContentValue>(content);
+
+    const handleSave = async () => {
+        await updateSectionContent({
+            id: "1",
+            templateId: "a2710960-129a-4823-aaa8-ee26afbeba77",
+            title: "title",
+            content: editor.getEditorValue(),
+        });
+    };
 
     const onChange = (
         value: YooptaContentValue,
@@ -43,7 +56,7 @@ export default function Editor() {
                 plugins={plugins}
                 tools={tools}
             />
-            {/* <div>{JSON.stringify("value", editor.getEditorValue())}</div> */}
+            <Button onClick={handleSave}>Save</Button>
         </div>
     );
 }
