@@ -7,18 +7,18 @@ import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, FolderPlusIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { createPortal } from "@/server/actions/template/mutations";
+import { createPortal } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 
 export default function DashboardPage() {
     const router = useRouter();
     async function handleClick() {
         try {
-            const newTemplate = await createPortal();
-            if (!newTemplate?.id) throw new Error("Failed to create template");
-            router.push("/editor/" + newTemplate.id);
+            const newPortal = await createPortal();
+            if (!newPortal?.id) throw new Error("Failed to create Portal");
+            router.push("/editor/" + newPortal.id);
         } catch {
-            toast.error("Failed to create template");
+            toast.error("Failed to create Portal");
         }
     }
 

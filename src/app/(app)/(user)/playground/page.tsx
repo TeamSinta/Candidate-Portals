@@ -1,6 +1,6 @@
 import React from "react";
 import Editor from "@/components/editor";
-import { getPortalQuery } from "@/server/actions/template/queries";
+import { getPortalQuery } from "@/server/actions/portal/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 import CreateTemplateButton from "./create-template-button";
 

@@ -5,7 +5,7 @@ import { protectedProcedure } from "@/server/procedures";
 import { getOrganizations } from "../organization/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 
-// Templates should be initialized with an initial section
+// portal should be initialized with an initial section
 export async function createPortal() {
     const { user } = await protectedProcedure();
     const { currentOrg } = await getOrganizations();
@@ -18,7 +18,7 @@ export async function createPortal() {
         .returning()
         .execute();
 
-    if (!newPortal?.id) throw new Error("Failed to create template");
+    if (!newPortal?.id) throw new Error("Failed to create portal");
 
     const newSection = await db.insert(section).values({
         portalId: newPortal.id,

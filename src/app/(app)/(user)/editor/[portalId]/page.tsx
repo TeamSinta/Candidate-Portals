@@ -1,11 +1,11 @@
 import Editor from "@/components/editor";
-import { getPortalQuery } from "@/server/actions/template/queries";
+import { getPortalQuery } from "@/server/actions/portal/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 import { notFound } from "next/navigation";
 import React from "react";
 
-async function page({ params }: { params: { templateId: string } }) {
-    const data = await getPortalQuery(params.templateId);
+async function page({ params }: { params: { portalId: string } }) {
+    const data = await getPortalQuery(params.portalId);
     if (!data.portal) return notFound();
     return (
         <>
@@ -14,7 +14,7 @@ async function page({ params }: { params: { templateId: string } }) {
                 <Editor
                     key={section.id}
                     sectionId={section.id}
-                    templateId={params.templateId}
+                    portalId={params.portalId}
                     content={section.content as YooptaContentValue}
                     editable={true}
                 />

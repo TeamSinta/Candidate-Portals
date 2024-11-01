@@ -7,7 +7,7 @@ import YooptaEditor, {
 import Paragraph from "@yoopta/paragraph";
 // import Blockquote from '@yoopta/blockquote';
 import { Button } from "@/components/ui/button";
-import { updateSectionContent } from "@/server/actions/template/mutations";
+import { updateSectionContent } from "@/server/actions/portal/mutations";
 import ActionMenuList, {
     DefaultActionMenuRender,
 } from "@yoopta/action-menu-list";
