@@ -1,4 +1,4 @@
-import { Sidebar } from "@/app/(app)/_components/sidebar";
+import { AppSidebar } from "@/app/(app)/_components/sidebar";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { MenuIcon } from "lucide-react";
@@ -23,7 +23,7 @@ export function MobileSidenav({
                 </Button>
             </SheetTrigger>
             <SheetContent side="left" className="px-3 pb-20 pt-10">
-                <Sidebar
+                <AppSidebar
                     showLogo={false}
                     showOrgSwitcher={showOrgSwitcher}
                     sidebarNavIncludeIds={sidebarNavIncludeIds}

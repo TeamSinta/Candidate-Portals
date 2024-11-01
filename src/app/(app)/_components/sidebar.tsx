@@ -12,6 +12,7 @@ import {
 } from "@/app/(app)/_components/org-select-dropdown";
 import { getOrganizations } from "@/server/actions/organization/queries";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
 
 type SideNavProps = {
     sidebarNavIncludeIds?: string[];
@@ -28,7 +29,7 @@ type SideNavProps = {
  * fell free to customize the sidebar component as you like
  */
 
-export async function Sidebar({
+export async function AppSidebar({
     sidebarNavIncludeIds,
     sidebarNavRemoveIds,
     showOrgSwitcher = true,
@@ -53,46 +54,38 @@ export async function Sidebar({
     ];
 
     return (
-        <aside className={cn("h-full w-full")}>
-            {showLogo && (
-                <div className={cn("flex h-16 items-center justify-between")}>
-                    <Link
-                        href={siteUrls.dashboard.home}
-                        className={cn(
-                            "z-10 transition-transform hover:scale-90",
-                        )}
-                    >
-                        <Icons.logo
-                            className="text-xl"
-                            iconProps={{ className: "w-6 h-6 fill-primary" }}
-                        />
-                    </Link>
-                </div>
-            )}
+      <Sidebar variant="inset" collapsible="icon">
+      <SidebarHeader className="w-full">
 
-            <div className="py-2">
-                <UserDropdown user={user} />
-            </div>
+      {showOrgSwitcher && (
+              <div className="py-2">
+                  <OrgSelectDropdown userOrgs={urgOrgsData} currentOrg={currentOrg} />
+              </div>
+          )}
 
-            {showOrgSwitcher && (
-                <div className="py-2">
-                    <OrgSelectDropdown
-                        userOrgs={urgOrgsData}
-                        currentOrg={currentOrg}
-                    />
-                </div>
-            )}
+      </SidebarHeader>
 
-            <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
-                <div className="h-full w-full py-2 pb-10">
-                    <SidebarNav
-                        sidebarNavIncludeIds={sidebarNavIncludeIds}
-                        sidebarNavRemoveIds={sidebarNavRemoveIds}
-                    />
-                    <ScrollBar orientation="vertical" />
-                </div>
-            </ScrollArea>
-        </aside>
+      <SidebarContent>
+
+          <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
+              <SidebarNav
+                  sidebarNavIncludeIds={sidebarNavIncludeIds}
+                  sidebarNavRemoveIds={sidebarNavRemoveIds}
+              />
+              <ScrollBar orientation="vertical" />
+          </ScrollArea>
+      </SidebarContent>
+
+      <SidebarFooter>
+      {/* {showLogo && (
+              <Link href={siteUrls.dashboard.home} className="flex items-center gap-3 p-4 w-full">
+                  <Icons.logo className="w-24 h-6 fill-primary" />
+              </Link>
+          )} */}
+          <UserDropdown user={user} />
+      </SidebarFooter>
+      <SidebarRail />
+  </Sidebar>
     );
 }
 

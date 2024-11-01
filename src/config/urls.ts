@@ -20,7 +20,7 @@ export const siteUrls = {
     maintenance: "/maintenance",
     waitlist: "/waitlist",
     rapidlaunch: "https://www.rapidlaunch.xyz",
-
+    analytics: "/analytics",
     dashboard: {
         home: "/dashboard",
     },
@@ -74,6 +74,7 @@ export const protectedRoutes: string[] = [
     siteUrls.organization.members.invite,
     siteUrls.organization.settings,
     siteUrls.organization.plansAndBilling,
+    siteUrls.analytics,
     siteUrls.auth.login,
     siteUrls.auth.signup,
     siteUrls.admin.dashboard,

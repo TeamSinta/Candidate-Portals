@@ -5,7 +5,7 @@
  */
 
 export const siteConfig = {
-    name: "Rapidlaunch",
+    name: "Sinta",
     description:
         "Get your startup off the ground quickly with RapidLaunch! This open source Next.js starter kit provides the foundation you need to build your MVP fast – pre-built components, optimized performance, and ready-to-go styling",
     orgImage:

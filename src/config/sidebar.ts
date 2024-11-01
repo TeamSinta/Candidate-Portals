@@ -1,5 +1,6 @@
 import {
     BarChart4Icon,
+    BlocksIcon,
     BookTextIcon,
     Building2Icon,
     ClipboardListIcon,
@@ -9,9 +10,11 @@ import {
     MessageSquareIcon,
     PenLineIcon,
     Settings2Icon,
+    Square,
     UserRoundCheckIcon,
     UserRoundPlusIcon,
     UsersRoundIcon,
+    ZapIcon,
 } from "lucide-react";
 import { siteUrls } from "@/config/urls";
 
@@ -118,9 +121,14 @@ const navigation: SidebarNavItems[] = [
         showLabel: true,
         items: [
             {
-                label: "Dashboard",
-                icon: LayoutDashboardIcon,
+                label: "Portals",
+                icon: BlocksIcon,
                 href: siteUrls.dashboard.home,
+            },
+            {
+                label: "Analytics",
+                icon: ZapIcon,
+                href: siteUrls.analytics,
             },
             {
                 label: "Evan Playground",
@@ -135,57 +143,9 @@ const navigation: SidebarNavItems[] = [
         showLabel: true,
         items: [
             {
-                label: "Members",
-                icon: UsersRoundIcon,
-                subMenu: [
-                    {
-                        label: "Org Members",
-                        icon: UserRoundCheckIcon,
-                        href: siteUrls.organization.members.home,
-                    },
-                    {
-                        label: "Invite Members",
-                        icon: UserRoundPlusIcon,
-                        href: siteUrls.organization.members.invite,
-                    },
-                ],
-            },
-            {
-                label: "Plans & Billing",
-                icon: CreditCardIcon,
-                href: siteUrls.organization.plansAndBilling,
-            },
-            {
                 label: "Settings",
                 icon: Settings2Icon,
                 href: siteUrls.organization.settings,
-            },
-        ],
-    },
-    {
-        id: navIds.resources,
-        label: "Resources",
-        showLabel: true,
-        items: [
-            {
-                label: "Feedbacks",
-                icon: MessageSquareIcon,
-                href: siteUrls.feedback,
-            },
-            {
-                label: "Docs",
-                icon: BookTextIcon,
-                href: siteUrls.docs,
-            },
-            {
-                label: "Blog",
-                icon: PenLineIcon,
-                href: siteUrls.blogs,
-            },
-            {
-                label: "Support",
-                icon: HelpCircleIcon,
-                href: siteUrls.support,
             },
         ],
     },
