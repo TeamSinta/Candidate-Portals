@@ -378,7 +378,7 @@ export const tags = createTable(
     }),
 );
 
-export const template = createTable("template", {
+export const portal = createTable("portal", {
     id: varchar("id", { length: 255 })
         .notNull()
         .primaryKey()
@@ -391,19 +391,25 @@ export const template = createTable("template", {
         .references(() => users.id, { onDelete: "cascade" }),
 });
 
+const sectionContentType = pgEnum("section-content-type", [
+    "yoopta",
+    "url",
+    "doc",
+]);
 export const section = createTable("section", {
     id: varchar("id", { length: 255 })
         .notNull()
         .primaryKey()
         .default(sql`gen_random_uuid()`),
-    templateId: varchar("templateId", { length: 255 })
+    portalId: varchar("portalId", { length: 255 })
         .notNull()
-        .references(() => template.id, { onDelete: "cascade" }),
+        .references(() => portal.id, { onDelete: "cascade" }),
     title: varchar("title", { length: 255 }),
     content: jsonb("content"),
+    contentType: sectionContentType().notNull(),
 });
 
-export const candidatePortal = createTable("candidatePortal", {
+export const link = createTable("link", {
     id: varchar("id", { length: 255 })
         .notNull()
         .primaryKey()
@@ -412,9 +418,9 @@ export const candidatePortal = createTable("candidatePortal", {
         .notNull()
         .unique()
         .references(() => candidate.id, { onDelete: "cascade" }),
-    templateId: varchar("templateId", { length: 255 })
+    portalId: varchar("portalId", { length: 255 })
         .notNull()
-        .references(() => template.id, { onDelete: "cascade" }),
+        .references(() => portal.id, { onDelete: "cascade" }),
     url: varchar("url", { length: 255 }).unique(),
     customContent: jsonb("customContent"), // If the user makes edits unique to this candidate
     createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
