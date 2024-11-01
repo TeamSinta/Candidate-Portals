@@ -1,10 +1,17 @@
 import React from "react";
-import Editor from "@/components/editor";
 import { getTemplateQuery } from "@/server/actions/template/queries";
 import { YooptaContentValue } from "@yoopta/editor";
+import Editor from "@/components/editor";
+import { notFound } from "next/navigation";
 
-export default async function page() {
-    const data = await getTemplateQuery("a2710960-129a-4823-aaa8-ee26afbeba77");
+const sampleId = "a2710960-129a-4823-aaa8-ee26afbeba77";
+export default async function page({
+    params,
+}: {
+    params: { candidatePortalId: string };
+}) {
+    const data = await getTemplateQuery(params.candidatePortalId);
+    if (!data.template) return notFound();
     return (
         <>
             {/* <Editor /> */}
@@ -12,7 +19,7 @@ export default async function page() {
                 <Editor
                     key={section.id}
                     content={section.content as YooptaContentValue}
-                    editable={true}
+                    editable={false}
                 />
             ))}
         </>

@@ -25,7 +25,13 @@ const tools = {
     },
 };
 
-export default function Editor({ content }: { content: YooptaContentValue }) {
+export default function Editor({
+    content,
+    editable = true,
+}: {
+    content: YooptaContentValue;
+    editable: boolean;
+}) {
     const editor = useMemo(() => createYooptaEditor(), []);
     const [value, setValue] = useState<YooptaContentValue>(content);
 
@@ -55,8 +61,9 @@ export default function Editor({ content }: { content: YooptaContentValue }) {
                 // here we go
                 plugins={plugins}
                 tools={tools}
+                readOnly={!editable}
             />
-            <Button onClick={handleSave}>Save</Button>
+            {editable && <Button onClick={handleSave}>Save</Button>}
         </div>
     );
 }
