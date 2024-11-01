@@ -29,7 +29,7 @@ export function AppLayoutShell({
                         />
                     </Suspense>
 
-                    <SidebarInset className="p-6 border">
+                    <SidebarInset className="p-6 border dark:bg-gray-900">
                     {children}
                      </SidebarInset>
             </div>

@@ -391,23 +391,26 @@ export const portal = createTable("portal", {
         .references(() => users.id, { onDelete: "cascade" }),
 });
 
-const sectionContentType = pgEnum("section-content-type", [
-    "yoopta",
-    "url",
-    "doc",
+export const sectionContentType = pgEnum("section-content-type", [
+  "yoopta",
+  "url",
+  "doc",
 ]);
+
 export const section = createTable("section", {
-    id: varchar("id", { length: 255 })
-        .notNull()
-        .primaryKey()
-        .default(sql`gen_random_uuid()`),
-    portalId: varchar("portalId", { length: 255 })
-        .notNull()
-        .references(() => portal.id, { onDelete: "cascade" }),
-    title: varchar("title", { length: 255 }),
-    content: jsonb("content"),
-    contentType: sectionContentType().notNull(),
+  id: varchar("id", { length: 255 })
+      .notNull()
+      .primaryKey()
+      .default(sql`gen_random_uuid()`),
+  portalId: varchar("portalId", { length: 255 })
+      .notNull()
+      .references(() => portal.id, { onDelete: "cascade" }),
+  title: varchar("title", { length: 255 }),
+  content: jsonb("content"),
+  contentType: sectionContentType("contentType").notNull(),
 });
+
+
 
 export const link = createTable("link", {
     id: varchar("id", { length: 255 })
