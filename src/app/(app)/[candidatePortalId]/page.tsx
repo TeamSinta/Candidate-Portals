@@ -13,7 +13,7 @@ export default async function page({
     if (!data.portal) return notFound();
     return (
         <>
-            {/* <Editor /> */}
+            <div>Candidate Portal Page</div>
             {data.portal.sections?.map((section) => (
                 <Editor
                     sectionId={section.id}
