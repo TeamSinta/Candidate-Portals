@@ -1,4 +1,4 @@
-import { relations, sql } from "drizzle-orm";
+import { InferSelectModel, relations, sql } from "drizzle-orm";
 import {
     boolean,
     index,
@@ -415,6 +415,8 @@ export const section = createTable("section", {
     content: jsonb("content"),
     contentType: sectionContentType().notNull(),
 });
+
+export type SectionSelect = InferSelectModel<typeof section>;
 
 export const link = createTable("link", {
     id: varchar("id", { length: 255 })

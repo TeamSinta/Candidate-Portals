@@ -7,11 +7,13 @@ import React from "react";
 import EditorPageButtons from "./editor-page-buttons";
 import { Terminal } from "lucide-react";
 import ContentBlock from "./_components/content-block";
+import BlockEditor from "./_components/block-editor";
 
 async function PortalEditPage({ params }: { params: { portalId: string } }) {
     const data = await getPortalQuery(params.portalId);
     if (!data.portal) return notFound();
     console.log("PORTAL DATA", data);
+
     return (
         <AppPageShell
             title="Portal Editor"
@@ -35,7 +37,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
                         </div>
                     </div>
                 </div>
-                <ContentBlock index={1}></ContentBlock>
+                <BlockEditor sections={data.sections || []} />
                 {/* <div className="flex h-full flex-col items-center">
                     {data.sections?.map((section) => (
                         <Editor

@@ -21,7 +21,7 @@ function UrlInput({ title, url }: { title: string; url: string }) {
     }
 
     return (
-        <>
+        <div className="my-4 flex flex-col items-end gap-4">
             <InputField
                 label="Content Title"
                 placeholder="Careers Page Overview"
@@ -31,7 +31,7 @@ function UrlInput({ title, url }: { title: string; url: string }) {
                 placeholder="https://www.aptible.com/culture-hub/careers"
             />
             <InputField label="Expected Engagement Time" placeholder="~5min" />
-        </>
+        </div>
     );
 }
 
