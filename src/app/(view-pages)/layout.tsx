@@ -12,7 +12,7 @@ type AppLayoutProps = {
 
 export default function AppLayout({ children }: AppLayoutProps) {
   return (
-    <div className="bg-slate-100 min-h-screen">
+    <div className="bg-slate-100 min-h-screen flex flex-col">
        <header className="flex h-16 items-center justify-between px-4 border-gray-200">
         <div className="flex items-center gap-2">
           <span className="text-sm font-semibold">Sinta Candidate Portals - MVP</span>
