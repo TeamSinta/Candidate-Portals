@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/select";
 import UrlInput from "./url-input";
 import { Edit } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 function ContentBlock({
     index,
@@ -44,7 +45,15 @@ function ContentBlock({
     }
 
     return (
-        <div className="flex w-[50rem] flex-col rounded-lg border-2 bg-white p-4 shadow">
+        <div
+            className={cn(
+                "flex w-[50rem] flex-col rounded-lg border-2 bg-white p-4 shadow transition-shadow duration-300",
+                !editing && "cursor-pointer hover:shadow-lg ",
+            )}
+            onClick={() => {
+                if (!editing) editBlock();
+            }}
+        >
             <div className="flex flex-row items-center justify-between text-xl font-bold">
                 {editing && <div>Content Block {index}</div>}
                 {!editing && (
