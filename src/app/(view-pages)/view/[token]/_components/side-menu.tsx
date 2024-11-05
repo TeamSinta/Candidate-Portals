@@ -1,3 +1,5 @@
+"use client";
+
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { X, FileText, File, YoutubeIcon } from "lucide-react";
