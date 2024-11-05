@@ -389,12 +389,16 @@ export const portal = createTable("portal", {
     ownerId: varchar("ownerId", { length: 255 })
         .notNull()
         .references(() => users.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 255 }),
+
 });
 
 export const sectionContentType = pgEnum("section-content-type", [
   "yoopta",
   "url",
   "doc",
+  "notion",
+  "pdf"
 ]);
 
 export const section = createTable("section", {

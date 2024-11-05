@@ -2,7 +2,9 @@
 
 import { db } from "@/server/db";
 import { link, portal, candidate, section } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
+import { getOrganizations } from "../organization/queries";
+import { protectedProcedure } from "@/server/procedures";
 
 // Define the function to fetch portal data by token
 // app/queries.ts
@@ -47,4 +49,65 @@ export async function getPortalData(token: string) {
           contentType: section.contentType,
       })),
   };
+}
+
+
+
+// Define the function to fetch portal list data
+export async function getPortalListData() {
+  const { user } = await protectedProcedure();
+  const { currentOrg } = await getOrganizations();
+
+  // Fetch portal data, including the title
+  const portalData = await db
+    .select({
+      portalId: portal.id,
+      ownerId: portal.ownerId,
+      orgId: portal.orgId,
+      title: portal.title,
+    })
+    .from(portal)
+    .where(and(eq(portal.orgId, currentOrg.id), eq(portal.ownerId, user.id)))
+    .execute();
+
+  if (portalData.length === 0) return null;
+
+  // Fetch linked data and sections for each portal
+  const portals = await Promise.all(
+    portalData.map(async (portal) => {
+      const linkData = await db
+        .select({
+          candidateId: link.candidateId,
+          url: link.url,
+        })
+        .from(link)
+        .where(eq(link.portalId, portal.portalId))
+        .execute();
+
+      const sections = await db
+        .select({
+          title: section.title,
+          content: section.content,
+          contentType: section.contentType,
+        })
+        .from(section)
+        .where(eq(section.portalId, portal.portalId))
+        .execute();
+
+      return {
+        portalId: portal.portalId,
+        ownerId: portal.ownerId,
+        orgId: portal.orgId,
+        title: portal.title || "Untitled", // Use portal title
+        url: linkData[0]?.url || "#",
+        sections: sections.map((sec) => ({
+          title: sec.title || "",
+          content: sec.content,
+          contentType: sec.contentType,
+        })),
+      };
+    })
+  );
+
+  return portals;
 }
