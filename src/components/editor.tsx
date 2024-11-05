@@ -56,7 +56,7 @@ export default function Editor({
     };
 
     return (
-        <div className="my-8 flex w-full items-center justify-center border-2 bg-slate-200 p-4">
+        <div className="my-8 flex w-full items-center justify-center border-2 p-4">
             <YooptaEditor
                 editor={editor}
                 placeholder="Type text.."
