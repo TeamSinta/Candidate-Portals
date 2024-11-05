@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useState } from "react";
 import BottomToolbar from "./bottom-toolbar";
 import Sidebar from "./side-menu";
@@ -38,6 +37,21 @@ export default function PortalContent({ sections }: PortalContentProps) {
     setIsSidebarOpen(false);
   };
 
+  // Improved renderContent function to handle various content types
+  const renderContent = (content: any) => {
+    if (typeof content === "string") {
+      return <p>{content}</p>;
+    } else if (typeof content === "object" && "text" in content) {
+      return <p>{content.text}</p>;
+    } else if (Array.isArray(content)) {
+      return content.map((item, index) => (
+        <p key={index}>{typeof item === "object" && "text" in item ? item.text : item}</p>
+      ));
+    } else {
+      return <p>Content not available</p>;
+    }
+  };
+
   return (
     <div className="flex flex-col flex-1 my-2 bg-white shadow rounded border">
       <header className="flex h-16 items-center justify-between px-4 border-b border-gray-200" />
@@ -46,7 +60,7 @@ export default function PortalContent({ sections }: PortalContentProps) {
         {selectedSection ? (
           <>
             <h1 className="text-lg font-bold">{selectedSection.title}</h1>
-            <p>{selectedSection.content}</p>
+            {renderContent(selectedSection.content)}
           </>
         ) : (
           <p>No content available</p>
