@@ -1,4 +1,3 @@
-import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import { ArrowLeftIcon, ChevronDownIcon, EyeIcon, MoreHorizontalIcon, UploadIcon } from "lucide-react";
 import Link from "next/link";
 import { notFound } from 'next/navigation';
@@ -10,6 +9,11 @@ import { getPortalData } from "@/server/actions/portal/queries";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { Sheet, SheetTrigger, SheetContent, SheetHeader, SheetTitle, SheetDescription } from "@/components/ui/sheet";
+import CreateLinkSheetContent from "../../_components/sheet-content";
+import { Tooltip, TooltipTrigger ,TooltipContent } from "@/components/ui/tooltip";
+import { siteUrls } from "@/config/urls";
+import { cn } from "@/lib/utils";
 
 interface Props {
     params: { id: string };
@@ -46,15 +50,43 @@ export default async function PortalView({ params }: Props) {
 
                     {/* Right Side - Action Buttons */}
                     <div className="flex items-center gap-2">
-                        <EyeIcon className="h-5 w-5 cursor-pointer" />
+                    <Tooltip>
+                    <TooltipTrigger asChild>
+                                                            <Link
+                    href={`/view/${params.id}`}
+                    className={cn("z-10 transition-transform hover:scale-90")}
+                >
+      <EyeIcon className="h-5 w-5 cursor-pointer" />
+                    </Link>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent side="top">
+                                                                {"Preview"}
+                                                            </TooltipContent>
+                                                        </Tooltip>
+
+
+
+
+
+
+
+
                         <Separator orientation="vertical" className="h-6" />
                         <MoreHorizontalIcon className="h-5 w-5 p-1 rounded-full bg-gray-100 dark:bg-gray-700 cursor-pointer" />
 
                         {/* Create Link Button with Dropdown Icon */}
-                        <Button className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-full">
-                            Create link
-                            <ChevronDownIcon className="h-4 w-4" />
-                        </Button>
+                        <Sheet>
+        <SheetTrigger asChild>
+            <Button className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-full">
+                Create link
+                <ChevronDownIcon className="h-4 w-4" />
+            </Button>
+        </SheetTrigger>
+        <SheetContent>
+            <CreateLinkSheetContent /> {/* Import the separate component for sheet content */}
+        </SheetContent>
+    </Sheet>
+
                     </div>
                 </div>
 
