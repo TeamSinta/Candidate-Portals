@@ -106,12 +106,12 @@ function NavLink({ href, label, icon: Icon, active }: NavLinkProps) {
         <Link
             href={href}
             className={cn("flex items-center gap-3 px-2 py-2 rounded transition-colors", {
-                "bg-border text-black font-semibold": active,
-                "hover:bg-muted": !active,
+                "bg-border text-blue-600 font-semibold bg-blue-100": active,
+                "hover:bg-blue-100": !active,
             })}
         >
             <Icon className="h-4 w-4 flex-shrink-0" />
-            <span className="flex-grow truncate font-heading">{label}</span>
+            <span className="flex-grow truncate text-sm font-heading">{label}</span>
             {href.startsWith("http") && (
                 <ExternalLinkIcon className="ml-2 h-4 w-4 text-muted-foreground" />
             )}

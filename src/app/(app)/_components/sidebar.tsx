@@ -13,6 +13,8 @@ import {
 import { getOrganizations } from "@/server/actions/organization/queries";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
+import { HelpCircle } from "lucide-react";
+import { Tooltip, TooltipTrigger ,TooltipContent } from "@/components/ui/tooltip";
 
 type SideNavProps = {
     sidebarNavIncludeIds?: string[];
@@ -56,9 +58,32 @@ export async function AppSidebar({
     return (
       <Sidebar variant="inset" collapsible="icon">
       <SidebarHeader className="w-full">
+      {showLogo && (
+            <div className="flex items-center ">
+              <Link href={siteUrls.dashboard.home} className="flex items-center gap-1 w-full">
+                  <Icons.logo className="w-16 h-10 fill-primary" />
+              </Link>
 
+
+
+              <Tooltip>
+                                                            <TooltipTrigger asChild>
+                                                            <Link
+                    href={siteUrls.feedback}
+                    className={cn("z-10 transition-transform hover:scale-90")}
+                >
+              <HelpCircle className="h-4 w-4 text-muted-foreground"/>
+              </Link>
+                                                            </TooltipTrigger>
+                                                            <TooltipContent side="right">
+                                                                {"Provide Feedback"}
+                                                            </TooltipContent>
+                                                        </Tooltip>
+
+              </div>
+          )}
       {showOrgSwitcher && (
-              <div className="py-2">
+              <div className="py-2 mt-4">
                   <OrgSelectDropdown userOrgs={urgOrgsData} currentOrg={currentOrg} />
               </div>
           )}
@@ -77,11 +102,7 @@ export async function AppSidebar({
       </SidebarContent>
 
       <SidebarFooter>
-      {/* {showLogo && (
-              <Link href={siteUrls.dashboard.home} className="flex items-center gap-3 p-4 w-full">
-                  <Icons.logo className="w-24 h-6 fill-primary" />
-              </Link>
-          )} */}
+
           <UserDropdown user={user} />
       </SidebarFooter>
       <SidebarRail />

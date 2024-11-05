@@ -82,7 +82,7 @@ export function OrgSelectDropdown({
         <AvatarImage src={currentOrg.image} />
     ) : (
         <AvatarFallback>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
+            <div className="flex aspect-square size-8 items-center justify-center rounded-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-sidebar-primary-foreground">
                 {/* Default fallback icon or text */}
                 <GalleryVerticalEnd className="size-4" />
                            </div>

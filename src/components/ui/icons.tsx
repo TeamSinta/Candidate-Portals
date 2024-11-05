@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { type ElementType } from "react";
-import CompanyLogo from "../../../public/SintaLogoCircle.png"
+import CompanyLogo from "../../../public/SintaNameLogo.png"
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -22,16 +22,16 @@ export const Icons = {
         const Comp = as ?? "div";
         return (
             <Comp
-                className={cn("flex items-center space-x-2 text-lg", className)}
+                className={cn("flex items-center space-x-1 text-lg", className)}
             >
             <Image
                     src={CompanyLogo}
                     alt="Company Logo"
-                    width={28} // Adjust size as needed
-                    height={30}
-                    className="rounded-full"
+                    width={88} // Adjust size as needed
+                    height={80}
+                    className=""
                 />
-                <span
+                {/* <span
                     className={cn(
                         "font-bold",
                         "text-xl",
@@ -40,7 +40,7 @@ export const Icons = {
                     )}
                 >
                     {siteConfig.name}
-                </span>
+                </span> */}
             </Comp>
         );
     },

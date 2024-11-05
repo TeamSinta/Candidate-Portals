@@ -39,7 +39,7 @@ function getIcon(contentType: string) {
 
 const PortalCard: React.FC<PortalCardProps> = ({ title, sections, url, date, linkCount, views }) => {
     return (
-        <Link href={`view/${url}`} passHref>
+        <Link href={`dashboard/portal/${url}`} passHref>
             <div
                 className="flex items-center justify-between p-5 rounded-lg border mb-3 hover:shadow-md transition-shadow cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800"
                 style={{ minHeight: "80px" }} // Adjusts the card height slightly

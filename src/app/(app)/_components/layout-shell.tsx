@@ -17,7 +17,13 @@ export function AppLayoutShell({
     showOrgSwitcher,
 }: AppLayoutProps) {
     return (
-        <SidebarProvider>
+      <SidebarProvider
+      style={
+        {
+          "--sidebar-width": "14rem",
+        } as React.CSSProperties
+      }
+    >
             <div className=" flex items-start w-[100%] ">
 
                     <Suspense fallback={<SidebarLoading />}>
