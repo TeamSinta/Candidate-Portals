@@ -45,6 +45,7 @@ export default function Editor({
             title: "title",
             content: editor.getEditorValue(),
             contentType: SectionContentType.YOOPTA,
+            index: 1,
         });
     };
 

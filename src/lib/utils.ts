@@ -28,3 +28,11 @@ export function thousandToK(value: number) {
 export function formatDate(date: string | number | Date) {
     return format(new Date(date), "PP");
 }
+
+export function generateGUID(): string {
+    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+        const r = (Math.random() * 16) | 0;
+        const v = c === "x" ? r : (r & 0x3) | 0x8;
+        return v.toString(16);
+    });
+}

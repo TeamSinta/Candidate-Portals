@@ -28,7 +28,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
                     backgroundSize: "20px 20px",
                 }}
             >
-                <div className="flex w-max gap-2 rounded-lg border-[2px] bg-white p-2 lg:min-w-[30rem]">
+                <div className="flex w-max gap-2 rounded-lg border-[2px] bg-white p-2 transition-shadow duration-300 hover:shadow-lg lg:min-w-[30rem]">
                     <Terminal className="mt-1 h-4" />
                     <div className="flex flex-col text-sm">
                         <div className="font-medium">Heads up!</div>

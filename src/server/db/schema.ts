@@ -1,4 +1,9 @@
-import { InferSelectModel, relations, sql } from "drizzle-orm";
+import {
+    InferInsertModel,
+    InferSelectModel,
+    relations,
+    sql,
+} from "drizzle-orm";
 import {
     boolean,
     index,
@@ -414,7 +419,7 @@ export const section = createTable("section", {
     title: varchar("title", { length: 255 }),
     content: jsonb("content"),
     contentType: sectionContentType().notNull(),
-    index: integer().notNull()
+    index: integer().notNull(),
 });
 
 // ContentType is made potentially undefined here so this type can be used when users create new blocks
@@ -424,6 +429,7 @@ export type SectionSelect = Omit<
 > & {
     contentType?: SectionContentType;
 };
+export type SectionInsert = InferInsertModel<typeof section>;
 
 export const link = createTable("link", {
     id: varchar("id", { length: 255 })

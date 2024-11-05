@@ -4,6 +4,8 @@ import { SectionContentType, SectionSelect } from "@/server/db/schema";
 import ContentBlock from "./content-block";
 import { YooptaBlockData } from "@yoopta/editor";
 import { Button } from "@/components/ui/button";
+import { generateGUID } from "@/lib/utils";
+import { deleteSection, saveSection } from "@/server/actions/portal/mutations";
 function BlockEditor({
     portalId,
     sections,
@@ -16,35 +18,37 @@ function BlockEditor({
         undefined,
     );
 
-    function handleSaveBlock(index: number, updatedBlockData: any) {
-        setBlocks((prevBlocks) => {
-            const blocksCopy = [...prevBlocks];
-            if (blocksCopy[index]) {
-                blocksCopy[index] = {
-                    ...blocksCopy[index],
-                    ...updatedBlockData,
-                    portalId,
-                };
-                console.log("Updating block at index:", index);
-            } else {
-                blocksCopy.splice(index, 0, { ...updatedBlockData, portalId });
-                console.log("Creating new block at index:", index);
-            }
-            return blocksCopy;
-        });
+    async function handleSaveBlock(index: number, updatedBlockData: any) {
+        const newBlocks = [...blocks];
+        if (newBlocks[index]) {
+            newBlocks[index] = {
+                ...newBlocks[index],
+                ...updatedBlockData,
+                portalId,
+            };
+            console.log("Updating block at index:", index);
+        } else {
+            newBlocks.splice(index, 0, { ...updatedBlockData, portalId });
+            console.log("Creating new block at index:", index);
+        }
+        setBlocks(newBlocks);
         setSelectedBlock(undefined);
+        await saveSection({ ...updatedBlockData, portalId, index });
     }
 
-    function handleDeleteBlock(index: number) {
+    async function handleDeleteBlock(sectionId: string) {
         setBlocks((prevBlocks) => {
-            const updatedBlocks = prevBlocks.filter((_block, i) => i !== index);
-            console.log("Deleted block at index:", index);
+            const updatedBlocks = prevBlocks.filter(
+                (block, index) => block.id !== sectionId,
+            );
+            console.log("Deleted block with id:", sectionId);
             return updatedBlocks;
         });
+        await deleteSection(sectionId, portalId);
     }
 
     function handleCreateBlock() {
-        const newId = Date.now().toString();
+        const newId = generateGUID();
         setBlocks((prevBlocks) => {
             const newBlock = {
                 contentType: undefined,
@@ -56,17 +60,18 @@ function BlockEditor({
             };
             return [...prevBlocks, newBlock];
         });
-        if (!blocks.length) setSelectedBlock(undefined);
-        else setSelectedBlock(newId);
+        setSelectedBlock(newId);
     }
 
     return (
         <>
+            <div>SelectedBlock: {JSON.stringify(selectedBlock)}</div>
             {blocks.length > 0 && (
                 <div className="flex flex-col items-center gap-8">
                     {blocks.map((section, index) => (
                         <ContentBlock
                             key={section.id}
+                            id={section.id}
                             index={index + 1}
                             initialContentData={
                                 section.content as
@@ -75,7 +80,7 @@ function BlockEditor({
                             }
                             initialContentType={section.contentType}
                             onSaveBlock={(data) => handleSaveBlock(index, data)}
-                            onDeleteBlock={() => handleDeleteBlock(index)}
+                            onDeleteBlock={() => handleDeleteBlock(section.id)}
                             editing={selectedBlock === section.id}
                             editBlock={() => setSelectedBlock(section.id)}
                         />
@@ -94,8 +99,11 @@ function BlockEditor({
             {blocks.length === 0 && (
                 <ContentBlock
                     index={1}
+                    id={""}
                     initialContentData={{ title: "", url: "" }}
-                    onSaveBlock={(data) => handleSaveBlock(0, data)}
+                    onSaveBlock={(data) =>
+                        handleSaveBlock(0, { ...data, id: generateGUID() })
+                    }
                     onDeleteBlock={() => {}}
                     editing={true}
                     editBlock={() => {}}
