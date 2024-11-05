@@ -20,12 +20,13 @@ export async function createPortal() {
 
     if (!newPortal?.id) throw new Error("Failed to create portal");
 
-    const newSection = await db.insert(section).values({
-        portalId: newPortal.id,
-        title: "title",
-        content: {},
-        contentType: SectionContentType.YOOPTA,
-    });
+    // const newSection = await db.insert(section).values({
+    //     portalId: newPortal.id,
+    //     title: "title",
+    //     content: {},
+    //     contentType: SectionContentType.YOOPTA,
+    //     index: 0,
+    // });
     return newPortal;
 }
 

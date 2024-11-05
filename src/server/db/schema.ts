@@ -399,7 +399,7 @@ export enum SectionContentType {
 }
 
 export const sectionContentType = pgEnum(
-    "role",
+    "sectionContentType",
     enumToPgEnum(SectionContentType),
 );
 
@@ -414,9 +414,16 @@ export const section = createTable("section", {
     title: varchar("title", { length: 255 }),
     content: jsonb("content"),
     contentType: sectionContentType().notNull(),
+    index: integer().notNull()
 });
 
-export type SectionSelect = InferSelectModel<typeof section>;
+// ContentType is made potentially undefined here so this type can be used when users create new blocks
+export type SectionSelect = Omit<
+    InferSelectModel<typeof section>,
+    "contentType"
+> & {
+    contentType?: SectionContentType;
+};
 
 export const link = createTable("link", {
     id: varchar("id", { length: 255 })
