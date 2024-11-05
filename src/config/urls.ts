@@ -24,6 +24,7 @@ export const siteUrls = {
     dashboard: {
         home: "/dashboard",
     },
+    view: "/view/",
     feedback: "/feedback",
     organization: {
         members: {
@@ -64,6 +65,7 @@ export const publicRoutes: string[] = [
     siteUrls.maintenance,
     siteUrls.waitlist,
     siteUrls.rapidlaunch,
+    siteUrls.view,
 ];
 
 export const protectedRoutes: string[] = [

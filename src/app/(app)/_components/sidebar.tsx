@@ -95,7 +95,7 @@ export function SidebarLoading({
     showOrgSwitcher?: boolean;
 }) {
     return (
-        <aside className={cn("h-full w-full")}>
+        <aside className={cn("h-full")}>
             <div className={cn(" flex h-16 items-center justify-between")}>
                 <Link
                     href={siteUrls.home}
@@ -121,7 +121,7 @@ export function SidebarLoading({
             <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
                 <div className="h-full w-full space-y-2 py-2">
                     {[1, 2, 3, 4, 5].map((i) => (
-                        <Skeleton key={i} className="h-8 w-full rounded-md" />
+                        <Skeleton key={i} className="h-8 rounded-md" />
                     ))}
                     <ScrollBar orientation="vertical" />
                 </div>

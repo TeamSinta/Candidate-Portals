@@ -7,6 +7,7 @@
         "build": "next build",
         "db:push": "drizzle-kit push",
         "db:studio": "drizzle-kit studio --config=drizzle.config.ts",
+        "db:seed": "node --loader esbuild-register/loader -r esbuild-register ./src/server/db/seed.ts",
         "dev": "next dev",
         "dev:turbo": "next dev --turbo",
         "lint": "next lint",
@@ -52,8 +53,8 @@
         "clsx": "^2.1.0",
         "cmdk": "^0.2.1",
         "date-fns": "^3.6.0",
-        "drizzle-kit": "^0.26.2",
-        "drizzle-orm": "^0.35.1",
+        "dotenv": "^16.4.5",
+        "drizzle-orm": "^0.35.3",
         "drizzle-zod": "^0.5.1",
         "eslint": "^8.57.0",
         "eslint-config-next": "^14.2.1",
@@ -67,7 +68,7 @@
         "next-auth": "^4.24.6",
         "next-themes": "^0.3.0",
         "nodemailer": "^6.9.13",
-        "pg": "^8.11.3",
+        "pg": "^8.13.1",
         "postcss": "^8.4.38",
         "postgres": "^3.4.3",
         "posthog-js": "^1.130.0",
@@ -96,5 +97,11 @@
     "ct3aMetadata": {
         "initVersion": "7.26.0"
     },
-    "packageManager": "pnpm@8.10.0"
+    "packageManager": "pnpm@8.10.0",
+    "devDependencies": {
+        "@faker-js/faker": "^9.1.0",
+        "@types/pg": "^8.11.10",
+        "drizzle-kit": "^0.27.1",
+        "esbuild-register": "^3.6.0"
+    }
 }
