@@ -14,6 +14,7 @@ import { Edit } from "lucide-react";
 
 function ContentBlock({
     index,
+    id,
     initialContentType,
     initialContentData,
     onSaveBlock,
@@ -22,6 +23,7 @@ function ContentBlock({
     editBlock,
 }: {
     index: number;
+    id: string;
     initialContentType?: SectionContentType;
     initialContentData: YooptaBlockData | { url: string; title: string };
     onSaveBlock: (data: any) => void;
