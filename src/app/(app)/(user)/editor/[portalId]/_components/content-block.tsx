@@ -46,11 +46,7 @@ function ContentBlock({
     return (
         <div className="flex w-[50rem] flex-col rounded-lg border-2 bg-white p-4 shadow">
             <div className="flex flex-row items-center justify-between text-xl font-bold">
-                {editing && (
-                    <div>
-                        Content Block {index} Editing: {editing.toString()}
-                    </div>
-                )}
+                {editing && <div>Content Block {index}</div>}
                 {!editing && (
                     <>
                         <div>
@@ -118,8 +114,9 @@ function ContentBlock({
                             disabled={!contentType}
                             onClick={() =>
                                 onSaveBlock({
+                                    id,
                                     contentType,
-                                    contentData,
+                                    content: contentData,
                                     title: contentData.title ?? "title",
                                 })
                             }
@@ -131,7 +128,14 @@ function ContentBlock({
             )}
             {!editing && (
                 <div>
-                    <div>Content Type: {contentType}</div>
+                    <div>
+                        Content Type: <b>{contentType}</b>
+                    </div>
+                    {contentType === SectionContentType.URL && (
+                        <div>
+                            <b>{contentData.url}</b>
+                        </div>
+                    )}
                 </div>
             )}
         </div>

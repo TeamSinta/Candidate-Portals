@@ -65,7 +65,7 @@ function BlockEditor({
 
     return (
         <>
-            <div>SelectedBlock: {JSON.stringify(selectedBlock)}</div>
+            {/* <div>SelectedBlock: {JSON.stringify(selectedBlock)}</div> */}
             {blocks.length > 0 && (
                 <div className="flex flex-col items-center gap-8">
                     {blocks.map((section, index) => (
@@ -109,7 +109,7 @@ function BlockEditor({
                     editBlock={() => {}}
                 />
             )}
-            <div>{JSON.stringify(blocks)}</div>
+            {/* <div>{JSON.stringify(blocks)}</div> */}
         </>
     );
 }
