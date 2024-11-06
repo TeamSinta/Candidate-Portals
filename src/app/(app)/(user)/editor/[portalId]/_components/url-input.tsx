@@ -11,7 +11,7 @@ function InputField({
     value: string;
     label: string;
     placeholder: string;
-    onChange: (key: string, value: any) => void;
+    onChange: (key: string, value: string) => void;
 }) {
     return (
         <div className="flex flex-row items-center gap-4 text-sm">
@@ -34,7 +34,7 @@ function UrlInput({
 }: {
     title: string;
     url: string;
-    onChange: (key: string, value: any) => void;
+    onChange: (key: string, value: string) => void;
 }) {
     return (
         <div className="my-4 flex flex-col items-end gap-4">

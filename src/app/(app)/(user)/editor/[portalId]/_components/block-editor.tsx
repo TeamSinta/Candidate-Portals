@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { SectionContentType, SectionSelect } from "@/server/db/schema";
-import ContentBlock from "./content-block";
+import ContentBlock, { ContentDataType, SaveBlockArgs } from "./content-block";
 import { YooptaBlockData } from "@yoopta/editor";
 import { Button } from "@/components/ui/button";
 import { generateGUID } from "@/lib/utils";
@@ -18,7 +18,10 @@ function BlockEditor({
         undefined,
     );
 
-    async function handleSaveBlock(index: number, updatedBlockData: any) {
+    async function handleSaveBlock(
+        index: number,
+        updatedBlockData: SaveBlockArgs,
+    ) {
         const newBlocks = [...blocks];
         if (newBlocks[index]) {
             newBlocks[index] = {
@@ -28,7 +31,11 @@ function BlockEditor({
             };
             console.log("Updating block at index:", index);
         } else {
-            newBlocks.splice(index, 0, { ...updatedBlockData, portalId });
+            newBlocks.splice(index, 0, {
+                ...updatedBlockData,
+                portalId,
+                index: index,
+            });
             console.log("Creating new block at index:", index);
         }
         setBlocks(newBlocks);
@@ -74,9 +81,7 @@ function BlockEditor({
                             id={section.id}
                             index={index + 1}
                             initialContentData={
-                                section.content as
-                                    | YooptaBlockData
-                                    | { url: string; title: string }
+                                section.content as ContentDataType
                             }
                             initialContentType={section.contentType}
                             onSaveBlock={(data) => handleSaveBlock(index, data)}
@@ -104,9 +109,13 @@ function BlockEditor({
                     onSaveBlock={(data) =>
                         handleSaveBlock(0, { ...data, id: generateGUID() })
                     }
-                    onDeleteBlock={() => {}}
+                    onDeleteBlock={() => {
+                        return;
+                    }}
                     editing={true}
-                    editBlock={() => {}}
+                    editBlock={() => {
+                        return;
+                    }}
                 />
             )}
             {/* <div>{JSON.stringify(blocks)}</div> */}

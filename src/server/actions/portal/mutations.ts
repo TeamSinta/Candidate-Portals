@@ -66,7 +66,8 @@ export async function reIndexSections(portalId: string) {
     });
 
     const updatePromises = sections.map((block, newIndex) => {
-        db.insert(section)
+        return db
+            .insert(section)
             .values({ ...block, index: newIndex })
             .onConflictDoUpdate({
                 target: section.id,

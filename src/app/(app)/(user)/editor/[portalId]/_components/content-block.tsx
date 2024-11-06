@@ -12,7 +12,21 @@ import {
 import UrlInput from "./url-input";
 import { Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
+export interface UrlContentData {
+    url: string;
+    title: string;
+}
 
+export type ContentDataType =
+    | (YooptaBlockData & { title: string })
+    | UrlContentData;
+
+export interface SaveBlockArgs {
+    content: ContentDataType;
+    id: string;
+    contentType: SectionContentType;
+    title: string;
+}
 function ContentBlock({
     index,
     id,
@@ -26,8 +40,8 @@ function ContentBlock({
     index: number;
     id: string;
     initialContentType?: SectionContentType;
-    initialContentData: YooptaBlockData | { url: string; title: string };
-    onSaveBlock: (data: any) => void;
+    initialContentData: ContentDataType;
+    onSaveBlock: (args: SaveBlockArgs) => void;
     onDeleteBlock: () => void;
     editing: boolean;
     editBlock: () => void;
@@ -35,10 +49,14 @@ function ContentBlock({
     const [contentType, setContentType] = useState<
         SectionContentType | undefined
     >(initialContentType);
-    const [contentData, setContentData] = useState<any>(initialContentData);
+    const [contentData, setContentData] =
+        useState<ContentDataType>(initialContentData);
 
-    function handleContentDataChange(key: string, value: any) {
-        setContentData((prevData: any) => ({
+    function handleContentDataChange(
+        key: string,
+        value: string | YooptaBlockData,
+    ) {
+        setContentData((prevData: ContentDataType) => ({
             ...prevData,
             [key]: value,
         }));
@@ -106,8 +124,8 @@ function ContentBlock({
                     {/* Conditional render based on contentType */}
                     {contentType === SectionContentType.URL && (
                         <UrlInput
-                            title={contentData?.title || ""}
-                            url={contentData?.url || ""}
+                            title={contentData?.title ?? ""}
+                            url={"url" in contentData ? contentData?.url : ""}
                             onChange={handleContentDataChange}
                         />
                     )}
@@ -121,14 +139,15 @@ function ContentBlock({
                         </Button>
                         <Button
                             disabled={!contentType}
-                            onClick={() =>
+                            onClick={() => {
+                                if (!contentType) return;
                                 onSaveBlock({
                                     id,
                                     contentType,
                                     content: contentData,
                                     title: contentData.title ?? "title",
-                                })
-                            }
+                                });
+                            }}
                         >
                             Save Block
                         </Button>
@@ -140,11 +159,12 @@ function ContentBlock({
                     <div>
                         Content Type: <b>{contentType}</b>
                     </div>
-                    {contentType === SectionContentType.URL && (
-                        <div>
-                            <b>{contentData.url}</b>
-                        </div>
-                    )}
+                    {contentType === SectionContentType.URL &&
+                        "url" in contentData && (
+                            <div>
+                                <b>{contentData.url}</b>
+                            </div>
+                        )}
                 </div>
             )}
         </div>
