@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SectionContentType } from "@/server/db/schema";
-import { YooptaBlockData } from "@yoopta/editor";
+import { YooptaContentValue } from "@yoopta/editor";
 import {
     Select,
     SelectContent,
@@ -12,14 +12,13 @@ import {
 import UrlInput from "./url-input";
 import { Edit } from "lucide-react";
 import { cn } from "@/lib/utils";
-export interface UrlContentData {
-    url: string;
-    title: string;
-}
-
-export type ContentDataType =
-    | (YooptaBlockData & { title: string })
-    | UrlContentData;
+import Editor from "@/components/editor";
+import {
+    ContentDataType,
+    isUrlContentData,
+    isYooptaContentData,
+    UrlContentData,
+} from "../utils/types";
 
 export interface SaveBlockArgs {
     content: ContentDataType;
@@ -27,16 +26,8 @@ export interface SaveBlockArgs {
     contentType: SectionContentType;
     title: string;
 }
-function ContentBlock({
-    index,
-    id,
-    initialContentType,
-    initialContentData,
-    onSaveBlock,
-    onDeleteBlock,
-    editing,
-    editBlock,
-}: {
+
+interface ContentBlockProps {
     index: number;
     id: string;
     initialContentType?: SectionContentType;
@@ -45,21 +36,51 @@ function ContentBlock({
     onDeleteBlock: () => void;
     editing: boolean;
     editBlock: () => void;
-}) {
+    initialTitle: string;
+}
+
+function ContentBlock({
+    index,
+    id,
+    initialContentType,
+    initialContentData,
+    initialTitle,
+    onSaveBlock,
+    onDeleteBlock,
+    editing,
+    editBlock,
+}: ContentBlockProps) {
     const [contentType, setContentType] = useState<
         SectionContentType | undefined
     >(initialContentType);
-    const [contentData, setContentData] =
-        useState<ContentDataType>(initialContentData);
+    const [title, setTitle] = useState<string>(initialTitle ?? "");
+    const [urlContentData, setUrlContentData] = useState<UrlContentData>(
+        isUrlContentData(initialContentData) ? initialContentData : { url: "" },
+    );
+    const [yooptaContentData, setYooptaContentData] =
+        useState<YooptaContentValue>(
+            isYooptaContentData(initialContentData) ? initialContentData : {},
+        );
 
-    function handleContentDataChange(
-        key: string,
-        value: string | YooptaBlockData,
-    ) {
-        setContentData((prevData: ContentDataType) => ({
+    function handleUrlContentDataChange(key: string, value: string) {
+        setUrlContentData((prevData) => ({
             ...prevData,
             [key]: value,
         }));
+    }
+
+    function handleSave() {
+        if (!contentType) return;
+        const content =
+            contentType === SectionContentType.URL
+                ? { ...urlContentData }
+                : { ...yooptaContentData };
+        onSaveBlock({
+            id,
+            contentType,
+            content,
+            title,
+        });
     }
 
     return (
@@ -76,11 +97,7 @@ function ContentBlock({
                 {editing && <div>Content Block {index}</div>}
                 {!editing && (
                     <>
-                        <div>
-                            {contentData?.title?.length > 0
-                                ? contentData.title
-                                : `Section ${index}`}
-                        </div>
+                        <div>{title || `Section ${index}`}</div>
                         <Edit
                             className="h-6 w-6 cursor-pointer text-slate-400"
                             onClick={editBlock}
@@ -120,35 +137,28 @@ function ContentBlock({
                             </Select>
                         </div>
                     )}
-
-                    {/* Conditional render based on contentType */}
                     {contentType === SectionContentType.URL && (
                         <UrlInput
-                            title={contentData?.title ?? ""}
-                            url={"url" in contentData ? contentData?.url : ""}
-                            onChange={handleContentDataChange}
+                            title={title}
+                            url={urlContentData.url}
+                            onChange={handleUrlContentDataChange}
+                            onTitleChange={setTitle}
                         />
                     )}
                     {contentType === SectionContentType.YOOPTA && (
-                        <div>Editor Component Placeholder</div>
+                        <Editor
+                            content={yooptaContentData}
+                            editable
+                            sectionId={id}
+                            onChange={setYooptaContentData}
+                            onTitleChange={setTitle}
+                        />
                     )}
-
                     <div className="flex gap-2 self-end">
                         <Button variant="outline" onClick={onDeleteBlock}>
                             Delete Block
                         </Button>
-                        <Button
-                            disabled={!contentType}
-                            onClick={() => {
-                                if (!contentType) return;
-                                onSaveBlock({
-                                    id,
-                                    contentType,
-                                    content: contentData,
-                                    title: contentData.title ?? "title",
-                                });
-                            }}
-                        >
+                        <Button disabled={!contentType} onClick={handleSave}>
                             Save Block
                         </Button>
                     </div>
@@ -159,14 +169,15 @@ function ContentBlock({
                     <div>
                         Content Type: <b>{contentType}</b>
                     </div>
-                    {contentType === SectionContentType.URL &&
-                        "url" in contentData && (
-                            <div>
-                                <b>{contentData.url}</b>
-                            </div>
-                        )}
+                    {contentType === SectionContentType.URL && (
+                        <div>
+                            <b>{urlContentData.url}</b>
+                        </div>
+                    )}
                 </div>
             )}
+            {/* {JSON.stringify(isYooptaContentData(initialContentData))}
+            {JSON.stringify(initialContentData)} */}
         </div>
     );
 }

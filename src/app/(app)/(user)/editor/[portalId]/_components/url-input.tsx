@@ -1,4 +1,5 @@
 import React from "react";
+import { UrlContentData } from "../utils/types";
 
 function InputField({
     fieldKey,
@@ -31,10 +32,12 @@ function UrlInput({
     title,
     url,
     onChange,
+    onTitleChange,
 }: {
     title: string;
     url: string;
     onChange: (key: string, value: string) => void;
+    onTitleChange: (value: string) => void;
 }) {
     return (
         <div className="my-4 flex flex-col items-end gap-4">
@@ -43,7 +46,9 @@ function UrlInput({
                 value={title}
                 label="Content Title"
                 placeholder="Careers Page Overview"
-                onChange={onChange}
+                onChange={(key, value) => {
+                    if (key === "title") onTitleChange(value);
+                }}
             />
             <InputField
                 fieldKey="url"

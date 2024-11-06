@@ -1,11 +1,12 @@
 "use client";
 import React, { useState } from "react";
 import { SectionContentType, SectionSelect } from "@/server/db/schema";
-import ContentBlock, { ContentDataType, SaveBlockArgs } from "./content-block";
+import ContentBlock, { SaveBlockArgs } from "./content-block";
 import { YooptaBlockData } from "@yoopta/editor";
 import { Button } from "@/components/ui/button";
 import { generateGUID } from "@/lib/utils";
 import { deleteSection, saveSection } from "@/server/actions/portal/mutations";
+import { ContentDataType } from "../utils/types";
 function BlockEditor({
     portalId,
     sections,
@@ -83,6 +84,7 @@ function BlockEditor({
                             initialContentData={
                                 section.content as ContentDataType
                             }
+                            initialTitle={section.title ?? ""}
                             initialContentType={section.contentType}
                             onSaveBlock={(data) => handleSaveBlock(index, data)}
                             onDeleteBlock={() => handleDeleteBlock(section.id)}
@@ -105,7 +107,8 @@ function BlockEditor({
                 <ContentBlock
                     index={1}
                     id={""}
-                    initialContentData={{ title: "", url: "" }}
+                    initialTitle=""
+                    initialContentData={{ url: "" }}
                     onSaveBlock={(data) =>
                         handleSaveBlock(0, { ...data, id: generateGUID() })
                     }
@@ -118,7 +121,7 @@ function BlockEditor({
                     }}
                 />
             )}
-            {/* <div>{JSON.stringify(blocks)}</div> */}
+            <div>{JSON.stringify(blocks)}</div>
         </>
     );
 }

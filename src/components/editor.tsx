@@ -26,49 +26,43 @@ const tools = {
 
 export default function Editor({
     content,
-    portalId,
+    // portalId,
     sectionId,
     editable = true,
+    onChange,
+    onTitleChange,
 }: {
     content: YooptaContentValue;
-    portalId: string;
     sectionId: string;
     editable: boolean;
+    onChange: (data: YooptaContentValue) => void;
+    onTitleChange: (value: string) => void;
 }) {
     const editor = useMemo(() => createYooptaEditor(), []);
-    const [value, setValue] = useState<YooptaContentValue>(content);
-
-    const handleSave = async () => {
-        await updateSectionContent({
-            id: sectionId,
-            portalId: portalId,
-            title: "title",
-            content: editor.getEditorValue(),
-            contentType: SectionContentType.YOOPTA,
-            index: 1,
-        });
-    };
-
-    const onChange = (
-        value: YooptaContentValue,
-        options: YooptaOnChangeOptions,
-    ) => {
-        setValue(value);
-    };
+    // const handleSave = async () => {
+    //     await updateSectionContent({
+    //         id: sectionId,
+    //         portalId: portalId,
+    //         title: "title",
+    //         content: editor.getEditorValue(),
+    //         contentType: SectionContentType.YOOPTA,
+    //         index: 1,
+    //     });
+    // };
 
     return (
         <div className="my-8 flex w-full items-center justify-center border-2 p-4">
             <YooptaEditor
                 editor={editor}
                 placeholder="Type text.."
-                value={value}
+                value={content}
                 onChange={onChange}
                 // here we go
                 plugins={plugins}
                 tools={tools}
                 readOnly={!editable}
             />
-            {editable && <Button onClick={handleSave}>Save</Button>}
+            {/* {editable && <Button onClick={handleSave}>Save</Button>} */}
         </div>
     );
 }
