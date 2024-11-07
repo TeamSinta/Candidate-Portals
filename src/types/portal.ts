@@ -19,3 +19,25 @@ export interface PortalData {
     candidateId: string;
   }[];
 }
+
+
+export type Section = {
+  id: string;
+  title: string;
+  content: any;
+  contentType: string;
+};
+
+export type PublicPortalData = {
+  candidateName: string;
+  candidateEmail: string;
+  userId: string;
+  portalId: string;
+  linkId: string;
+  customContent: object | string | null;
+  sections: Section[];
+};
+
+export type PortalContentProps = {
+  portalData: PortalData;
+};

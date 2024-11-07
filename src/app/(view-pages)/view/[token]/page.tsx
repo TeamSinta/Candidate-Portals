@@ -17,7 +17,7 @@ export default async function ViewPage({
 
     return (
         <>
-            <PortalContent sections={portalData.sections} />
+            <PortalContent portalData={portalData} />
         </>
     );
 }

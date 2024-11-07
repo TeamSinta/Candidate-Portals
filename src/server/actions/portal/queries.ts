@@ -6,13 +6,15 @@ import { and, eq, inArray } from "drizzle-orm";
 import { getOrganizations } from "../organization/queries";
 import { protectedProcedure } from "@/server/procedures";
 
-// Define the function to fetch portal data by token
-// app/queries.ts
-
 export async function getPortalData(token: string) {
     // Query the link table to find the candidate's portal linked to the token
     const linkData = await db
-        .select()
+        .select({
+            id: link.id, // Adding link_id
+            portalId: link.portalId, // Adding portal_id
+            candidateId: link.candidateId, // Needed for fetching candidate data
+            customContent: link.customContent,
+        })
         .from(link)
         .where(eq(link.url, token))
         .execute()
@@ -25,6 +27,7 @@ export async function getPortalData(token: string) {
         .select({
             candidateName: candidate.name,
             candidateEmail: candidate.email,
+            userId: candidate.id, // Adding user_id
         })
         .from(candidate)
         .where(eq(candidate.id, linkData.candidateId))
@@ -34,7 +37,12 @@ export async function getPortalData(token: string) {
     if (!candidateData) return null;
 
     const sections = await db
-        .select()
+        .select({
+            id: section.id, // Adding section_id
+            title: section.title,
+            content: section.content,
+            contentType: section.contentType,
+        })
         .from(section)
         .where(eq(section.portalId, linkData.portalId))
         .execute();
@@ -42,14 +50,19 @@ export async function getPortalData(token: string) {
     return {
         candidateName: candidateData.candidateName,
         candidateEmail: candidateData.candidateEmail,
+        userId: candidateData.userId, // Including user_id
+        portalId: linkData.portalId, // Including portal_id
+        linkId: linkData.id, // Including link_id
         customContent: linkData.customContent as object | string | null, // Explicitly type it here
         sections: sections.map((section) => ({
+            sectionId: section.id, // Including section_id
             title: section.title,
             content: section.content as string, // Ensure content is string for rendering
             contentType: section.contentType,
-        }))
+        })),
     };
 }
+
 
 // Define the function to fetch portal list data
 export async function getPortalListData() {

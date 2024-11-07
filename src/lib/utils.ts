@@ -4,6 +4,7 @@ import { type ClassValue, clsx } from "clsx";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
 
+
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
 }
@@ -44,4 +45,28 @@ export function generateCustomUrl(): string {
 
   // Return the generated string
   return result;
+}
+
+// utils/tinybird.ts
+export async function sendEventToTinybird(eventData: any) {
+  try {
+      const response = await fetch(`https://api.us-east.tinybird.co/v0/events?name=${env.NEXT_PUBLIC_TINYBIRD_DATASOURCE}`, {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${env.NEXT_PUBLIC_TINYBIRD_INGESTION_TOKEN}`,
+          },
+          body: JSON.stringify(eventData),
+      });
+
+      if (!response.ok) {
+          console.error("Failed to send event to Tinybird", await response.text());
+      }
+      console.log(response)
+
+
+  } catch (error) {
+      console.error("Error sending event to Tinybird:", error);
+      console.log(error)
+  }
 }

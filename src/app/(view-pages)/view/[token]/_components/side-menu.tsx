@@ -4,13 +4,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { X, FileText, File, YoutubeIcon } from "lucide-react";
 import { NotionLogoIcon } from "@radix-ui/react-icons";
-
-type Section = {
-    id: string;
-    title: string;
-    content: any;
-    type: string;
-};
+import { Section } from "@/types/portal";
 
 type SidebarProps = {
     isSidebarOpen: boolean;
@@ -82,7 +76,7 @@ export default function Sidebar({
             <motion.div className="h-full space-y-1 overflow-y-auto p-2">
                 {sections.map((section) => (
                     <motion.div
-                        key={section.id}
+                        key={section.id} // Ensure this is a unique identifier
                         onClick={() => handleSectionSelect(section)}
                         className="flex cursor-pointer items-center gap-3 rounded-lg p-3 transition-colors hover:bg-gray-200"
                     >

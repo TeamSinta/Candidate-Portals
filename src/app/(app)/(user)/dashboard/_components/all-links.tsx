@@ -8,6 +8,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/h
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import Image from "next/image";
+import CircleProgressLoader from "@/app/(app)/_components/circle-progress-loader";
 
 interface LinksCardProps {
   portalData: {
@@ -20,8 +21,8 @@ export default function LinksCard({ portalData }: LinksCardProps) {
   const handleCopy = (text: string) => {
     navigator.clipboard.writeText(text);
   };
-  const views = 1;
-  const lastClicked = "2m ago";
+
+  const progress = 0.75; // Example progress amount (75%)
 
   return (
     <Card className="mt-6 rounded shadow-none">
@@ -35,7 +36,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
               <th className="py-2">Name</th>
               <th className="py-2">Link</th>
               <th className="py-2">Views</th>
-              <th className="py-2">Last Viewed</th>
+              <th className="py-2">View Duration</th>
             </tr>
           </thead>
           <tbody>
@@ -47,19 +48,19 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                 const displayName = candidate?.name || candidate?.email || "Untitled";
 
                 return (
-                  <tr key={index} className="border-b items-center ">
-                    <td className="py-4 flex gap-2 items-center"><Image className="rounded-full" width={26} height={30} alt="user pic" src={`https://avatar.vercel.sh/${displayName}`}/> {displayName}</td>
+                  <tr key={index} className="border-b items-center font-heading ">
+                    <td className="py-4 flex gap-2 items-center"><Image className="rounded-sm" width={26} height={30} alt="user pic" src={`https://avatar.vercel.sh/${displayName}`}/> {displayName}</td>
                     <td className="py-2">
                       <div
                         className="relative group cursor-pointer"
                         onClick={() => handleCopy(link.url)}
                       >
 
-                        <div className="p-2 rounded-md bg-blue-50 group-hover:bg-blue-200 transition w-[400px] overflow-hidden">
-                          <span className="text-blue-600 group-hover:hidden">
+                        <div className="p-2 rounded-full bg-blue-50 group-hover:bg-white group-hover:border hover:border-blue-400 transition w-[400px] overflow-hidden text-center">
+                          <span className="text-black text-sm group-hover:hidden">
                             {siteUrls.publicUrl + siteUrls.view + link.url}
                           </span>
-                          <span className="hidden text-blue-600 group-hover:inline">
+                          <span className="hidden text-blue-600 group-hover:inline ">
                             Copy to Clipboard
                           </span>
                         </div>
@@ -99,8 +100,8 @@ export default function LinksCard({ portalData }: LinksCardProps) {
         </button>
       </HoverCardContent>
     </HoverCard>
-                    <td className="py-2">Nov 1</td> {/* Placeholder for last viewed */}
-                  </tr>
+    <td className="py-2">  <CircleProgressLoader progress={progress} /></td> {/* Use the progress loader */}
+    </tr>
                 );
               })
             ) : (
