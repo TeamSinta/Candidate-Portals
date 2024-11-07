@@ -121,7 +121,7 @@ function BlockEditor({
                     }}
                 />
             )}
-            <div>{JSON.stringify(blocks)}</div>
+            {/* <div>{JSON.stringify(blocks)}</div> */}
         </>
     );
 }

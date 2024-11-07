@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { candidate, link, section, portal } from "@/server/db/schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 
 export async function getPortalQuery(portalId: string) {
     const portalObject = await db.query.portal.findFirst({
@@ -10,6 +10,7 @@ export async function getPortalQuery(portalId: string) {
 
     const sections = await db.query.section.findMany({
         where: eq(section.portalId, portalId),
+        orderBy: [asc(section.index)],
     });
     return { portal: portalObject, sections };
 }

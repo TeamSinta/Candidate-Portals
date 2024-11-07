@@ -86,6 +86,7 @@ export async function reIndexSections(portalId: string) {
 
 export async function saveSection(data: SectionInsert | undefined) {
     if (!data) return;
+    // console.log("data on save", data);
     await db
         .insert(section)
         .values(data)
