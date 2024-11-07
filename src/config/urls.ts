@@ -8,7 +8,7 @@
  */
 
 export const siteUrls = {
-    publicUrl: "https://saasdemo.rapidlaunch.xyz",
+    publicUrl: "https://app.teamsinta.com",
     github: "https://github.com/alifarooq9/rapidlaunch",
     home: "/",
     pricing: "/pricing",
@@ -19,7 +19,7 @@ export const siteUrls = {
     changelogs: "/changelogs",
     maintenance: "/maintenance",
     waitlist: "/waitlist",
-    rapidlaunch: "https://www.rapidlaunch.xyz",
+    rapidlaunch: "https://www.teamsinta.com",
     analytics: "/analytics",
     dashboard: {
         home: "/dashboard",

@@ -7,7 +7,11 @@ import {
     SidebarGroupLabel,
     SidebarMenuButton,
 } from "@/components/ui/sidebar";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { ChevronRight, ExternalLinkIcon } from "lucide-react";
 import { sidebarConfig } from "@/config/sidebar";
 import { cn } from "@/lib/utils";
@@ -25,7 +29,10 @@ type SidebarNavProps = {
     sidebarNavRemoveIds?: string[];
 };
 
-export function SidebarNav({ sidebarNavIncludeIds, sidebarNavRemoveIds }: SidebarNavProps) {
+export function SidebarNav({
+    sidebarNavIncludeIds,
+    sidebarNavRemoveIds,
+}: SidebarNavProps) {
     const pathname = usePathname();
     const sidebarNavItems = sidebarConfig.filteredNavItems({
         removeIds: sidebarNavRemoveIds,
@@ -37,7 +44,9 @@ export function SidebarNav({ sidebarNavIncludeIds, sidebarNavRemoveIds }: Sideba
             {sidebarNavItems.map((nav) => (
                 <div key={nav.id} className="mb-4">
                     {nav.showLabel && (
-                        <SidebarGroupLabel className="px-2">{nav.label}</SidebarGroupLabel>
+                        <SidebarGroupLabel className="px-2">
+                            {nav.label}
+                        </SidebarGroupLabel>
                     )}
                     <SidebarMenu>
                         {nav.items.map((item) => (
@@ -46,19 +55,28 @@ export function SidebarNav({ sidebarNavIncludeIds, sidebarNavRemoveIds }: Sideba
                                     <Accordion type="single" collapsible>
                                         <AccordionItem value={item.label}>
                                             {/* Accordion Trigger to handle dropdown items */}
-                                            <AccordionTrigger className="flex items-center gap-2 w-full">
+                                            <AccordionTrigger className="flex w-full items-center gap-2">
                                                 <item.icon className="h-5 w-5 flex-shrink-0" />
-                                                <span className="flex-grow truncate">{item.label}</span>
+                                                <span className="flex-grow truncate">
+                                                    {item.label}
+                                                </span>
                                                 <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200" />
                                             </AccordionTrigger>
                                             <AccordionContent className="pl-6">
                                                 {item.subMenu.map((subItem) => (
-                                                    <SidebarMenuItem key={subItem.label}>
+                                                    <SidebarMenuItem
+                                                        key={subItem.label}
+                                                    >
                                                         <Tooltip>
-                                                            <TooltipTrigger asChild>
+                                                            <TooltipTrigger
+                                                                asChild
+                                                            >
                                                                 <NavLink
                                                                     {...subItem}
-                                                                    active={pathname === subItem.href}
+                                                                    active={
+                                                                        pathname ===
+                                                                        subItem.href
+                                                                    }
                                                                 />
                                                             </TooltipTrigger>
                                                             <TooltipContent side="right">
@@ -76,7 +94,9 @@ export function SidebarNav({ sidebarNavIncludeIds, sidebarNavRemoveIds }: Sideba
                                             <div className="w-full">
                                                 <NavLink
                                                     {...item}
-                                                    active={pathname === item.href}
+                                                    active={
+                                                        pathname === item.href
+                                                    }
                                                 />
                                             </div>
                                         </TooltipTrigger>
@@ -105,13 +125,18 @@ function NavLink({ href, label, icon: Icon, active }: NavLinkProps) {
     return (
         <Link
             href={href}
-            className={cn("flex items-center gap-3 px-2 py-2 rounded transition-colors", {
-                "bg-border text-blue-600 font-semibold bg-blue-100": active,
-                "hover:bg-blue-100": !active,
-            })}
+            className={cn(
+                "flex items-center gap-3 rounded px-2 py-2 transition-colors",
+                {
+                    "bg-blue-100 bg-border font-semibold text-blue-600": active,
+                    "hover:bg-blue-100": !active,
+                },
+            )}
         >
             <Icon className="h-4 w-4 flex-shrink-0" />
-            <span className="flex-grow truncate text-sm font-heading">{label}</span>
+            <span className="flex-grow truncate font-heading text-sm">
+                {label}
+            </span>
             {href.startsWith("http") && (
                 <ExternalLinkIcon className="ml-2 h-4 w-4 text-muted-foreground" />
             )}

@@ -12,9 +12,20 @@ import {
 } from "@/app/(app)/_components/org-select-dropdown";
 import { getOrganizations } from "@/server/actions/organization/queries";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarRail } from "@/components/ui/sidebar";
+import {
+    Sidebar,
+    SidebarContent,
+    SidebarFooter,
+    SidebarGroup,
+    SidebarHeader,
+    SidebarRail,
+} from "@/components/ui/sidebar";
 import { HelpCircle } from "lucide-react";
-import { Tooltip, TooltipTrigger ,TooltipContent } from "@/components/ui/tooltip";
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from "@/components/ui/tooltip";
 
 type SideNavProps = {
     sidebarNavIncludeIds?: string[];
@@ -56,57 +67,59 @@ export async function AppSidebar({
     ];
 
     return (
-      <Sidebar variant="inset" collapsible="icon">
-      <SidebarHeader className="w-full">
-      {showLogo && (
-            <div className="flex items-center ">
-              <Link href={siteUrls.dashboard.home} className="flex items-center gap-1 w-full">
-                  <Icons.logo className="w-16 h-10 fill-primary" />
-              </Link>
+        <Sidebar variant="inset" collapsible="icon">
+            <SidebarHeader className="w-full">
+                {showLogo && (
+                    <div className="flex items-center ">
+                        <Link
+                            href={siteUrls.dashboard.home}
+                            className="flex w-full items-center gap-1"
+                        >
+                            <Icons.logo className="h-10 w-16 fill-primary" />
+                        </Link>
 
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link
+                                    href={siteUrls.feedback}
+                                    className={cn(
+                                        "z-10 transition-transform hover:scale-90",
+                                    )}
+                                >
+                                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {"Provide Feedback"}
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
+                )}
+                {showOrgSwitcher && (
+                    <div className="mt-4 py-2">
+                        <OrgSelectDropdown
+                            userOrgs={urgOrgsData}
+                            currentOrg={currentOrg}
+                        />
+                    </div>
+                )}
+            </SidebarHeader>
 
+            <SidebarContent>
+                <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
+                    <SidebarNav
+                        sidebarNavIncludeIds={sidebarNavIncludeIds}
+                        sidebarNavRemoveIds={sidebarNavRemoveIds}
+                    />
+                    <ScrollBar orientation="vertical" />
+                </ScrollArea>
+            </SidebarContent>
 
-              <Tooltip>
-                                                            <TooltipTrigger asChild>
-                                                            <Link
-                    href={siteUrls.feedback}
-                    className={cn("z-10 transition-transform hover:scale-90")}
-                >
-              <HelpCircle className="h-4 w-4 text-muted-foreground"/>
-              </Link>
-                                                            </TooltipTrigger>
-                                                            <TooltipContent side="right">
-                                                                {"Provide Feedback"}
-                                                            </TooltipContent>
-                                                        </Tooltip>
-
-              </div>
-          )}
-      {showOrgSwitcher && (
-              <div className="py-2 mt-4">
-                  <OrgSelectDropdown userOrgs={urgOrgsData} currentOrg={currentOrg} />
-              </div>
-          )}
-
-      </SidebarHeader>
-
-      <SidebarContent>
-
-          <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
-              <SidebarNav
-                  sidebarNavIncludeIds={sidebarNavIncludeIds}
-                  sidebarNavRemoveIds={sidebarNavRemoveIds}
-              />
-              <ScrollBar orientation="vertical" />
-          </ScrollArea>
-      </SidebarContent>
-
-      <SidebarFooter>
-
-          <UserDropdown user={user} />
-      </SidebarFooter>
-      <SidebarRail />
-  </Sidebar>
+            <SidebarFooter>
+                <UserDropdown user={user} />
+            </SidebarFooter>
+            <SidebarRail />
+        </Sidebar>
     );
 }
 

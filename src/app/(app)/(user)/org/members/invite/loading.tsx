@@ -9,8 +9,8 @@ export default function InviteMembersLoading() {
             description={orgMembersInvitePageConfig.description}
         >
             <div className="space-y-4">
-            <Skeleton className="h-64 w-full" />
-            <Skeleton className="h-36 w-full" />
+                <Skeleton className="h-64 w-full" />
+                <Skeleton className="h-36 w-full" />
             </div>
         </AppPageLoading>
     );

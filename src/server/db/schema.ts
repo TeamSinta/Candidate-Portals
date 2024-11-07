@@ -348,6 +348,13 @@ export const waitlistUsersSchema = createInsertSchema(waitlistUsers, {
     name: z.string().min(3, "Name must be at least 3 characters long"),
 });
 
+
+
+
+
+
+
+
 export const candidate = createTable("candidate", {
     id: varchar("id", { length: 255 })
         .notNull()
@@ -357,13 +364,24 @@ export const candidate = createTable("candidate", {
         .notNull()
         .references(() => organizations.id, { onDelete: "cascade" }),
     name: varchar("name", { length: 255 }).notNull(),
-    email: varchar("email", { length: 255 }).notNull().unique(),
-    role: varchar("role", { length: 255 }).notNull(),
-    stage: varchar("stage", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }),
+    role: varchar("role", { length: 255 }),
+    linkedin: varchar("stage", { length: 255 }),
     createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
     notes: jsonb("notes"), // This is a field to be used with results of the notion like editor
 });
+
+
+
+export const createCandidateInsertSchema = createInsertSchema(candidate, {
+  name: z.string().min(1, "Name is required"),
+  email: z.string().email("Invalid email format").optional(),
+  role: z.string().optional(), // Optional string for the role
+  linkedin: z.string().optional(), // Optional string for the stage
+  notes: z.array(z.any()).optional(), // Optional array for notes
+});
+
 
 export const tags = createTable(
     "tags",
@@ -390,31 +408,28 @@ export const portal = createTable("portal", {
         .notNull()
         .references(() => users.id, { onDelete: "cascade" }),
     title: varchar("title", { length: 255 }),
-
 });
 
 export const sectionContentType = pgEnum("section-content-type", [
-  "yoopta",
-  "url",
-  "doc",
-  "notion",
-  "pdf"
+    "yoopta",
+    "url",
+    "doc",
+    "notion",
+    "pdf",
 ]);
 
 export const section = createTable("section", {
-  id: varchar("id", { length: 255 })
-      .notNull()
-      .primaryKey()
-      .default(sql`gen_random_uuid()`),
-  portalId: varchar("portalId", { length: 255 })
-      .notNull()
-      .references(() => portal.id, { onDelete: "cascade" }),
-  title: varchar("title", { length: 255 }),
-  content: jsonb("content"),
-  contentType: sectionContentType("contentType").notNull(),
+    id: varchar("id", { length: 255 })
+        .notNull()
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    portalId: varchar("portalId", { length: 255 })
+        .notNull()
+        .references(() => portal.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 255 }),
+    content: jsonb("content"),
+    contentType: sectionContentType("contentType").notNull(),
 });
-
-
 
 export const link = createTable("link", {
     id: varchar("id", { length: 255 })
@@ -432,4 +447,11 @@ export const link = createTable("link", {
     customContent: jsonb("customContent"), // If the user makes edits unique to this candidate
     createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
+});
+
+export const createLinkInsertSchema = createInsertSchema(link, {
+  candidateId: z.string().min(1, "Candidate ID is required"),
+  portalId: z.string().min(1, "Portal ID is required"),
+  url: z.string().min(3, "Invalid URL format"),
+  customContent: z.object({}).optional(), // Adjust the shape if you have more structure for customContent
 });

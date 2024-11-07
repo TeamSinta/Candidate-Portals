@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Loader2Icon } from "lucide-react";
 import Image from "next/image";
 import { type ElementType } from "react";
-import CompanyLogo from "../../../public/SintaNameLogo.png"
+import CompanyLogo from "../../../public/SintaNameLogo.png";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -24,7 +24,7 @@ export const Icons = {
             <Comp
                 className={cn("flex items-center space-x-1 text-lg", className)}
             >
-            <Image
+                <Image
                     src={CompanyLogo}
                     alt="Company Logo"
                     width={88} // Adjust size as needed

@@ -12,8 +12,6 @@ export default function AnalyticsPage() {
             title="Analytics"
             description="View and manage analytics for your content."
         >
-
-
             <div className="sticky top-0 z-50 bg-white  pb-0 dark:bg-gray-900 sm:mx-4 sm:pt-4">
                 <section className="mb-4 flex items-center justify-between space-x-2 sm:space-x-0">
                     <div className="space-y-0 sm:space-y-1">
@@ -25,12 +23,10 @@ export default function AnalyticsPage() {
                         </p>
                     </div>
                 </section>
-
-                <Separator className="bg-gray-200 dark:bg-gray-800 mt-16" />
-              <p className="font-semibold my-6">Interactions</p>
-
-
-                <AnalyticsTable /> {/* Render the AnalyticsTable client component */}
+                <Separator className="mt-16 bg-gray-200 dark:bg-gray-800" />
+                <p className="my-6 font-semibold">Interactions</p>
+                <AnalyticsTable />{" "}
+                {/* Render the AnalyticsTable client component */}
             </div>
         </AppPageShell>
     );

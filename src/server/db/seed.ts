@@ -21,7 +21,10 @@ const main = async () => {
             `INSERT INTO "sinta-candidate-portals_portal" (id, "organizationId", "ownerId")
              VALUES (gen_random_uuid(), $1, $2)
              RETURNING id`,
-            ["9c4607f7-e9bd-4b23-b537-7b67d66a39e3", "6cb53420-3d86-444d-94ad-3f2a9f7abba9"]
+            [
+                "9c4607f7-e9bd-4b23-b537-7b67d66a39e3",
+                "6cb53420-3d86-444d-94ad-3f2a9f7abba9",
+            ],
         );
         const portalId = portalResult.rows[0].id;
         console.log("Portal inserted with ID:", portalId);
@@ -38,16 +41,28 @@ const main = async () => {
                 faker.name.jobTitle(),
                 "Interview",
                 JSON.stringify({ text: faker.lorem.sentence() }),
-            ]
+            ],
         );
         const candidateId = candidateResult.rows[0].id;
         console.log("Candidate inserted with ID:", candidateId);
 
         // Insert sections
         const sectionData = [
-            { title: "Section 1", content: { text: faker.lorem.paragraph() }, contentType: "yoopta" },
-            { title: "Section 2", content: { text: faker.lorem.paragraph() }, contentType: "url" },
-            { title: "Section 3", content: { text: faker.lorem.paragraph() }, contentType: "doc" },
+            {
+                title: "Section 1",
+                content: { text: faker.lorem.paragraph() },
+                contentType: "yoopta",
+            },
+            {
+                title: "Section 2",
+                content: { text: faker.lorem.paragraph() },
+                contentType: "url",
+            },
+            {
+                title: "Section 3",
+                content: { text: faker.lorem.paragraph() },
+                contentType: "doc",
+            },
         ];
 
         for (const section of sectionData) {
@@ -55,9 +70,16 @@ const main = async () => {
                 `INSERT INTO "sinta-candidate-portals_section" (id, "portalId", title, content, "contentType")
                  VALUES (gen_random_uuid(), $1, $2, $3, $4)
                  RETURNING id`,
-                [portalId, section.title, JSON.stringify(section.content), section.contentType]
+                [
+                    portalId,
+                    section.title,
+                    JSON.stringify(section.content),
+                    section.contentType,
+                ],
             );
-            console.log(`Section inserted with ID: ${sectionResult.rows[0].id}`);
+            console.log(
+                `Section inserted with ID: ${sectionResult.rows[0].id}`,
+            );
         }
 
         // Insert link
@@ -69,10 +91,9 @@ const main = async () => {
                 portalId,
                 faker.internet.url(),
                 JSON.stringify({ note: faker.lorem.sentence() }),
-            ]
+            ],
         );
         console.log("Link inserted");
-
     } catch (err) {
         console.error("Error during seeding:", err);
     } finally {

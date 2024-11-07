@@ -53,9 +53,10 @@ export default async function OrgMemberInvite() {
                         </CardDescription>
                     </CardHeader>
                     <CardContent>
-
-
-                        <SendInviteLink inviteLink={inviteLink} orgName={currentOrg.name} />
+                        <SendInviteLink
+                            inviteLink={inviteLink}
+                            orgName={currentOrg.name}
+                        />
                     </CardContent>
                 </Card>
             </div>

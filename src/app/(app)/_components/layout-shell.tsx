@@ -17,27 +17,26 @@ export function AppLayoutShell({
     showOrgSwitcher,
 }: AppLayoutProps) {
     return (
-      <SidebarProvider
-      style={
-        {
-          "--sidebar-width": "14rem",
-        } as React.CSSProperties
-      }
-    >
-            <div className=" flex items-start w-[100%] ">
+        <SidebarProvider
+            style={
+                {
+                    "--sidebar-width": "14rem",
+                } as React.CSSProperties
+            }
+        >
+            <div className=" flex w-[100%] items-start ">
+                <Suspense fallback={<SidebarLoading />}>
+                    <AppSidebar
+                        sidebarNavIncludeIds={sideNavIncludedIds}
+                        sidebarNavRemoveIds={sideNavRemoveIds}
+                        showOrgSwitcher={showOrgSwitcher}
+                        showLogo={true}
+                    />
+                </Suspense>
 
-                    <Suspense fallback={<SidebarLoading />}>
-                        <AppSidebar
-                            sidebarNavIncludeIds={sideNavIncludedIds}
-                            sidebarNavRemoveIds={sideNavRemoveIds}
-                            showOrgSwitcher={showOrgSwitcher}
-                            showLogo={true}
-                        />
-                    </Suspense>
-
-                    <SidebarInset className="p-6 border dark:bg-gray-900">
+                <SidebarInset className="border p-6 dark:bg-gray-900">
                     {children}
-                     </SidebarInset>
+                </SidebarInset>
             </div>
         </SidebarProvider>
     );
