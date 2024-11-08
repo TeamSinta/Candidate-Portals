@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import BottomToolbar from "./bottom-toolbar";
 import Sidebar from "./side-menu";
-import { sendEventToTinybird } from "@/lib/utils";
+import { sendEventToTinybird } from "@/server/tinybird/client";
 
 type Section = {
   sectionId: string;

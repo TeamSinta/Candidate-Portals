@@ -151,6 +151,7 @@ export async function getPortalDetails(portalId: string) {
       .select({
           contentType: section.contentType,
           title: section.title,
+          section_id: section.id,
       })
       .from(section)
       .where(eq(section.portalId, portalId))
@@ -161,6 +162,7 @@ export async function getPortalDetails(portalId: string) {
       .select({
           url: link.url,
           candidateId: link.candidateId,
+          id: link.id
       })
       .from(link)
       .where(eq(link.portalId, portalId))
@@ -196,10 +198,12 @@ export async function getPortalDetails(portalId: string) {
       sections: sections.map((section) => ({
           contentType: section.contentType,
           title: section.title,
+          section_id: section.section_id
       })),
       links: links.map((link) => ({
           url: link.url,
           candidateId: link.candidateId,
+          linkId: link.id,
       })),
       candidates: candidates.map((candidate) => ({
           name: candidate.name,

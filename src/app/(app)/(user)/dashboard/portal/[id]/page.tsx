@@ -37,7 +37,6 @@ interface Props {
 export default async function PortalView({ params }: Props) {
     const portalData = await getPortalDetails(params.id);
 
-    console.log(portalData);
     if (!portalData) return notFound();
 
     return (
@@ -138,43 +137,7 @@ export default async function PortalView({ params }: Props) {
                 <LinksCard portalData={portalData} />
 
 
-                {/* Visitors Table */}
-                <Card className="mt-6 rounded shadow-none">
-                    <CardHeader>
-                        <CardTitle>All Visitors</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <table className="w-full border-collapse text-left">
-                            <thead>
-                                <tr className="border-b">
-                                    <th className="py-2">Name</th>
-                                    <th className="py-2">Visit Duration</th>
-                                    <th className="py-2">Visit Completion</th>
-                                    <th className="py-2">Last Viewed</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr className="border-b">
-                                    <td className="py-2">Anonymous</td>
-                                    <td className="py-2">10 secs</td>
-                                    <td className="py-2 text-center">100%</td>
-                                    <td className="py-2">Nov 1</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                        <div className="mt-4 flex items-center justify-between text-sm">
-                            <span>Showing 1 of 1 visits</span>
-                            <div className="flex space-x-2">
-                                <button className="rounded bg-gray-100 px-2 py-1">
-                                    Previous
-                                </button>
-                                <button className="rounded bg-gray-100 px-2 py-1">
-                                    Next
-                                </button>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+
             </div>
         </div>
     );

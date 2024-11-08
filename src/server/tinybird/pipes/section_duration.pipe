@@ -1,0 +1,22 @@
+NODE mv
+SQL >
+
+SELECT
+    link_id,
+    user_id,
+    session_id,
+    section_id,
+    section_title,
+    COUNT(click_target) AS total_clicks,
+    SUM(duration) AS total_duration,
+    MAX(timestamp) AS last_view_timestamp
+FROM
+    db_sinta_events
+GROUP BY
+    link_id,
+    user_id,
+    session_id,
+    section_id,
+    section_title
+ORDER BY
+    last_view_timestamp DESC
