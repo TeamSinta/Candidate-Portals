@@ -101,7 +101,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
             <TableRow>
               <TableHead className="py-2">Name</TableHead>
               <TableHead className="py-2">Link</TableHead>
-              <TableHead className="py-2">Views</TableHead>
+              <TableHead className="py-2 text-center">Views</TableHead>
               <TableHead className="py-2 text-start">Progress</TableHead>
             </TableRow>
           </TableHeader>
@@ -150,9 +150,8 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                       </div>
                     </TableCell>
 
-                    <TableCell className="py-2">
+                    <TableCell className="py-2 justify-center items-center text-center">
                       {viewCount > 0 ? (
-                        <div>
                         <AnimatedGradientText>
             <p className="transition-transform duration-300 ease-in-out group-hover:translate-x-0.5">🎉</p> <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
             <span
@@ -165,10 +164,9 @@ export default function LinksCard({ portalData }: LinksCardProps) {
           </span>
 
           </AnimatedGradientText>
-    </div>
 
                       ) : (
-                        <span className="text-sm text-gray-500">0 Views</span>
+                        <span className="text-sm text-gray-500 text-center">0 Views</span>
                       )}
                     </TableCell>
 
