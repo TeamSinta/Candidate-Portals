@@ -118,10 +118,10 @@ export default function LinksCard({ portalData }: LinksCardProps) {
               return (
                 <React.Fragment key={link.url}>
                   <TableRow
-                    className="cursor-pointer border-none"
+                    className="cursor-pointer border-none justify-center items-center"
                     onClick={() => toggleLink(link.url)}
                   >
-                    <TableCell className="py-4 flex gap-2 items-center">
+                    <TableCell className="py-6 flex gap-2  items-center font-medium">
                       <Image
                         className="rounded-sm"
                         width={26}
