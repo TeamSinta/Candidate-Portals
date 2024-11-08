@@ -398,9 +398,9 @@ export const portal = createTable("portal", {
 });
 
 export enum SectionContentType {
-    YOOPTA = "yoopta",
-    URL = "url",
-    DOC = "doc",
+    YOOPTA = "Notion Editor",
+    URL = "Link",
+    DOC = "Document",
 }
 
 export const sectionContentType = pgEnum(

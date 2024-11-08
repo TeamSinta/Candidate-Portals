@@ -151,6 +151,7 @@ function ContentBlock({
                             editable
                             sectionId={id}
                             onChange={setYooptaContentData}
+                            title={title}
                             onTitleChange={setTitle}
                         />
                     )}

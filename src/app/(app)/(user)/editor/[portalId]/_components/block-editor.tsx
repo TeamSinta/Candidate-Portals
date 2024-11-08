@@ -29,6 +29,7 @@ function BlockEditor({
                 ...newBlocks[index],
                 ...updatedBlockData,
                 portalId,
+                index,
             };
             console.log("Updating block at index:", index);
         } else {
