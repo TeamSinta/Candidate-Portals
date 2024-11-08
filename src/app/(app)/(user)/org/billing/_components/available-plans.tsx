@@ -270,10 +270,10 @@ export function AvailablePlans({ subscription }: AvailablePlansProps) {
                                         planName={selectedPlan?.title ?? ""}
                                         price={
                                             selectedBilling === "monthly"
-                                                ? selectedPlan?.price.monthly ??
-                                                  0
-                                                : selectedPlan?.price.yearly ??
-                                                  0
+                                                ? (selectedPlan?.price
+                                                      .monthly ?? 0)
+                                                : (selectedPlan?.price.yearly ??
+                                                  0)
                                         }
                                         variantId={selectedVariantId}
                                         status={subscription?.status ?? ""}

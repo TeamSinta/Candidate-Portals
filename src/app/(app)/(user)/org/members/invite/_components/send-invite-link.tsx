@@ -17,8 +17,6 @@ import {
 } from "@/components/ui/form";
 import { Icons } from "@/components/ui/icons";
 
-
-
 const formSchema = z.object({
     email: z.string().email("Please enter a valid email address"),
 });
@@ -43,19 +41,20 @@ export function SendInviteLink({ inviteLink, orgName }: SendInviteLinkProps) {
 
     const onSumbmit = async (data: formSchemaType) => {
         setIsLoading(true);
-        const sendInvitePromise = () => sendOrgInviteEmail({
-            email: data.email,
-            orgName: orgName,
-            invLink: inviteLink
-        });
+        const sendInvitePromise = () =>
+            sendOrgInviteEmail({
+                email: data.email,
+                orgName: orgName,
+                invLink: inviteLink,
+            });
 
         toast.promise(sendInvitePromise(), {
-            loading: 'Sending invite...',
+            loading: "Sending invite...",
             success: () => {
                 setIsSent(true);
                 return "Invite sent";
             },
-            error: 'Error sending invite',
+            error: "Error sending invite",
             finally() {
                 setIsLoading(false);
                 form.reset({ email: "" });
@@ -85,22 +84,22 @@ export function SendInviteLink({ inviteLink, orgName }: SendInviteLinkProps) {
             >
                 <div className="flex w-full space-x-2">
                     <div className="w-full">
-                    <FormField
-                        control={form.control}
-                        name="email"
-                        render={({ field }) => (
-                            <FormItem>
-                                <FormControl>
-                                    <Input
-                                        className="bg-background w-full"
-                                        placeholder="hey@example.com"
-                                        {...field}
-                                    />
-                                </FormControl>
-                                <FormMessage />
-                            </FormItem>
-                        )}
-                    />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormControl>
+                                        <Input
+                                            className="w-full bg-background"
+                                            placeholder="hey@example.com"
+                                            {...field}
+                                        />
+                                    </FormControl>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
                     </div>
                     <Button
                         disabled={isLoading}
@@ -109,7 +108,7 @@ export function SendInviteLink({ inviteLink, orgName }: SendInviteLinkProps) {
                         className="shrink-0"
                         type="submit"
                     >
-                        {isLoading && <Icons.loader className="h-4 w-4 mr-2" />}
+                        {isLoading && <Icons.loader className="mr-2 h-4 w-4" />}
                         {isSent ? "Invite Sent" : "Send Invite"}
                     </Button>
                 </div>

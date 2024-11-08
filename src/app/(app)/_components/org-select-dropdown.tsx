@@ -29,7 +29,11 @@ import {
     DropdownMenuLabel,
 } from "@/components/ui/dropdown-menu";
 import { switchOrgPendingState } from "./org-switch-loading";
-import { ChevronsUpDown, GalleryVerticalEnd, SquareTerminalIcon } from "lucide-react";
+import {
+    ChevronsUpDown,
+    GalleryVerticalEnd,
+    SquareTerminalIcon,
+} from "lucide-react";
 
 export type UserOrgs = {
     heading: string;
@@ -63,7 +67,7 @@ export function OrgSelectDropdown({
     const filteredOrgs = userOrgs.map((group) => ({
         ...group,
         items: group.items.filter((org) =>
-            org.name.toLowerCase().includes(searchTerm.toLowerCase())
+            org.name.toLowerCase().includes(searchTerm.toLowerCase()),
         ),
     }));
 
@@ -75,24 +79,28 @@ export function OrgSelectDropdown({
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
-                            className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center gap-2"
+                            className="flex items-center gap-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
-                      <Avatar className="h-8 w-8 rounded-sm">
-    {currentOrg?.image ? (
-        <AvatarImage src={currentOrg.image} />
-    ) : (
-        <AvatarFallback>
-            <div className="flex aspect-square size-8 items-center justify-center rounded-sm bg-sidebar-primary text-sidebar-primary-foreground">
-                {/* Default fallback icon or text */}
-                <GalleryVerticalEnd className="size-4" />
-                           </div>
-        </AvatarFallback>
-    )}
-</Avatar>
+                            <Avatar className="h-8 w-8 rounded-sm">
+                                {currentOrg?.image ? (
+                                    <AvatarImage src={currentOrg.image} />
+                                ) : (
+                                    <AvatarFallback>
+                                        <div className="flex aspect-square size-7 items-center justify-center rounded-sm bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-sidebar-primary-foreground">
+                                            {/* Default fallback icon or text */}
+                                            <GalleryVerticalEnd className="size-4" />
+                                        </div>
+                                    </AvatarFallback>
+                                )}
+                            </Avatar>
 
-                            <div className="grid flex-1 text-left text-md leading-tight">
-                                <span className="truncate text-lg font-semibold">{currentOrg?.name}</span>
-                                <span className="truncate text-xs">{currentOrg?.plan}</span>
+                            <div className="text-md grid flex-1 text-left leading-tight">
+                                <span className="truncate text-lg font-semibold">
+                                    {currentOrg?.name}
+                                </span>
+                                <span className="truncate text-xs">
+                                    {currentOrg?.plan}
+                                </span>
                             </div>
                             <ChevronsUpDown className="ml-auto" />
                         </SidebarMenuButton>
@@ -113,7 +121,7 @@ export function OrgSelectDropdown({
                             <CommandList>
                                 {filteredOrgs.map((group) => (
                                     <Fragment key={group.heading}>
-                                        <DropdownMenuLabel className="text-xs font-semibold text-muted-foreground px-2 py-1">
+                                        <DropdownMenuLabel className="px-2 py-1 text-xs font-semibold text-muted-foreground">
                                             {group.heading}
                                         </DropdownMenuLabel>
                                         {group.items.length > 0 ? (
@@ -122,23 +130,33 @@ export function OrgSelectDropdown({
                                                     key={org.id}
                                                     onSelect={async () => {
                                                         setModalOpen(false);
-                                                        await onOrgChange(org.id);
+                                                        await onOrgChange(
+                                                            org.id,
+                                                        );
                                                     }}
                                                     className="flex items-center gap-2 text-sm"
                                                 >
-                                                    <Avatar className="h-5 w-5 mr-2">
-                                                        <AvatarImage src={org.image ?? ""} />
+                                                    <Avatar className="mr-2 h-5 w-5">
+                                                        <AvatarImage
+                                                            src={
+                                                                org.image ?? ""
+                                                            }
+                                                        />
                                                         <AvatarFallback>
-                                                        {currentOrg?.name?.charAt(0).toUpperCase() ?? "N/A"}
+                                                            {currentOrg?.name
+                                                                ?.charAt(0)
+                                                                .toUpperCase() ??
+                                                                "N/A"}
                                                         </AvatarFallback>
                                                     </Avatar>
                                                     {org.name}
                                                     <CheckIcon
                                                         className={cn(
                                                             "ml-auto h-4 w-4",
-                                                            currentOrg.id === org.id
+                                                            currentOrg.id ===
+                                                                org.id
                                                                 ? "opacity-100"
-                                                                : "opacity-0"
+                                                                : "opacity-0",
                                                         )}
                                                     />
                                                 </CommandItem>

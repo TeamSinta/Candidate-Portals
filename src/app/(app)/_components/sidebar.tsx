@@ -20,6 +20,12 @@ import {
     SidebarHeader,
     SidebarRail,
 } from "@/components/ui/sidebar";
+import { HelpCircle } from "lucide-react";
+import {
+    Tooltip,
+    TooltipTrigger,
+    TooltipContent,
+} from "@/components/ui/tooltip";
 
 type SideNavProps = {
     sidebarNavIncludeIds?: string[];
@@ -63,8 +69,34 @@ export async function AppSidebar({
     return (
         <Sidebar variant="inset" collapsible="icon">
             <SidebarHeader className="w-full">
+                {showLogo && (
+                    <div className="flex items-center ">
+                        <Link
+                            href={siteUrls.dashboard.home}
+                            className="flex w-full items-center gap-1"
+                        >
+                            <Icons.logo className="h-10 w-16 fill-primary" />
+                        </Link>
+
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link
+                                    href={siteUrls.feedback}
+                                    className={cn(
+                                        "z-10 transition-transform hover:scale-90",
+                                    )}
+                                >
+                                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {"Provide Feedback"}
+                            </TooltipContent>
+                        </Tooltip>
+                    </div>
+                )}
                 {showOrgSwitcher && (
-                    <div className="py-2">
+                    <div className="mt-4 py-2">
                         <OrgSelectDropdown
                             userOrgs={urgOrgsData}
                             currentOrg={currentOrg}
@@ -84,11 +116,6 @@ export async function AppSidebar({
             </SidebarContent>
 
             <SidebarFooter>
-                {/* {showLogo && (
-              <Link href={siteUrls.dashboard.home} className="flex items-center gap-3 p-4 w-full">
-                  <Icons.logo className="w-24 h-6 fill-primary" />
-              </Link>
-          )} */}
                 <UserDropdown user={user} />
             </SidebarFooter>
             <SidebarRail />
@@ -102,7 +129,7 @@ export function SidebarLoading({
     showOrgSwitcher?: boolean;
 }) {
     return (
-        <aside className={cn("h-full w-full")}>
+        <aside className={cn("h-full")}>
             <div className={cn(" flex h-16 items-center justify-between")}>
                 <Link
                     href={siteUrls.home}
@@ -128,7 +155,7 @@ export function SidebarLoading({
             <ScrollArea style={{ height: "calc(100vh - 10.5rem)" }}>
                 <div className="h-full w-full space-y-2 py-2">
                     {[1, 2, 3, 4, 5].map((i) => (
-                        <Skeleton key={i} className="h-8 w-full rounded-md" />
+                        <Skeleton key={i} className="h-8 rounded-md" />
                     ))}
                     <ScrollBar orientation="vertical" />
                 </div>

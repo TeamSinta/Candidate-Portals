@@ -43,7 +43,7 @@ type UserDropdownProps = {
 
 const userRoles = z.enum(usersRoleEnum.enumValues);
 
-export function UserDropdown({ user }: UserDropdownProps) {
+export async function UserDropdown({ user }: UserDropdownProps) {
     const navItems =
         user?.role === userRoles.Values.Admin ||
         user?.role === userRoles.Values["Super Admin"]
@@ -66,7 +66,7 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
             <DropdownMenuTrigger asChild>
                 <SidebarMenuButton
                     size="lg"
-                    className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex items-center gap-2"
+                    className="flex items-center gap-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                     aria-label="user dropdown"
                 >
                     <Avatar className="h-8 w-8 rounded-sm">

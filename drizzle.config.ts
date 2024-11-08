@@ -8,5 +8,5 @@ export default {
     dbCredentials: {
         url: env.DATABASE_URL, // Changed from connectionString to url
     },
-    tablesFilter: ["teamsinta-saas*"],
+    tablesFilter: ["sinta-candidate-portals_*"],
 } satisfies Config;
