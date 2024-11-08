@@ -9,7 +9,7 @@ export default function CircleProgressLoader({
   progress,
   width = 50,  // Default width
   height = 50, // Default height
-  fontSize = "sm", // Default font size
+  fontSize = "xs", // Default font size
 }: CircleProgressLoaderProps) {
   const strokeDashoffset = 251.2 * (1 - progress);
 
