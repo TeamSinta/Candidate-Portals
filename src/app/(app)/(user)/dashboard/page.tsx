@@ -1,6 +1,10 @@
+"use client";
 import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import { dashboardPageConfig } from "@/app/(app)/(user)/dashboard/_constants/page-config";
 import { SproutIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { createPortal } from "@/server/actions/portal/mutations";
+import { toast } from "sonner";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, FolderPlusIcon } from "lucide-react";
@@ -8,13 +12,23 @@ import { getPortalListData } from "@/server/actions/portal/queries";
 import PortalCard from "./_components/portal-card";
 
 type Section = {
-    title: string | null;
-    content: unknown;
-    contentType: "yoopta" | "url" | "doc" | "notion" | "pdf";
+  title: string | null;
+  content: unknown;
+  contentType: "yoopta" | "url" | "doc" | "notion" | "pdf";
 };
 
 export default async function DashboardPage() {
+    const router = useRouter();
     const portals = await getPortalListData();
+    async function handleClick() {
+        try {
+            const newPortal = await createPortal();
+            if (!newPortal?.id) throw new Error("Failed to create Portal");
+            router.push("/editor/" + newPortal.id);
+        } catch {
+            toast.error("Failed to create Portal");
+        }
+    }
 
     return (
         <AppPageShell
@@ -32,7 +46,10 @@ export default async function DashboardPage() {
                         </p>
                     </div>
                     <div className="flex items-center gap-x-2">
-                        <Button className="group flex flex-1 items-center justify-start gap-x-1 whitespace-nowrap rounded px-1 text-left sm:gap-x-3 sm:px-3">
+                        <Button
+                            className="group flex flex-1 items-center justify-start gap-x-1 whitespace-nowrap rounded px-1 text-left sm:gap-x-3 sm:px-3"
+                            onClick={handleClick}
+                        >
                             <PlusIcon
                                 className="h-5 w-5 shrink-0"
                                 aria-hidden="true"

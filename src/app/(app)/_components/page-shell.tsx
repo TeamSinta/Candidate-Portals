@@ -1,4 +1,4 @@
-import { type ElementType } from "react";
+import React, { type ElementType } from "react";
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -15,13 +15,19 @@ type AppPageShellProps = {
     as?: ElementType;
     title: string;
     description: string;
+    buttons?: React.ReactNode[];
 };
 
-export function AppPageShell({ as, children, title }: AppPageShellProps) {
+export function AppPageShell({
+    as,
+    children,
+    title,
+    buttons,
+}: AppPageShellProps) {
     const Container = as ?? "main";
 
     return (
-        <div className="w-full space-y-4">
+        <div className="flex h-full w-full flex-col space-y-4">
             <div className="flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
@@ -36,8 +42,11 @@ export function AppPageShell({ as, children, title }: AppPageShellProps) {
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
+                {buttons && (
+                    <div className="flex flex-1 justify-end">{buttons}</div>
+                )}
             </div>
-            <Container className="space-y-8 pb-8">{children}</Container>
+            <Container className=" space-y-8 pb-8">{children}</Container>
         </div>
     );
 }

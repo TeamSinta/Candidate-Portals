@@ -1,8 +1,6 @@
-// app/queries.ts
-
 import { db } from "@/server/db";
 import { link, portal, candidate, section } from "@/server/db/schema";
-import { and, eq, inArray } from "drizzle-orm";
+import { and, asc, eq, inArray } from "drizzle-orm";
 import { getOrganizations } from "../organization/queries";
 import { protectedProcedure } from "@/server/procedures";
 
@@ -213,4 +211,36 @@ export async function getPortalDetails(portalId: string) {
           candidateId: candidate.candidateId,
       })),
   };
+}
+
+
+export async function getPortalQuery(portalId: string) {
+    const portalObject = await db.query.portal.findFirst({
+        where: eq(portal.id, portalId),
+    });
+    if (!portalObject) return {};
+
+    const sections = await db.query.section.findMany({
+        where: eq(section.portalId, portalId),
+        orderBy: [asc(section.index)],
+    });
+    return { portal: portalObject, sections };
+}
+
+export async function getPortalByURLQuery(url: string) {
+    const [portal] = await db
+        .select()
+        .from(link)
+        .leftJoin(candidate, eq(candidate.id, link.candidateId))
+        .where(eq(link.url, url))
+        .limit(1)
+        .execute();
+
+    const portalId = portal?.link?.portalId;
+    if (!portalId) return {};
+
+    return {
+        candidate: portal,
+        portal: await getPortalQuery(portalId),
+    };
 }

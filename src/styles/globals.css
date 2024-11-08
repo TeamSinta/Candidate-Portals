@@ -87,3 +87,13 @@
         text-rendering: optimizeLegibility;
     }
 }
+
+.dotted-background {
+    background-image: radial-gradient(circle, black 1px, transparent 1px);
+    background-size: 10px 10px; /* Adjust size to change dot spacing */
+    height: 100vh; /* Full-screen height */
+    width: 100%; /* Full width */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
