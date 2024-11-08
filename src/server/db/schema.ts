@@ -1,4 +1,9 @@
-import { relations, sql } from "drizzle-orm";
+import {
+    InferInsertModel,
+    InferSelectModel,
+    relations,
+    sql,
+} from "drizzle-orm";
 import {
     boolean,
     index,
@@ -14,6 +19,7 @@ import {
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { type AdapterAccount } from "next-auth/adapters";
 import { z } from "zod";
+import { enumToPgEnum } from "./utils";
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -391,26 +397,39 @@ export const portal = createTable("portal", {
         .references(() => users.id, { onDelete: "cascade" }),
 });
 
-export const sectionContentType = pgEnum("section-content-type", [
-  "yoopta",
-  "url",
-  "doc",
-]);
+export enum SectionContentType {
+    YOOPTA = "Notion Editor",
+    URL = "Link",
+    DOC = "Document",
+}
+
+export const sectionContentType = pgEnum(
+    "sectionContentType",
+    enumToPgEnum(SectionContentType),
+);
 
 export const section = createTable("section", {
-  id: varchar("id", { length: 255 })
-      .notNull()
-      .primaryKey()
-      .default(sql`gen_random_uuid()`),
-  portalId: varchar("portalId", { length: 255 })
-      .notNull()
-      .references(() => portal.id, { onDelete: "cascade" }),
-  title: varchar("title", { length: 255 }),
-  content: jsonb("content"),
-  contentType: sectionContentType("contentType").notNull(),
+    id: varchar("id", { length: 255 })
+        .notNull()
+        .primaryKey()
+        .default(sql`gen_random_uuid()`),
+    portalId: varchar("portalId", { length: 255 })
+        .notNull()
+        .references(() => portal.id, { onDelete: "cascade" }),
+    title: varchar("title", { length: 255 }),
+    content: jsonb("content"),
+    contentType: sectionContentType().notNull(),
+    index: integer().notNull(),
 });
 
-
+// ContentType is made potentially undefined here so this type can be used when users create new blocks
+export type SectionSelect = Omit<
+    InferSelectModel<typeof section>,
+    "contentType"
+> & {
+    contentType?: SectionContentType;
+};
+export type SectionInsert = InferInsertModel<typeof section>;
 
 export const link = createTable("link", {
     id: varchar("id", { length: 255 })

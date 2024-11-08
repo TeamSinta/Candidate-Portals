@@ -13,15 +13,24 @@ import {
 import { cn } from "@/lib/utils";
 import { siteUrls } from "@/config/urls";
 import { SignoutTrigger } from "@/components/signout-trigger";
-import { LogOut, Sparkles, BadgeCheck, CreditCard, Bell, ChevronsUpDown } from "lucide-react";
+import {
+    LogOut,
+    Sparkles,
+    BadgeCheck,
+    CreditCard,
+    Bell,
+    ChevronsUpDown,
+} from "lucide-react";
 import { Fragment } from "react";
 import Link from "next/link";
-import { type UserDropdownNavItems, userDropdownConfig } from "@/config/user-dropdown";
+import {
+    type UserDropdownNavItems,
+    userDropdownConfig,
+} from "@/config/user-dropdown";
 import { type User } from "next-auth";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { usersRoleEnum } from "@/server/db/schema";
 import { z } from "zod";
-
 
 /**
  * to @add more navigation items to the user dropdown, you can add more items to the `userDropdownConfig` object in the
@@ -29,28 +38,27 @@ import { z } from "zod";
  */
 
 type UserDropdownProps = {
-  user: User | null;
+    user: User | null;
 };
 
 const userRoles = z.enum(usersRoleEnum.enumValues);
 
-export async function UserDropdown({ user }: UserDropdownProps) {
-  const navItems =
-      user?.role === userRoles.Values.Admin ||
-      user?.role === userRoles.Values["Super Admin"]
-          ? userDropdownConfig.navigation
-          : userDropdownConfig.filterNavItems({
-                removeIds: [userDropdownConfig.navIds.admin],
-            });
+export function UserDropdown({ user }: UserDropdownProps) {
+    const navItems =
+        user?.role === userRoles.Values.Admin ||
+        user?.role === userRoles.Values["Super Admin"]
+            ? userDropdownConfig.navigation
+            : userDropdownConfig.filterNavItems({
+                  removeIds: [userDropdownConfig.navIds.admin],
+              });
 
-  return <UserDropdownContent user={user} navItems={navItems} />;
+    return <UserDropdownContent user={user} navItems={navItems} />;
 }
 
 type UserDropdownContentProps = {
-  user: User | null;
-  navItems: UserDropdownNavItems[];
+    user: User | null;
+    navItems: UserDropdownNavItems[];
 };
-
 
 function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
     return (
@@ -68,7 +76,9 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
                         </AvatarFallback>
                     </Avatar>
                     <div className="grid flex-1 text-left text-sm leading-tight">
-                        <span className="truncate font-semibold">{user?.name ?? "Name not found"}</span>
+                        <span className="truncate font-semibold">
+                            {user?.name ?? "Name not found"}
+                        </span>
                         <span className="truncate text-xs">{user?.email}</span>
                     </div>
                     <ChevronsUpDown className="ml-auto size-4" />
@@ -91,8 +101,12 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
                             </AvatarFallback>
                         </Avatar>
                         <div className="grid flex-1 text-left text-sm leading-tight">
-                            <span className="truncate font-semibold">{user?.name ?? "Name not found"}</span>
-                            <span className="truncate text-xs">{user?.email}</span>
+                            <span className="truncate font-semibold">
+                                {user?.name ?? "Name not found"}
+                            </span>
+                            <span className="truncate text-xs">
+                                {user?.email}
+                            </span>
                         </div>
                     </div>
                 </DropdownMenuLabel>

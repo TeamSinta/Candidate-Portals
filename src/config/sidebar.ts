@@ -120,17 +120,21 @@ const navigation: SidebarNavItems[] = [
         label: "General",
         showLabel: true,
         items: [
-
-          {
-            label: "Portals",
-            icon: BlocksIcon,
-            href: siteUrls.dashboard.home,
-        },
             {
-              label: "Analytics",
-              icon: ZapIcon,
-              href: siteUrls.analytics,
-          },
+                label: "Portals",
+                icon: BlocksIcon,
+                href: siteUrls.dashboard.home,
+            },
+            {
+                label: "Analytics",
+                icon: ZapIcon,
+                href: siteUrls.analytics,
+            },
+            {
+                label: "Evan Playground",
+                icon: LayoutDashboardIcon,
+                href: siteUrls.playground,
+            },
         ],
     },
     {
@@ -144,7 +148,7 @@ const navigation: SidebarNavItems[] = [
                 href: siteUrls.organization.settings,
             },
         ],
-    }
+    },
 ];
 
 type FilterNavItemsProps = {

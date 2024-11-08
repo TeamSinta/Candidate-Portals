@@ -24,6 +24,7 @@ export const siteUrls = {
     dashboard: {
         home: "/dashboard",
     },
+    playground: "/playground",
     feedback: "/feedback",
     organization: {
         members: {
