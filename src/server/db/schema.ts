@@ -354,13 +354,6 @@ export const waitlistUsersSchema = createInsertSchema(waitlistUsers, {
     name: z.string().min(3, "Name must be at least 3 characters long"),
 });
 
-
-
-
-
-
-
-
 export const candidate = createTable("candidate", {
     id: varchar("id", { length: 255 })
         .notNull()
@@ -378,16 +371,13 @@ export const candidate = createTable("candidate", {
     notes: jsonb("notes"), // This is a field to be used with results of the notion like editor
 });
 
-
-
 export const createCandidateInsertSchema = createInsertSchema(candidate, {
-  name: z.string().min(1, "Name is required"),
-  email: z.string().email("Invalid email format").optional(),
-  role: z.string().optional(), // Optional string for the role
-  linkedin: z.string().optional(), // Optional string for the stage
-  notes: z.array(z.any()).optional(), // Optional array for notes
+    name: z.string().min(1, "Name is required"),
+    email: z.string().email("Invalid email format").optional(),
+    role: z.string().optional(), // Optional string for the role
+    linkedin: z.string().optional(), // Optional string for the stage
+    notes: z.array(z.any()).optional(), // Optional array for notes
 });
-
 
 export const tags = createTable(
     "tags",
@@ -416,6 +406,7 @@ export const portal = createTable("portal", {
     title: varchar("title", { length: 255 }),
 });
 
+export type PortalSelect = InferSelectModel<typeof portal>;
 export enum SectionContentType {
     YOOPTA = "Notion Editor",
     URL = "Link",
@@ -471,8 +462,8 @@ export const link = createTable("link", {
 });
 
 export const createLinkInsertSchema = createInsertSchema(link, {
-  candidateId: z.string().min(1, "Candidate ID is required"),
-  portalId: z.string().min(1, "Portal ID is required"),
-  url: z.string().min(3, "Invalid URL format"),
-  customContent: z.object({}).optional(), // Adjust the shape if you have more structure for customContent
+    candidateId: z.string().min(1, "Candidate ID is required"),
+    portalId: z.string().min(1, "Portal ID is required"),
+    url: z.string().min(3, "Invalid URL format"),
+    customContent: z.object({}).optional(), // Adjust the shape if you have more structure for customContent
 });

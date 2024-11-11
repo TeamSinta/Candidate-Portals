@@ -1,23 +1,46 @@
 "use client";
 import React, { useState } from "react";
-import { SectionContentType, SectionSelect } from "@/server/db/schema";
+import {
+    PortalSelect,
+    SectionContentType,
+    SectionSelect,
+} from "@/server/db/schema";
 import ContentBlock, { SaveBlockArgs } from "./content-block";
 import { YooptaBlockData } from "@yoopta/editor";
 import { Button } from "@/components/ui/button";
 import { generateGUID } from "@/lib/utils";
 import { deleteSection, saveSection } from "@/server/actions/portal/mutations";
 import { ContentDataType } from "../utils/types";
+import { updatePortalData } from "@/server/actions/portal/queries";
+import { toast } from "sonner";
+import PortalEditBlock from "./portal-edit-block";
 function BlockEditor({
     portalId,
     sections,
+    initialPortalData,
 }: {
     portalId: string;
     sections: SectionSelect[];
+    initialPortalData: PortalSelect;
 }) {
     const [blocks, setBlocks] = useState<SectionSelect[]>(sections);
     const [selectedBlock, setSelectedBlock] = useState<string | undefined>(
         undefined,
     );
+    const [portalData, setPortalData] =
+        useState<PortalSelect>(initialPortalData);
+
+    async function handleRenamePortal(newName: string) {
+        const updatedPortal = { ...portalData, title: newName };
+        try {
+            setPortalData(updatedPortal);
+            await updatePortalData(portalId, updatedPortal);
+            toast.success("Portal updated successfully");
+            setSelectedBlock("");
+        } catch {
+            toast.error("Failed to update portal name");
+        }
+    }
 
     async function handleSaveBlock(
         index: number,
@@ -74,7 +97,15 @@ function BlockEditor({
 
     return (
         <>
-            {/* <div>SelectedBlock: {JSON.stringify(selectedBlock)}</div> */}
+            <PortalEditBlock
+                onRenamePortal={handleRenamePortal}
+                portalData={portalData}
+                editing={Boolean(selectedBlock) && selectedBlock === "portal"}
+                onCancel={() => setSelectedBlock(undefined)}
+                onClick={() => {
+                    if (selectedBlock !== "portal") setSelectedBlock("portal");
+                }}
+            />
             {blocks.length > 0 && (
                 <div className="flex flex-col items-center gap-8">
                     {blocks.map((section, index) => (
@@ -122,7 +153,6 @@ function BlockEditor({
                     }}
                 />
             )}
-            {/* <div>{JSON.stringify(blocks)}</div> */}
         </>
     );
 }

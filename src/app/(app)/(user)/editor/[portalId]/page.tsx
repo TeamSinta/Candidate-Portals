@@ -40,6 +40,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
                 <BlockEditor
                     sections={data.sections || []}
                     portalId={params.portalId}
+                    initialPortalData={data.portal}
                 />
                 {/* <div className="flex h-full flex-col items-center">
                     {data.sections?.map((section) => (
