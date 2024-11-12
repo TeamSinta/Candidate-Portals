@@ -103,24 +103,24 @@ function ContentBlock({
             <div
                 className={cn(
                     "flex w-[50rem] flex-col rounded-lg border-2 bg-white p-4 px-8 shadow transition-shadow duration-300",
-                    !editing && "cursor-pointer hover:shadow-lg ",
+                    !editing && "hover:shadow-lg ",
                 )}
-                // onClick={() => {
-                //     if (!editing) editBlock();
-                // }}
             >
                 <div className="flex flex-row items-center justify-between text-xl font-bold">
                     {editing && <div>Content Block {index}</div>}
                     {!editing && (
                         <>
                             <div>{title || `Section ${index}`}</div>
-                            {/* <Edit
-                                className="h-6 w-6 cursor-pointer text-slate-400"
-                                onClick={editBlock}
-                            /> */}
                         </>
                     )}
                 </div>
+                {!editing && (
+                    <div className="flex w-full flex-col">
+                        <div>
+                            Content Type: <b>{contentType}</b>
+                        </div>
+                    </div>
+                )}
                 {editing && (
                     <>
                         <div className="text-sm font-light">
@@ -159,125 +159,80 @@ function ContentBlock({
                                 </TabsList>
                             </Tabs>
                         </div>
-
-                        {/* {!contentType && (
-                        <div className="mt-4 flex flex-col self-center">
-                            <div className="text-sm font-semibold">
-                                Content Type
-                            </div>
-                            <Select
-                                value={contentType}
-                                onValueChange={(value: SectionContentType) =>
-                                    setContentType(value)
-                                }
-                            >
-                                <SelectTrigger className="w-[180px]">
-                                    <SelectValue placeholder="Not Selected" />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value={SectionContentType.URL}>
-                                        Link
-                                    </SelectItem>
-                                    <SelectItem
-                                        value={SectionContentType.YOOPTA}
-                                    >
-                                        Editor
-                                    </SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    )} */}
-                        {contentType === SectionContentType.URL && (
-                            <UrlInput
-                                title={title}
-                                url={urlContentData.url}
-                                onChange={handleUrlContentDataChange}
-                                onTitleChange={setTitle}
-                                editable={editing}
-                            />
-                        )}
-                        {contentType === SectionContentType.YOOPTA && (
-                            <Editor
-                                content={yooptaContentData}
-                                editable={editing}
-                                sectionId={id}
-                                onChange={setYooptaContentData}
-                                title={title}
-                                onTitleChange={setTitle}
-                            />
-                        )}
-                        {contentType === SectionContentType.DOC && (
-                            <AttachmentBlock />
-                        )}
-                        <div className="flex gap-2 self-end">
-                            <Button variant="outline" onClick={cancelEdit}>
-                                Cancel
-                            </Button>
-                            <Button
-                                disabled={!contentType}
-                                onClick={handleSave}
-                                // variant={"outline"}
-                            >
-                                Save Block
-                            </Button>
-                        </div>
                     </>
                 )}
+                {contentType === SectionContentType.URL && (
+                    <UrlInput
+                        title={title}
+                        url={urlContentData.url}
+                        onChange={handleUrlContentDataChange}
+                        onTitleChange={setTitle}
+                        editable={editing}
+                    />
+                )}
+                {contentType === SectionContentType.YOOPTA && (
+                    <Editor
+                        content={yooptaContentData}
+                        editable={editing}
+                        sectionId={id}
+                        onChange={setYooptaContentData}
+                        title={title}
+                        onTitleChange={setTitle}
+                    />
+                )}
+                {contentType === SectionContentType.DOC && <AttachmentBlock />}
+                {editing && (
+                    <div className="flex gap-2 self-end">
+                        <Button variant="outline" onClick={cancelEdit}>
+                            Cancel
+                        </Button>
+                        <Button
+                            disabled={!contentType}
+                            onClick={handleSave}
+                            // variant={"outline"}
+                        >
+                            Save Block
+                        </Button>
+                    </div>
+                )}
                 {!editing && (
-                    <div className="flex w-full flex-col">
-                        <div>
-                            Content Type: <b>{contentType}</b>
-                        </div>
-                        {contentType === SectionContentType.URL && (
-                            <div>
-                                <b>{urlContentData.url}</b>
-                            </div>
-                        )}
-                        <div className="flex gap-2 self-end">
-                            <AlertDialog>
-                                <AlertDialogTrigger>
-                                    <Button
-                                        variant="ghost"
-                                        className="text-red-600 hover:text-red-500"
+                    <div className="flex gap-2 self-end">
+                        <AlertDialog>
+                            <AlertDialogTrigger asChild>
+                                <Button
+                                    variant="ghost"
+                                    className="text-red-600 hover:text-red-500"
+                                >
+                                    Delete
+                                </Button>
+                            </AlertDialogTrigger>
+                            <AlertDialogContent>
+                                <AlertDialogHeader>
+                                    <AlertDialogTitle>
+                                        Are you sure?
+                                    </AlertDialogTitle>
+                                    <AlertDialogDescription>
+                                        This action cannot be undone. This will
+                                        permanently delete this content block.
+                                    </AlertDialogDescription>
+                                </AlertDialogHeader>
+                                <AlertDialogFooter>
+                                    <AlertDialogCancel>
+                                        Cancel
+                                    </AlertDialogCancel>
+                                    <AlertDialogAction
+                                        className="bg-red-600 text-white hover:bg-red-500"
+                                        onClick={() => onDeleteBlock()}
                                     >
                                         Delete
-                                    </Button>
-                                </AlertDialogTrigger>
-                                <AlertDialogContent>
-                                    <AlertDialogHeader>
-                                        <AlertDialogTitle>
-                                            Are you sure?
-                                        </AlertDialogTitle>
-                                        <AlertDialogDescription>
-                                            This action cannot be undone. This
-                                            will permanently delete this content
-                                            block.
-                                        </AlertDialogDescription>
-                                    </AlertDialogHeader>
-                                    <AlertDialogFooter>
-                                        <AlertDialogCancel>
-                                            Cancel
-                                        </AlertDialogCancel>
-                                        <AlertDialogAction asChild>
-                                            <Button
-                                                onClick={onDeleteBlock}
-                                                variant={"destructive"}
-                                                className="bg-red-600 hover:bg-red-500"
-                                            >
-                                                Delete
-                                            </Button>
-                                        </AlertDialogAction>
-                                    </AlertDialogFooter>
-                                </AlertDialogContent>
-                            </AlertDialog>
+                                    </AlertDialogAction>
+                                </AlertDialogFooter>
+                            </AlertDialogContent>
+                        </AlertDialog>
 
-                            <Button
-                                onClick={() => editBlock()}
-                                variant={"outline"}
-                            >
-                                Edit Block
-                            </Button>
-                        </div>
+                        <Button onClick={() => editBlock()} variant={"outline"}>
+                            Edit Block
+                        </Button>
                     </div>
                 )}
                 {/* {JSON.stringify(isYooptaContentData(initialContentData))}

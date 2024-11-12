@@ -22,7 +22,7 @@ function InputField({
             <input
                 type="text"
                 placeholder={placeholder}
-                className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2"
+                className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2 disabled:border-0 disabled:bg-transparent"
                 onChange={(e) => onChange(fieldKey, e.target.value)}
                 value={value}
                 disabled={!editable}
@@ -54,7 +54,7 @@ function UrlInput({
                 onChange={(key, value) => {
                     if (key === "title") onTitleChange(value);
                 }}
-                editable
+                editable={editable}
             />
             <InputField
                 fieldKey="url"
@@ -62,7 +62,7 @@ function UrlInput({
                 label="Content Link"
                 placeholder="https://www.aptible.com/culture-hub/careers"
                 onChange={onChange}
-                editable
+                editable={editable}
             />
             <InputField
                 fieldKey="engagement"
@@ -70,7 +70,7 @@ function UrlInput({
                 label="Expected Engagement Time"
                 placeholder="~5min"
                 onChange={onChange}
-                editable
+                editable={editable}
             />
         </div>
     );
