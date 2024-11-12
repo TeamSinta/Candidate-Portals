@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { ChevronDownIcon } from "lucide-react";
 import { PortalData } from "@/types/portal";
 import CreateLinkSheetContent from "./sheet-content";
+import { useRouter, useSearchParams } from "next/navigation";
+import Fireworks from "react-canvas-confetti/dist/presets/fireworks";
 
 interface ClientSheetProps {
     portalData: PortalData;
@@ -13,19 +15,46 @@ interface ClientSheetProps {
 
 export default function ClientSheet({ portalData }: ClientSheetProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    useEffect(() => {
+        setIsOpen(searchParams.get("createLink") === "true");
+    }, []);
+    const closeSheet = () => {
+        // setIsOpen(false);
+        const params = new URLSearchParams(searchParams.toString());
+        params.delete("createLink");
+    };
 
-    const closeSheet = () => setIsOpen(false);
+    const toggleSheet = () => {
+        const params = new URLSearchParams(searchParams.toString());
+        if (isOpen) {
+            params.delete("createLink");
+        } else {
+            params.set("createLink", "true");
+        }
+        // Update the URL with new parameters
+        router.push(`?${params.toString()}`);
+        setIsOpen(!isOpen);
+    };
 
     return (
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <Sheet open={isOpen} onOpenChange={toggleSheet}>
             <SheetTrigger asChild>
-                <Button className="flex items-center gap-2 rounded-full bg-black px-4 py-2 text-white">
+                <Button
+                    className="flex items-center gap-2 rounded-full bg-black px-4 py-2 text-white"
+                    onClick={toggleSheet}
+                >
                     Create link
                     <ChevronDownIcon className="h-4 w-4" />
                 </Button>
             </SheetTrigger>
             <SheetContent>
-                <CreateLinkSheetContent portalData={portalData} closeSheet={closeSheet} />
+                {isOpen && <Fireworks globalOptions={{}} />}
+                <CreateLinkSheetContent
+                    portalData={portalData}
+                    closeSheet={toggleSheet}
+                />
             </SheetContent>
         </Sheet>
     );
