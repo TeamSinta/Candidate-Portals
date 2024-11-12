@@ -14,6 +14,7 @@ import { ContentDataType } from "../utils/types";
 import { updatePortalData } from "@/server/actions/portal/queries";
 import { toast } from "sonner";
 import PortalEditBlock from "./portal-edit-block";
+import { useRouter } from "next/navigation";
 function BlockEditor({
     portalId,
     sections,
@@ -29,7 +30,7 @@ function BlockEditor({
     );
     const [portalData, setPortalData] =
         useState<PortalSelect>(initialPortalData);
-
+    const router = useRouter();
     async function handleRenamePortal(newName: string) {
         const updatedPortal = { ...portalData, title: newName };
         try {
@@ -37,6 +38,8 @@ function BlockEditor({
             await updatePortalData(portalId, updatedPortal);
             toast.success("Portal updated successfully");
             setSelectedBlock("");
+            // Display the updated name on the AppPageShell
+            router.refresh();
         } catch {
             toast.error("Failed to update portal name");
         }
@@ -122,6 +125,7 @@ function BlockEditor({
                             onDeleteBlock={() => handleDeleteBlock(section.id)}
                             editing={selectedBlock === section.id}
                             editBlock={() => setSelectedBlock(section.id)}
+                            cancelEdit={() => setSelectedBlock(undefined)}
                         />
                     ))}
                     <div className="flex flex-row items-center justify-center gap-4 font-light">

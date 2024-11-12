@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { PortalSelect } from "@/server/db/schema";
+import { Edit } from "lucide-react";
 import React, { useState } from "react";
 import { toast } from "sonner";
 
@@ -67,9 +68,12 @@ function PortalEditBlock({
                 </>
             )}
             {!editing && (
-                <div className="flex flex-row items-center gap-2 text-2xl font-semibold">
-                    Candidate Portal:
-                    <div className="font-normal">{title}</div>
+                <div className="flex flex-row items-center justify-between gap-2 text-2xl font-normal">
+                    <div className="flex flex-row items-center gap-2">
+                        Candidate Portal:
+                        <div className="font-semibold">{title}</div>
+                    </div>
+                    <Edit className="h-6 w-6 cursor-pointer text-slate-400" />
                 </div>
             )}
         </div>
