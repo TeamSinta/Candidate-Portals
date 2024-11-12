@@ -10,7 +10,7 @@ import {
     SelectValue,
 } from "@/components/ui/select";
 import UrlInput from "./url-input";
-import { Edit } from "lucide-react";
+import { Edit, Router } from "lucide-react";
 import { cn } from "@/lib/utils";
 import Editor from "@/components/editor";
 import {
@@ -32,6 +32,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 import AttachmentBlock from "./attachment-block";
+import { useRouter } from "next/navigation";
 
 export interface SaveBlockArgs {
     content: ContentDataType;
@@ -77,6 +78,18 @@ function ContentBlock({
             isYooptaContentData(initialContentData) ? initialContentData : {},
         );
 
+    // Backup states for cancel functionality
+    const [backupContentType, setBackupContentType] =
+        useState(initialContentType);
+    const [backupTitle, setBackupTitle] = useState(initialTitle ?? "");
+    const [backupUrlContentData, setBackupUrlContentData] = useState(
+        isUrlContentData(initialContentData) ? initialContentData : { url: "" },
+    );
+    const [backupYooptaContentData, setBackupYooptaContentData] = useState(
+        isYooptaContentData(initialContentData) ? initialContentData : {},
+    );
+
+    const router = useRouter();
     function handleUrlContentDataChange(key: string, value: string) {
         setUrlContentData((prevData) => ({
             ...prevData,
@@ -96,6 +109,29 @@ function ContentBlock({
             content,
             title,
         });
+        // Update backup with saved data
+        setBackupContentType(contentType);
+        setBackupTitle(title);
+        setBackupUrlContentData({ ...urlContentData });
+        setBackupYooptaContentData({ ...yooptaContentData });
+
+        // Optional navigation to a new route
+        if (contentType === SectionContentType.YOOPTA) {
+            router.push("/editor/content/" + id);
+        }
+
+        if (contentType === SectionContentType.YOOPTA) {
+            router.push("/editor/content/" + id);
+        }
+    }
+    function handleCancel() {
+        // Revert to backup data
+        setContentType(backupContentType);
+        setTitle(backupTitle);
+        setUrlContentData(backupUrlContentData);
+        setYooptaContentData(backupYooptaContentData);
+
+        cancelEdit();
     }
 
     return (
@@ -183,15 +219,13 @@ function ContentBlock({
                 {contentType === SectionContentType.DOC && <AttachmentBlock />}
                 {editing && (
                     <div className="flex gap-2 self-end">
-                        <Button variant="outline" onClick={cancelEdit}>
+                        <Button variant="outline" onClick={handleCancel}>
                             Cancel
                         </Button>
-                        <Button
-                            disabled={!contentType}
-                            onClick={handleSave}
-                            // variant={"outline"}
-                        >
-                            Save Block
+                        <Button disabled={!contentType} onClick={handleSave}>
+                            {contentType === SectionContentType.YOOPTA
+                                ? "Create Block"
+                                : "Save Block"}
                         </Button>
                     </div>
                 )}

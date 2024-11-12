@@ -29,6 +29,8 @@ import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
 import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
 import { useMemo } from "react";
+import NextLink from "next/link";
+import { Button } from "./ui/button";
 const plugins = [
     Paragraph,
     Table,
@@ -66,7 +68,6 @@ const tools = {
 
 export default function Editor({
     content,
-    // portalId,
     sectionId,
     editable = true,
     onChange,
@@ -89,13 +90,18 @@ export default function Editor({
                 <input
                     type="text"
                     placeholder={"Title"}
-                    className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2"
+                    className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2 disabled:border-0 disabled:bg-transparent"
                     onChange={(e) => onTitleChange(e.target.value)}
                     value={title}
+                    disabled={!editable}
                 />
             </div>
+            <NextLink href={`/editor/${sectionId}`}>
+                <Button variant={"outline"}>Create Block</Button>
+            </NextLink>
             <div className="my-4 flex w-full flex-col items-center justify-center border-2 p-4">
                 <YooptaEditor
+                    key={editable ? "editable" : "readOnly"}
                     editor={editor}
                     placeholder="Type / to open menu"
                     value={content}
