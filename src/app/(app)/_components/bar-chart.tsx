@@ -1,17 +1,9 @@
 "use client";
-import { TrendingUp } from "lucide-react";
-import {
-    Bar,
-    BarChart,
-    CartesianGrid,
-    ResponsiveContainer,
-    XAxis,
-} from "recharts";
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis } from "recharts";
 import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -21,64 +13,65 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
+import { MergedSectionData } from "@/types/portal";
 
-export const description = "A bar chart";
-const chartData = [
-    { month: "January", desktop: 186 },
-    { month: "February", desktop: 305 },
-    { month: "March", desktop: 237 },
-    { month: "April", desktop: 73 },
-    { month: "May", desktop: 209 },
-    { month: "June", desktop: 214 },
-];
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "hsl(var(--chart-1))",
-    },
-} satisfies ChartConfig;
-export function Component() {
+// Helper function to format duration in seconds to "MM:SS"
+function formatDuration(seconds: number): string {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `: ${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+}
+
+// Props interface
+interface BarChartComponentProps {
+    data: MergedSectionData[];
+}
+
+export function BarChartComponent({ data }: BarChartComponentProps) {
+    const chartConfig = {
+        time_spent: {
+            label: "Time Spent",
+            color: "hsl(var(--chart-1))",
+        },
+    } satisfies ChartConfig;
+
     return (
         <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Progress Duration</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardDescription>Time Spent Per Section (Avg.)</CardDescription>
             </CardHeader>
             <CardContent>
-                <ChartContainer
-                    config={chartConfig}
-                    className="max-h-[250px] w-full"
-                >
-                    <BarChart accessibilityLayer data={chartData}>
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="month"
-                            tickLine={false}
-                            tickMargin={10}
-                            axisLine={false}
-                            tickFormatter={(value) => value.slice(0, 3)}
-                        />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
-                        />
-                        <Bar
-                            dataKey="desktop"
-                            fill="var(--color-desktop)"
-                            radius={8}
-                        />
-                    </BarChart>
+                <ChartContainer config={chartConfig} className="max-h-[250px] w-full">
+                    <ResponsiveContainer width="100%" height={250}>
+                        <BarChart data={data}>
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="section_title"
+                                tickLine={false}
+                                tickMargin={10}
+                                axisLine={false}
+                                tickFormatter={(value) => value.slice(0, 15)} // Shorten title if needed
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={
+                                    <ChartTooltipContent
+                                        hideLabel
+                                        valueFormatter={formatDuration} // Pass the formatDuration function
+                                    />
+                                }
+                            />
+                            <Bar
+                                dataKey="total_duration"
+                                fill="hsl(var(--chart-1))"
+                                radius={8}
+                                name="Time Spent"
+                            />
+                        </BarChart>
+                    </ResponsiveContainer>
                 </ChartContainer>
             </CardContent>
-            {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month{" "}
-                    <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter> */}
         </Card>
     );
 }

@@ -26,6 +26,7 @@ export default function ClientSheet({ portalData }: ClientSheetProps) {
             </SheetTrigger>
             <SheetContent>
                 <CreateLinkSheetContent portalData={portalData} closeSheet={closeSheet} />
+
             </SheetContent>
         </Sheet>
     );

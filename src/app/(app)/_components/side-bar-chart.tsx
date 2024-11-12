@@ -5,7 +5,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card";
@@ -15,45 +14,46 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart";
-export const description = "A mixed bar chart";
-const chartData = [
-    { browser: "chrome", visitors: 275, fill: "var(--color-chrome)" },
-    { browser: "safari", visitors: 200, fill: "var(--color-safari)" },
-    { browser: "firefox", visitors: 187, fill: "var(--color-firefox)" },
-    { browser: "edge", visitors: 173, fill: "var(--color-edge)" },
-    { browser: "other", visitors: 90, fill: "var(--color-other)" },
-];
-const chartConfig = {
-    visitors: {
-        label: "Visitors",
-    },
-    chrome: {
-        label: "Chrome",
-        color: "hsl(var(--chart-1))",
-    },
-    safari: {
-        label: "Safari",
-        color: "hsl(var(--chart-2))",
-    },
-    firefox: {
-        label: "Firefox",
-        color: "hsl(var(--chart-3))",
-    },
-    edge: {
-        label: "Edge",
-        color: "hsl(var(--chart-4))",
-    },
-    other: {
-        label: "Other",
-        color: "hsl(var(--chart-5))",
-    },
-} satisfies ChartConfig;
-export function Component() {
+import { MergedEngagedData } from "@/types/portal";
+
+// Updated component name
+export function TopEngagingUsersChart({ data }: { data: MergedEngagedData[] }) {
+    // Define the chart configuration
+    const chartConfig = {
+        total_duration: {
+            label: "Total Time Spent",
+            color: "hsl(var(--chart-1))",
+        },
+    } satisfies ChartConfig;
+
+    // Helper function to format duration as "MM:SS"
+    function formatDuration(seconds: number): string {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        return `: ${minutes}:${remainingSeconds.toString().padStart(2, "0")}`;
+    }
+
+    // Array of color variables
+    const colors = [
+        "hsl(var(--chart-1))",
+        "hsl(var(--chart-2))",
+        "hsl(var(--chart-3))",
+        "hsl(var(--chart-4))",
+        "hsl(var(--chart-5))",
+    ];
+
+    // Format the data and assign colors cyclically
+    const formattedData = data.map((item, index) => ({
+        candidate_name: item.candidate_name,
+        total_duration: item.total_duration,
+        fill: colors[index % colors.length], // Cycle through the colors
+    }));
+
     return (
         <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Top Engaging Users</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardDescription>Showing the top users by engagement</CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer
@@ -61,42 +61,39 @@ export function Component() {
                     className="max-h-[250px] w-full"
                 >
                     <BarChart
-                        accessibilityLayer
-                        data={chartData}
+                        data={formattedData}
                         layout="vertical"
                         margin={{
-                            left: 0,
+                            left: 12,
                         }}
+
                     >
                         <YAxis
-                            dataKey="browser"
+                            dataKey="candidate_name"
                             type="category"
                             tickLine={false}
                             tickMargin={10}
                             axisLine={false}
-                            tickFormatter={(value) =>
-                                chartConfig[value as keyof typeof chartConfig]
-                                    ?.label
-                            }
                         />
-                        <XAxis dataKey="visitors" type="number" hide />
+                        <XAxis dataKey="total_duration" type="number" hide />
                         <ChartTooltip
                             cursor={false}
-                            content={<ChartTooltipContent hideLabel />}
+                            content={
+                                <ChartTooltipContent
+                                    hideLabel
+                                    valueFormatter={formatDuration} // Pass the formatDuration function
+                                />
+                            }
                         />
-                        <Bar dataKey="visitors" layout="vertical" radius={5} />
+                        <Bar
+                            dataKey="total_duration"
+                            layout="vertical"
+                            radius={5}
+                            name="Total Time Spent"
+                        />
                     </BarChart>
                 </ChartContainer>
             </CardContent>
-            {/* <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month{" "}
-                    <TrendingUp className="h-4 w-4" />
-                </div>
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
-                </div>
-            </CardFooter> */}
         </Card>
     );
 }

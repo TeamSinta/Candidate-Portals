@@ -207,7 +207,8 @@ export default function CreateLinkSheetContent({
             </Accordion>
 
             {/* Shimmer Button */}
-            <div className="mt-6 flex justify-end">
+
+            <div className="mt-6 flex justify-end items-end">
                 {name ? (
                     <div className="mt-6 flex w-full justify-end">
                     <div className="group relative w-full">

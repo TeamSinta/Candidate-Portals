@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight, ChevronDown, TrendingUp } from "lucide-react";
+import { ChevronRight, ChevronDown } from "lucide-react";
 import Image from "next/image";
 import VisitorsAccordion from "./link-details-table";
 import CircleProgressLoader from "@/app/(app)/_components/circle-progress-loader";
@@ -19,13 +19,11 @@ import { getSectionDuration } from "@/server/tinybird/pipes/pipes";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { toast } from "sonner"; // Import the toast function
+import { calculateViewCounts } from "@/server/tinybird/utils";
+import { PortalData } from "@/types/portal";
 
 interface LinksCardProps {
-  portalData: {
-    links: { url: string; candidateId: string; linkId: string }[];
-    candidates: { candidateId: string; name?: string; email?: string }[];
-    sections: { section_id: string; title: string; contentType: string }[];
-  };
+  portalData: PortalData
 }
 
 export default function LinksCard({ portalData }: LinksCardProps) {
@@ -36,35 +34,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const counts: { [key: string]: number } = {};
-        const progressData: { [key: string]: number } = {};
-
-        for (const link of portalData.links) {
-          const data = await getSectionDuration({ link_id: link.linkId });
-          const filteredData = data.data.filter(
-            (item) => item.link_id === link.linkId
-          );
-          counts[link.linkId] = filteredData.length;
-
-          const uniqueSectionIdsFromData = [
-            ...new Set(filteredData.map((item) => item.section_id)),
-          ];
-          const uniqueSectionIdsFromPortal = [
-            ...new Set(portalData.sections.map((section) => section.section_id)),
-          ];
-
-          const matchingSectionIds = uniqueSectionIdsFromData.filter((id) =>
-            uniqueSectionIdsFromPortal.includes(id)
-          );
-
-          const progressRatio =
-            uniqueSectionIdsFromPortal.length > 0
-              ? matchingSectionIds.length / uniqueSectionIdsFromPortal.length
-              : 0;
-
-          progressData[link.linkId] = progressRatio;
-        }
-
+        const { counts, progressData } = await calculateViewCounts(portalData, getSectionDuration);
         setViewCounts(counts);
         setProgressMap(progressData);
       } catch (error) {
@@ -74,6 +44,8 @@ export default function LinksCard({ portalData }: LinksCardProps) {
 
     fetchData();
   }, [portalData.links, portalData.sections]);
+
+
 
   const toggleLink = (url: string) => {
     setExpandedLinks((prev) =>
@@ -91,7 +63,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
   };
 
   return (
-    <Card className="mt-6 rounded shadow-none">
+    <Card className="mt-6 rounded-sm shadow-none">
       <CardHeader>
         <CardTitle>All Links</CardTitle>
       </CardHeader>
@@ -136,7 +108,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                         className="relative group cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleCopyToClipboard(link.url); // Call the copy function
+                          handleCopyToClipboard(siteUrls.publicUrl + siteUrls.view + link.url); // Call the copy function
                         }}
                       >
                         <div className="p-2 rounded-full bg-blue-50 group-hover:bg-white group-hover:border hover:border-blue-400 transition text-center w-[400px]">
