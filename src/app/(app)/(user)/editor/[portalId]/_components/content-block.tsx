@@ -33,6 +33,7 @@ import {
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
 import AttachmentBlock from "./attachment-block";
 import { useRouter } from "next/navigation";
+import NextLink from "next/link";
 
 export interface SaveBlockArgs {
     content: ContentDataType;
@@ -109,19 +110,16 @@ function ContentBlock({
             content,
             title,
         });
-        // Update backup with saved data
-        setBackupContentType(contentType);
-        setBackupTitle(title);
-        setBackupUrlContentData({ ...urlContentData });
-        setBackupYooptaContentData({ ...yooptaContentData });
 
-        // Optional navigation to a new route
+        // Navigate to section/notion editor page
         if (contentType === SectionContentType.YOOPTA) {
             router.push("/editor/content/" + id);
-        }
-
-        if (contentType === SectionContentType.YOOPTA) {
-            router.push("/editor/content/" + id);
+        } else {
+            // Update backup with saved data
+            setBackupContentType(contentType);
+            setBackupTitle(title);
+            setBackupUrlContentData({ ...urlContentData });
+            setBackupYooptaContentData({ ...yooptaContentData });
         }
     }
     function handleCancel() {
@@ -207,14 +205,26 @@ function ContentBlock({
                     />
                 )}
                 {contentType === SectionContentType.YOOPTA && (
-                    <Editor
-                        content={yooptaContentData}
-                        editable={editing}
-                        sectionId={id}
-                        onChange={setYooptaContentData}
-                        title={title}
-                        onTitleChange={setTitle}
-                    />
+                    <div className="my-4 flex flex-row items-center justify-end gap-4 text-sm">
+                        <label className="font-semibold">Content Title</label>
+                        <input
+                            type="text"
+                            placeholder={"Title"}
+                            className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2 disabled:border-0 disabled:bg-transparent"
+                            onChange={(e) => setTitle(e.target.value)}
+                            value={title}
+                            disabled={!editing}
+                        />
+                    </div>
+
+                    // <Editor
+                    //     content={yooptaContentData}
+                    //     editable={editing}
+                    //     sectionId={id}
+                    //     onChange={setYooptaContentData}
+                    //     title={title}
+                    //     onTitleChange={setTitle}
+                    // />
                 )}
                 {contentType === SectionContentType.DOC && <AttachmentBlock />}
                 {editing && (

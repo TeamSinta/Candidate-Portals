@@ -1,4 +1,5 @@
 "use client";
+import { cn } from "@/lib/utils";
 import Accordion from "@yoopta/accordion";
 import ActionMenuList, {
     DefaultActionMenuRender,
@@ -29,8 +30,6 @@ import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
 import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
 import { useMemo } from "react";
-import NextLink from "next/link";
-import { Button } from "./ui/button";
 const plugins = [
     Paragraph,
     Table,
@@ -68,51 +67,39 @@ const tools = {
 
 export default function Editor({
     content,
-    sectionId,
     editable = true,
     onChange,
-    title,
-    onTitleChange,
+    className,
 }: {
     content: YooptaContentValue;
-    sectionId: string;
     editable: boolean;
     onChange: (data: YooptaContentValue) => void;
-    title: string;
-    onTitleChange: (value: string) => void;
+    className?: string;
 }) {
     const editor = useMemo(() => createYooptaEditor(), []);
 
     return (
-        <div className="mt-4">
-            <div className="flex flex-row items-center justify-end gap-4 text-sm">
-                <label className="font-semibold">Content Title</label>
-                <input
-                    type="text"
-                    placeholder={"Title"}
-                    className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2 disabled:border-0 disabled:bg-transparent"
-                    onChange={(e) => onTitleChange(e.target.value)}
-                    value={title}
-                    disabled={!editable}
-                />
-            </div>
-            <NextLink href={`/editor/${sectionId}`}>
-                <Button variant={"outline"}>Create Block</Button>
-            </NextLink>
-            <div className="my-4 flex w-full flex-col items-center justify-center border-2 p-4">
-                <YooptaEditor
-                    key={editable ? "editable" : "readOnly"}
-                    editor={editor}
-                    placeholder="Type / to open menu"
-                    value={content}
-                    onChange={onChange}
-                    // here we go
-                    plugins={plugins}
-                    tools={tools}
-                    readOnly={!editable}
-                    marks={marks}
-                />
-            </div>
+        <div
+            className={cn(
+                "my-4 flex w-full flex-col items-center justify-center",
+                className,
+            )}
+        >
+            <YooptaEditor
+                key={editable ? "editable" : "readOnly"}
+                editor={editor}
+                placeholder="Type / to open menu"
+                value={content}
+                onChange={onChange}
+                // here we go
+                plugins={plugins}
+                tools={tools}
+                readOnly={!editable}
+                marks={marks}
+                style={{
+                    width: "80%",
+                }}
+            />
         </div>
     );
 }
