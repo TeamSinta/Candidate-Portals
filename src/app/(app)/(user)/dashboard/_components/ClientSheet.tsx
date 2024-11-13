@@ -20,11 +20,6 @@ export default function ClientSheet({ portalData }: ClientSheetProps) {
     useEffect(() => {
         setIsOpen(searchParams.get("createLink") === "true");
     }, []);
-    const closeSheet = () => {
-        // setIsOpen(false);
-        const params = new URLSearchParams(searchParams.toString());
-        params.delete("createLink");
-    };
 
     const toggleSheet = () => {
         const params = new URLSearchParams(searchParams.toString());
@@ -37,7 +32,6 @@ export default function ClientSheet({ portalData }: ClientSheetProps) {
         router.push(`?${params.toString()}`);
         setIsOpen(!isOpen);
     };
-
     return (
         <Sheet open={isOpen} onOpenChange={toggleSheet}>
             <SheetTrigger asChild>
@@ -50,7 +44,34 @@ export default function ClientSheet({ portalData }: ClientSheetProps) {
                 </Button>
             </SheetTrigger>
             <SheetContent>
-                {isOpen && <Fireworks globalOptions={{}} />}
+                {portalData.links.length === 0 && (
+                    <div
+                        style={{
+                            position: "absolute",
+                            top: 0,
+                            left: 0,
+                            width: "100%",
+                            height: "100%",
+                            zIndex: 1, // Ensure it appears above content
+                            pointerEvents: "none",
+                        }}
+                    >
+                        <Fireworks
+                            onInit={(confetti) => {
+                                confetti.conductor.shoot();
+                            }}
+                            style={{
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                width: "100%",
+                                height: "100%",
+                                pointerEvents: "none", // Prevent interactions with canvas
+                            }}
+                        />
+                    </div>
+                )}
+
                 <CreateLinkSheetContent
                     portalData={portalData}
                     closeSheet={toggleSheet}
