@@ -17,12 +17,13 @@ type Section = {
 
 type PortalData = {
   candidateName: string;
-  candidateEmail: string;
+  companyName: string;
+  role: string;
+  recruiterName: string;
+  sections: Section[];
   userId: string;
   portalId: string;
   linkId: string;
-  customContent: object | string | null;
-  sections: Section[];
 };
 
 type PortalContentProps = {
@@ -33,21 +34,20 @@ export default function PortalContent({ portalData }: PortalContentProps) {
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
   const [isCardCollapsed, setIsCardCollapsed] = useState(false);
   const sessionIdRef = useRef<string>(crypto.randomUUID());
-
-
-  const toggleCardCollapse = () => {
-    setIsCardCollapsed(!isCardCollapsed);
-  };
   const startTimeRef = useRef<number | null>(null);
   const cumulativeDurationRef = useRef<number>(0);
   const sectionIndexRef = useRef<number>(selectedSectionIndex);
   const isInitialMountRef = useRef<boolean>(true);
 
+  const toggleCardCollapse = () => {
+    setIsCardCollapsed(!isCardCollapsed);
+  };
+
   if (!portalData) {
     return <div>Loading...</div>;
   }
 
-  const { sections, userId, portalId, linkId, candidateName } = portalData;
+  const { sections, userId, portalId, linkId, candidateName, companyName, role, recruiterName } = portalData;
   const selectedSection = sections[selectedSectionIndex];
 
   // Function to send duration data to Tinybird
@@ -104,12 +104,10 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     cumulativeDurationRef.current = 0;
   }, [selectedSectionIndex]);
 
-  const handleSectionSelect = (section: Section) => {
-    setSelectedSectionIndex(sections.indexOf(section));
+  const handleSectionSelect = (index: number) => {
+    setSelectedSectionIndex(index);
     setIsCardCollapsed(false);
   };
-
-
 
   const renderContent = (content: any) => {
     if (typeof content === "string") {
@@ -128,21 +126,20 @@ export default function PortalContent({ portalData }: PortalContentProps) {
   const renderIcon = (type: string) => {
     switch (type) {
       case "website":
-        return <FileText className="h-5 w-5" />;
+        return <FileText className="h-4 w-4" />;
       case "notion":
-        return <NotionLogoIcon className="h-5 w-5" />;
+        return <NotionLogoIcon className="h-4 w-4" />;
       case "pdf":
-        return <File className="h-5 w-5" />;
+        return <File className="h-4 w-4" />;
       case "video":
-        return <YoutubeIcon className="h-5 w-5" />;
+        return <YoutubeIcon className="h-4 w-4" />;
       default:
-        return <FileText className="h-5 w-5" />;
+        return <NotionLogoIcon className="h-4 w-4" />;
     }
   };
 
   return (
-    <div className="my-2 flex flex-1 flex-col ">
-
+    <div className="my-2 flex flex-1 flex-col">
       <div className="flex-1 p-6">
         {selectedSection ? (
           <>
@@ -156,59 +153,73 @@ export default function PortalContent({ portalData }: PortalContentProps) {
 
       {/* Collapsible Card Navigator */}
       <motion.div
-      initial={{ height: "auto" }}
-      animate={{ height: isCardCollapsed ? "60px" : "auto" }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="fixed left-4 bottom-4 w-80 rounded-lg border border-gray-300 bg-white shadow-lg"
-    >
-<Card className="w-[350px] fixed left-4 bottom-4 shadow bg-slate-50">
-      <CardHeader className="flex items-center justify-between w-ful">
-        <div className="flex w-full justify-between">
-        <div className="flex gap-2">
-        <div className="flex aspect-square size-8 items-center justify-center rounded bg-black text-sidebar-primary-foreground">
-                                            {/* Default fallback icon or text */}
-                                            <GalleryVerticalEnd className="size-4" />
+        initial={{ y: 200, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ type: "spring", stiffness: 120, damping: 15 }}
+        className="fixed left-4 bottom-4 w-80 rounded-lg shadow-lg"
+      >
+        <Card className="w-[350px] shadow bg-slate-50">
+          <CardHeader className="flex items-center justify-between w-full">
+            <div className="flex w-full justify-between">
+              <div className="flex gap-2">
+                <div className="flex aspect-square size-8 items-center justify-center rounded bg-black text-sidebar-primary-foreground">
+                  <GalleryVerticalEnd className="h-4 w-4 text-white" />
+                </div>
+                <div className="flex flex-col">
+                  <CardTitle>{candidateName}</CardTitle>
+                  <CardDescription>
+                    [companyName] - [role]
+                  </CardDescription>
+                </div>
+              </div>
 
-                                            </div>
-                                            <div className="flex flex-col">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleCardCollapse}
+                aria-label="Toggle Collapse"
+              >
+                {isCardCollapsed ? (
+                  <ChevronDown className="h-4 w-4 text-gray-500" />
+                ) : (
+                  <ChevronUp className="h-4 w-4 text-gray-500" />
+                )}
+              </Button>
+            </div>
+          </CardHeader>
 
-          <CardTitle>[Candidates Name]</CardTitle>
-          <CardDescription>
-          [Company]-[Role Title]
-          </CardDescription>
+          {!isCardCollapsed && (
+            <CardContent>
+              <h3 className="text-xs font-medium text-muted-foreground">Review</h3>
+              <div className="mt-2 space-y-2">
+                {sections.map((section, index) => (
+                  <div
+                    key={section.sectionId}
+                    className={`flex items-center justify-between space-x-2 cursor-pointer ${
+                      index === selectedSectionIndex ? "text-blue-600 font-semibold" : "text-gray-700"
+                    }`}
+                    onClick={() => handleSectionSelect(index)}
+                  >
+<div className="flex items-center gap-2">
+                    <Circle className="text-gray-300 h-4 w-4"/>
+                    <span className="text-sm">{section.title}</span>
+                    </div>
+                    {/* {renderIcon(section.type || "")} */}
 
-          </div>
-          </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          )}
 
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleCardCollapse}
-          aria-label="Toggle Collapse"
-        >
-          {isCardCollapsed ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronUp className="h-4 w-4 text-gray-500"  />}
-        </Button>
-        </div>
-
-      </CardHeader>
-      {!isCardCollapsed && (
-        <CardContent>
-          <h3 className="text-xs font-medium text-muted-foreground">Review</h3>
-          <div className="mt-2 space-y-2">
-            {sections.map((section) => (
-              <label key={section.sectionId} className="flex items-center space-x-2">
-                <Circle className="text-gray-300 h-4 w-4"/>
-                <span className="text-sm">{section.title}</span>
-              </label>
-            ))}
-          </div>
-        </CardContent>
-      )}
-      <CardFooter>
-        <Button className="w-full rounded">Message [Recruiter's Name]</Button>
-      </CardFooter>
-    </Card>
-    </motion.div>
+          <CardFooter >
+            <div className="w-full">
+            <Button className="w-full rounded">Message [recruiterName]</Button>
+            <p className="mt-2 text-center text-xs text-gray-400 underline">Powered by Sinta</p>
+            </div>
+          </CardFooter>
+        </Card>
+      </motion.div>
     </div>
   );
 }
