@@ -365,7 +365,7 @@ export const candidate = createTable("candidate", {
     name: varchar("name", { length: 255 }).notNull(),
     email: varchar("email", { length: 255 }),
     role: varchar("role", { length: 255 }),
-    linkedin: varchar("stage", { length: 255 }),
+    linkedin: varchar("linkedin", { length: 255 }),
     createdAt: timestamp("createdAt", { mode: "date" }).notNull().defaultNow(),
     updatedAt: timestamp("updatedAt", { mode: "date" }).notNull().defaultNow(),
     notes: jsonb("notes"), // This is a field to be used with results of the notion like editor

@@ -1,0 +1,19 @@
+NODE mv
+SQL >
+
+SELECT
+    portal_id,
+    link_id,
+    section_id,
+    section_title,
+    AVG(duration) AS average_duration,
+    MAX(timestamp) AS last_view_timestamp
+FROM
+    db_sinta_events
+GROUP BY
+    portal_id,
+    link_id,
+    section_id,
+    section_title
+ORDER BY
+    last_view_timestamp DESC

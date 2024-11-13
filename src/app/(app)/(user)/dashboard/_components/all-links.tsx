@@ -1,5 +1,6 @@
 "use client";
 
+
 import React, { useEffect, useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
@@ -10,70 +11,51 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { ChevronRight, ChevronDown, TrendingUp } from "lucide-react";
+import { ChevronRight, ChevronDown, PlusCircleIcon, MinusCircleIcon } from "lucide-react";
 import Image from "next/image";
 import VisitorsAccordion from "./link-details-table";
 import CircleProgressLoader from "@/app/(app)/_components/circle-progress-loader";
 import { siteUrls } from "@/config/urls";
-import { getSectionDuration } from "@/server/tinybird/pipes/pipes";
 import { cn } from "@/lib/utils";
 import AnimatedGradientText from "@/components/ui/animated-gradient-text";
 import { toast } from "sonner"; // Import the toast function
+import { calculateViewCounts } from "@/server/tinybird/utils";
+import { PortalData } from "@/types/portal";
+import { getSectionDuration } from "@/server/tinybird/pipes/pipes";
 
 interface LinksCardProps {
-  portalData: {
-    links: { url: string; candidateId: string; linkId: string }[];
-    candidates: { candidateId: string; name?: string; email?: string }[];
-    sections: { section_id: string; title: string; contentType: string }[];
-  };
+  portalData: PortalData;
 }
 
 export default function LinksCard({ portalData }: LinksCardProps) {
   const [expandedLinks, setExpandedLinks] = useState<string[]>([]);
   const [viewCounts, setViewCounts] = useState<{ [key: string]: number }>({});
   const [progressMap, setProgressMap] = useState<{ [key: string]: number }>({});
+  const [sectionDataMap, setSectionDataMap] = useState<{ [key: string]: any[] }>({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const counts: { [key: string]: number } = {};
-        const progressData: { [key: string]: number } = {};
-
-        for (const link of portalData.links) {
-          const data = await getSectionDuration({ link_id: link.linkId });
-          const filteredData = data.data.filter(
-            (item) => item.link_id === link.linkId
-          );
-          counts[link.linkId] = filteredData.length;
-
-          const uniqueSectionIdsFromData = [
-            ...new Set(filteredData.map((item) => item.section_id)),
-          ];
-          const uniqueSectionIdsFromPortal = [
-            ...new Set(portalData.sections.map((section) => section.section_id)),
-          ];
-
-          const matchingSectionIds = uniqueSectionIdsFromData.filter((id) =>
-            uniqueSectionIdsFromPortal.includes(id)
-          );
-
-          const progressRatio =
-            uniqueSectionIdsFromPortal.length > 0
-              ? matchingSectionIds.length / uniqueSectionIdsFromPortal.length
-              : 0;
-
-          progressData[link.linkId] = progressRatio;
-        }
-
+        const { counts, progressData } = await calculateViewCounts(portalData, getSectionDuration);
         setViewCounts(counts);
         setProgressMap(progressData);
+
+        // Fetch section data for each link
+        const sectionDataMap: { [key: string]: any[] } = {};
+        for (const link of portalData.links) {
+          const data = await getSectionDuration({ link_id: link.linkId });
+          sectionDataMap[link.linkId] = data.data.filter(
+            (item) => item.link_id === link.linkId
+          );
+        }
+        setSectionDataMap(sectionDataMap);
       } catch (error) {
         console.error("Error fetching data for links:", error);
       }
     };
 
     fetchData();
-  }, [portalData.links, portalData.sections]);
+  }, [portalData.links]);
 
   const toggleLink = (url: string) => {
     setExpandedLinks((prev) =>
@@ -82,16 +64,19 @@ export default function LinksCard({ portalData }: LinksCardProps) {
   };
 
   const handleCopyToClipboard = (text: string) => {
-    navigator.clipboard.writeText(text).then(() => {
-      toast.success("Link copied to clipboard!"); // Show success toast
-    }).catch((error) => {
-      console.error("Failed to copy text: ", error);
-      toast.error("Failed to copy link."); // Show error toast
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        toast.success("Link copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Failed to copy text: ", error);
+        toast.error("Failed to copy link.");
+      });
   };
 
   return (
-    <Card className="mt-6 rounded shadow-none">
+    <Card className="mt-6 rounded-sm shadow-none">
       <CardHeader>
         <CardTitle>All Links</CardTitle>
       </CardHeader>
@@ -115,13 +100,17 @@ export default function LinksCard({ portalData }: LinksCardProps) {
               const viewCount = viewCounts[link.linkId] || 0;
               const progress = progressMap[link.linkId] || 0;
 
+              // Get section data for this link
+              const sectionData = sectionDataMap[link.linkId] || [];
+              console.log(sectionData, "sectiondata")
+
               return (
                 <React.Fragment key={link.url}>
                   <TableRow
                     className="cursor-pointer border-none justify-center items-center"
                     onClick={() => toggleLink(link.url)}
                   >
-                    <TableCell className="py-6 flex gap-2  items-center font-medium">
+                    <TableCell className="py-6 flex gap-2 items-center font-medium">
                       <Image
                         className="rounded-sm"
                         width={26}
@@ -136,7 +125,9 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                         className="relative group cursor-pointer"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleCopyToClipboard(link.url); // Call the copy function
+                          handleCopyToClipboard(
+                            siteUrls.publicUrl + siteUrls.view + link.url
+                          );
                         }}
                       >
                         <div className="p-2 rounded-full bg-blue-50 group-hover:bg-white group-hover:border hover:border-blue-400 transition text-center w-[400px]">
@@ -149,37 +140,35 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                         </div>
                       </div>
                     </TableCell>
-
                     <TableCell className="py-2 justify-center items-center text-center">
                       {viewCount > 0 ? (
                         <AnimatedGradientText>
-            <p className="transition-transform duration-300 ease-in-out group-hover:translate-x-0.5">🎉</p> <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
-            <span
-              className={cn(
-                `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`,
-              )}
-            >
-
-          {viewCount} Views
-          </span>
-
-          </AnimatedGradientText>
-
+                          <p className="transition-transform duration-300 ease-in-out group-hover:translate-x-0.5">
+                            🎉
+                          </p>{" "}
+                          <hr className="mx-2 h-4 w-px shrink-0 bg-gray-300" />{" "}
+                          <span
+                            className={cn(
+                              `inline animate-gradient bg-gradient-to-r from-[#ffaa40] via-[#9c40ff] to-[#ffaa40] bg-[length:var(--bg-size)_100%] bg-clip-text text-transparent`
+                            )}
+                          >
+                            {viewCount} Views
+                          </span>
+                        </AnimatedGradientText>
                       ) : (
                         <span className="text-sm text-gray-500 text-center">0 Views</span>
                       )}
                     </TableCell>
-
                     <TableCell className="py-2 flex justify-around items-center">
                       <CircleProgressLoader progress={progress} />
                       {isExpanded ? (
-                        <ChevronDown className="h-4 w-4 text-gray-600" />
+                        <MinusCircleIcon className="h-5 w-5 text-gray-600" />
                       ) : (
-                        <ChevronRight className="h-4 w-4 text-gray-600" />
+                        <PlusCircleIcon className="h-5 w-5 text-gray-600" />
                       )}
                     </TableCell>
                   </TableRow>
-                  {isExpanded && <VisitorsAccordion linkId={link.linkId} />}
+                  {isExpanded && <VisitorsAccordion sectionData={sectionData} />}
                 </React.Fragment>
               );
             })}

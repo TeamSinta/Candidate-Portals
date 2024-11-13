@@ -78,21 +78,7 @@ export async function AppSidebar({
                             <Icons.logo className="h-10 w-16 fill-primary" />
                         </Link>
 
-                        <Tooltip>
-                            <TooltipTrigger asChild>
-                                <Link
-                                    href={siteUrls.feedback}
-                                    className={cn(
-                                        "z-10 transition-transform hover:scale-90",
-                                    )}
-                                >
-                                    <HelpCircle className="h-4 w-4 text-muted-foreground" />
-                                </Link>
-                            </TooltipTrigger>
-                            <TooltipContent side="right">
-                                {"Provide Feedback"}
-                            </TooltipContent>
-                        </Tooltip>
+
                     </div>
                 )}
                 {showOrgSwitcher && (
@@ -116,6 +102,22 @@ export async function AppSidebar({
             </SidebarContent>
 
             <SidebarFooter>
+            {/* <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link
+                                    href={siteUrls.feedback}
+                                    className={cn(
+                                        "z-10 transition-transform hover:scale-90 flex gap-2",
+                                    )}
+                                >
+                                    <HelpCircle className=" h-5 w-5 text-muted-foreground" />
+                                    Send Feedback
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent side="right">
+                                {"Provide Feedback"}
+                            </TooltipContent>
+                        </Tooltip> */}
                 <UserDropdown user={user} />
             </SidebarFooter>
             <SidebarRail />
