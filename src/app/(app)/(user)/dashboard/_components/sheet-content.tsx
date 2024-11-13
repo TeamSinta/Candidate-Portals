@@ -25,8 +25,8 @@ import { useAwaitableTransition } from "@/hooks/use-awaitable-transition";
 import { PortalData } from "@/types/portal";
 
 interface CreateLinkSheetContentProps {
-  portalData: PortalData;
-  closeSheet: () => void; // New prop to close the sheet
+    portalData: PortalData;
+    closeSheet: () => void; // New prop to close the sheet
 }
 
 export default function CreateLinkSheetContent({
@@ -82,14 +82,13 @@ export default function CreateLinkSheetContent({
         } catch (error) {
             // Show error toast
             toast.error(
-                (error as { message?: string })?.message ??
-                    "Organization could not be created"
+                (error as { message?: string })?.message ?? "Organization could not be created"
             );
         }
     };
 
     return (
-        <div className="space-y-6">
+        <div className="flex flex-col h-full justify-between space-y-6">
             {/* Header */}
             <SheetHeader>
                 <SheetTitle className="text-xl font-semibold text-gray-900">
@@ -103,113 +102,114 @@ export default function CreateLinkSheetContent({
             </SheetHeader>
 
             {/* Main Form */}
-            <div>
-                <Label htmlFor="name" className="text-sm font-medium text-gray-700">
-                    Name
-                </Label>
-                <Input
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Recipient's name"
-                    className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
-                />
+            <div className="flex-grow space-y-6">
+                <div>
+                    <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                        Name
+                    </Label>
+                    <Input
+                        id="name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        placeholder="Recipient's name"
+                        className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
+                    />
+                </div>
+
+                {/* Optional Fields */}
+                <Accordion type="single" collapsible defaultValue="optional-fields">
+                    <AccordionItem value="optional-fields">
+                        <AccordionTrigger className="flex items-center justify-between text-sm font-medium text-gray-800">
+                            <div className="flex items-center space-x-2">
+                                <Settings2Icon className="h-5 w-5 text-gray-600" />
+                                <span>Optional</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="mt-2 space-y-4">
+                            <SheetDescription className="text-xs text-gray-500">
+                                Add these fields to use custom variables in your portals.
+                            </SheetDescription>
+                            <div>
+                                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                                    Email (Optional)
+                                </Label>
+                                <Input
+                                    id="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                    placeholder="example@domain.com"
+                                    className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="roleTitle" className="text-sm font-medium text-gray-700">
+                                    Role Title (Optional)
+                                </Label>
+                                <Input
+                                    id="roleTitle"
+                                    value={roleTitle}
+                                    onChange={(e) => setRoleTitle(e.target.value)}
+                                    placeholder="Enter role title"
+                                    className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
+                                />
+                            </div>
+                            <div>
+                                <Label htmlFor="linkedProfile" className="text-sm font-medium text-gray-700">
+                                    Linked Profile Link (Optional)
+                                </Label>
+                                <Input
+                                    id="linkedProfile"
+                                    value={linkedProfile}
+                                    onChange={(e) => setLinkedProfile(e.target.value)}
+                                    placeholder="LinkedIn URL"
+                                    className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
+                                />
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
+
+                {/* Line Separator */}
+                <div className="my-4 border-t"></div>
+
+                {/* Manage File Access & Extra Security Settings */}
+                <Accordion type="single" collapsible>
+                    <AccordionItem value="manage-access">
+                        <AccordionTrigger className="flex items-center justify-between text-sm font-medium text-gray-800">
+                            <div className="flex items-center space-x-2">
+                                <Lock className="h-5 w-5 text-gray-600" />
+                                <span>Manage File Access & Security</span>
+                            </div>
+                        </AccordionTrigger>
+                        <AccordionContent className="mt-2 space-y-4">
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-700">
+                                    Require Email to Access
+                                </span>
+                                <Switch
+                                    id="emailGate"
+                                    checked={emailGate}
+                                    onCheckedChange={setEmailGate}
+                                    className="scale-90 transform"
+                                />
+                            </div>
+                            <div className="flex items-center justify-between">
+                                <span className="text-sm text-gray-700">Set Expiry</span>
+                                <Switch
+                                    id="expiry"
+                                    checked={expiryEnabled}
+                                    onCheckedChange={setExpiryEnabled}
+                                    className="scale-90 transform"
+                                />
+                            </div>
+                        </AccordionContent>
+                    </AccordionItem>
+                </Accordion>
             </div>
 
-            {/* Optional Fields */}
-            <Accordion type="single" collapsible defaultValue="optional-fields">
-                <AccordionItem value="optional-fields">
-                    <AccordionTrigger className="flex items-center justify-between text-sm font-medium text-gray-800">
-                        <div className="flex items-center space-x-2">
-                            <Settings2Icon className="h-5 w-5 text-gray-600" />
-                            <span>Optional</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="mt-2 space-y-4">
-                        <SheetDescription className="text-xs text-gray-500">
-                            Add these fields to use custom variables in your portals.
-                        </SheetDescription>
-                        <div>
-                            <Label htmlFor="email" className="text-sm font-medium text-gray-700">
-                                Email (Optional)
-                            </Label>
-                            <Input
-                                id="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="example@domain.com"
-                                className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="roleTitle" className="text-sm font-medium text-gray-700">
-                                Role Title (Optional)
-                            </Label>
-                            <Input
-                                id="roleTitle"
-                                value={roleTitle}
-                                onChange={(e) => setRoleTitle(e.target.value)}
-                                placeholder="Enter role title"
-                                className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
-                            />
-                        </div>
-                        <div>
-                            <Label htmlFor="linkedProfile1" className="text-sm font-medium text-gray-700">
-                                Linked Profile Link (Optional)
-                            </Label>
-                            <Input
-                                id="linkedProfile"
-                                value={linkedProfile}
-                                onChange={(e) => setLinkedProfile(e.target.value)}
-                                placeholder="LinkedIn URL"
-                                className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
-                            />
-                        </div>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-
-            {/* Line Separator */}
-            <div className="my-4 border-t"></div>
-
-            {/* Manage File Access & Extra Security Settings */}
-            <Accordion type="single" collapsible>
-                <AccordionItem value="manage-access">
-                    <AccordionTrigger className="flex items-center justify-between text-sm font-medium text-gray-800">
-                        <div className="flex items-center space-x-2">
-                            <Lock className="h-5 w-5 text-gray-600" />
-                            <span>Manage File Access & Security</span>
-                        </div>
-                    </AccordionTrigger>
-                    <AccordionContent className="mt-2 space-y-4">
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-700">
-                                Require Email to Access
-                            </span>
-                            <Switch
-                                id="emailGate"
-                                checked={emailGate}
-                                onCheckedChange={setEmailGate}
-                                className="scale-90 transform"
-                            />
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="text-sm text-gray-700">Set Expiry</span>
-                            <Switch
-                                id="expiry"
-                                checked={expiryEnabled}
-                                onCheckedChange={setExpiryEnabled}
-                                className="scale-90 transform"
-                            />
-                        </div>
-                    </AccordionContent>
-                </AccordionItem>
-            </Accordion>
-
-            {/* Shimmer Button */}
-
-            <div className="mt-6 flex justify-end items-end">
-                {name ? (
+            {/* Buttons at the Bottom */}
+            <div className="mt-6 flex justify-end space-x-2">
+            {name ? (
                     <div className="mt-6 flex w-full justify-end">
                     <div className="group relative w-full">
                         <span

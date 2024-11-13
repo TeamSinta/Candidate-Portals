@@ -1,8 +1,11 @@
 "use client";
 import React, { useState, useEffect, useRef } from "react";
-import BottomToolbar from "./bottom-toolbar";
-import Sidebar from "./side-menu";
+import { motion } from "framer-motion";
+import { X, FileText, File, YoutubeIcon, ChevronDown, ChevronUp, Circle, GalleryVerticalEnd } from "lucide-react";
+import { NotionLogoIcon } from "@radix-ui/react-icons";
 import { sendEventToTinybird } from "@/server/tinybird/client";
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 type Section = {
   sectionId: string;
@@ -28,23 +31,23 @@ type PortalContentProps = {
 
 export default function PortalContent({ portalData }: PortalContentProps) {
   const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const sessionIdRef = useRef<string>(crypto.randomUUID()); // Generate a session ID
+  const [isCardCollapsed, setIsCardCollapsed] = useState(false);
+  const sessionIdRef = useRef<string>(crypto.randomUUID());
 
+
+  const toggleCardCollapse = () => {
+    setIsCardCollapsed(!isCardCollapsed);
+  };
   const startTimeRef = useRef<number | null>(null);
   const cumulativeDurationRef = useRef<number>(0);
   const sectionIndexRef = useRef<number>(selectedSectionIndex);
-
-  const minimumDurationThreshold = 100; // Minimum duration in ms to log an event
-
-  // **Ref to track if it's the initial mount**
   const isInitialMountRef = useRef<boolean>(true);
 
   if (!portalData) {
     return <div>Loading...</div>;
   }
 
-  const { sections, userId, portalId, linkId } = portalData;
+  const { sections, userId, portalId, linkId, candidateName } = portalData;
   const selectedSection = sections[selectedSectionIndex];
 
   // Function to send duration data to Tinybird
@@ -55,8 +58,7 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     const endTime = Date.now();
     const duration = Math.round(endTime - startTimeRef.current);
 
-    // Only log if duration exceeds the minimum threshold
-    if (duration >= minimumDurationThreshold) {
+    if (duration >= 100) {
       cumulativeDurationRef.current += duration;
       await sendEventToTinybird({
         event_name: "Section Duration",
@@ -72,13 +74,12 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     }
   };
 
-  // Handle visibility changes for tab switching
   useEffect(() => {
     const handleVisibilityChange = async () => {
       if (document.visibilityState === "hidden") {
-        await sendDurationData(); // Send cumulative duration when tab becomes hidden
+        await sendDurationData();
       } else {
-        startTimeRef.current = Date.now(); // Reset start time when tab is visible again
+        startTimeRef.current = Date.now();
       }
     };
 
@@ -88,54 +89,27 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     };
   }, []);
 
-  // Track section changes, reset start time, and ignore first mount duration
   useEffect(() => {
     if (isInitialMountRef.current) {
-      isInitialMountRef.current = false; // Mark initial mount as complete
+      isInitialMountRef.current = false;
       setTimeout(() => {
-        startTimeRef.current = Date.now(); // Start tracking after initial delay
-      }, 100); // Delay to avoid first-mount glitches
+        startTimeRef.current = Date.now();
+      }, 100);
     } else {
-      sendDurationData(); // Send duration for previous section
-      startTimeRef.current = Date.now(); // Reset start time for the new section
+      sendDurationData();
+      startTimeRef.current = Date.now();
     }
 
-    sectionIndexRef.current = selectedSectionIndex; // Update section reference
-    cumulativeDurationRef.current = 0; // Reset cumulative duration
+    sectionIndexRef.current = selectedSectionIndex;
+    cumulativeDurationRef.current = 0;
   }, [selectedSectionIndex]);
-
-  // Function to handle click events
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    const clickTarget = event.target as HTMLElement;
-    sendEventToTinybird({
-      event_name: "Click",
-      section_id: selectedSection.sectionId,
-      user_id: userId,
-      portal_id: portalId,
-      link_id: linkId,
-      section_title: selectedSection?.title,
-      click_target: clickTarget.id || clickTarget.tagName,
-      timestamp: new Date().toISOString(),
-      session_id: sessionIdRef.current,
-    });
-  };
-
-  const handleNext = () => {
-    if (selectedSectionIndex < sections.length - 1) {
-      setSelectedSectionIndex((prev) => prev + 1);
-    }
-  };
-
-  const handlePrevious = () => {
-    if (selectedSectionIndex > 0) {
-      setSelectedSectionIndex((prev) => prev - 1);
-    }
-  };
 
   const handleSectionSelect = (section: Section) => {
     setSelectedSectionIndex(sections.indexOf(section));
-    setIsSidebarOpen(false);
+    setIsCardCollapsed(false);
   };
+
+
 
   const renderContent = (content: any) => {
     if (typeof content === "string") {
@@ -151,9 +125,23 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     }
   };
 
+  const renderIcon = (type: string) => {
+    switch (type) {
+      case "website":
+        return <FileText className="h-5 w-5" />;
+      case "notion":
+        return <NotionLogoIcon className="h-5 w-5" />;
+      case "pdf":
+        return <File className="h-5 w-5" />;
+      case "video":
+        return <YoutubeIcon className="h-5 w-5" />;
+      default:
+        return <FileText className="h-5 w-5" />;
+    }
+  };
+
   return (
-    <div className="my-2 flex flex-1 flex-col rounded border bg-white shadow">
-      <header className="flex h-16 items-center justify-between border-b border-gray-200 px-4" />
+    <div className="my-2 flex flex-1 flex-col ">
 
       <div className="flex-1 p-6">
         {selectedSection ? (
@@ -166,20 +154,61 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         )}
       </div>
 
-      <BottomToolbar
-        handlePrevious={handlePrevious}
-        handleNext={handleNext}
-        selectedSectionIndex={selectedSectionIndex}
-        totalSections={sections.length}
-        onMenuClick={() => setIsSidebarOpen(true)}
-      />
+      {/* Collapsible Card Navigator */}
+      <motion.div
+      initial={{ height: "auto" }}
+      animate={{ height: isCardCollapsed ? "60px" : "auto" }}
+      transition={{ type: "spring", stiffness: 300, damping: 20 }}
+      className="fixed left-4 bottom-4 w-80 rounded-lg border border-gray-300 bg-white shadow-lg"
+    >
+<Card className="w-[350px] fixed left-4 bottom-4 shadow bg-slate-50">
+      <CardHeader className="flex items-center justify-between w-ful">
+        <div className="flex w-full justify-between">
+        <div className="flex gap-2">
+        <div className="flex aspect-square size-8 items-center justify-center rounded bg-black text-sidebar-primary-foreground">
+                                            {/* Default fallback icon or text */}
+                                            <GalleryVerticalEnd className="size-4" />
 
-      <Sidebar
-        isSidebarOpen={isSidebarOpen}
-        setIsSidebarOpen={setIsSidebarOpen}
-        sections={sections}
-        handleSectionSelect={handleSectionSelect}
-      />
+                                            </div>
+                                            <div className="flex flex-col">
+
+          <CardTitle>[Candidates Name]</CardTitle>
+          <CardDescription>
+          [Company]-[Role Title]
+          </CardDescription>
+
+          </div>
+          </div>
+
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleCardCollapse}
+          aria-label="Toggle Collapse"
+        >
+          {isCardCollapsed ? <ChevronDown className="h-4 w-4 text-gray-500" /> : <ChevronUp className="h-4 w-4 text-gray-500"  />}
+        </Button>
+        </div>
+
+      </CardHeader>
+      {!isCardCollapsed && (
+        <CardContent>
+          <h3 className="text-xs font-medium text-muted-foreground">Review</h3>
+          <div className="mt-2 space-y-2">
+            {sections.map((section) => (
+              <label key={section.sectionId} className="flex items-center space-x-2">
+                <Circle className="text-gray-300 h-4 w-4"/>
+                <span className="text-sm">{section.title}</span>
+              </label>
+            ))}
+          </div>
+        </CardContent>
+      )}
+      <CardFooter>
+        <Button className="w-full rounded">Message [Recruiter's Name]</Button>
+      </CardFooter>
+    </Card>
+    </motion.div>
     </div>
   );
 }

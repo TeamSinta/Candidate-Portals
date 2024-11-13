@@ -41,8 +41,10 @@ export default async function PortalView({ params }: Props) {
     const hasLinks = portalData.links && portalData.links.length > 0;
 
     // Fetch Tinybird data and merge with portal sections
-    const tinybirdData = await getAverageDuration({ portal_id: portalID });
-    const engagedTinybirdData = await getTopEngaged({ portal_id: portalID });
+
+    const tinybirdData = (await getAverageDuration({ portal_id: portalID })) || {};
+    console.log(tinybirdData, "testing")
+    const engagedTinybirdData = await getTopEngaged({ portal_id: portalID }) || {};
 
     const AverageData: MergedSectionData[] = averageDurationData(portalData, tinybirdData);
     const EngagedData: MergedEngagedData[] = topEngagedData(portalData, engagedTinybirdData);
