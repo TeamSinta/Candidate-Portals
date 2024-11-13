@@ -1,3 +1,4 @@
+"use server";
 import { db } from "@/server/db";
 import { link, portal, candidate, section } from "@/server/db/schema";
 import { and, asc, eq, inArray } from "drizzle-orm";
@@ -61,11 +62,11 @@ export async function getPortalData(token: string) {
     };
 }
 
-
 // Define the function to fetch portal list data
 export async function getPortalListData() {
     const { user } = await protectedProcedure();
     const { currentOrg } = await getOrganizations();
+    if (!currentOrg) return [];
 
     // Fetch portal data, including the title
     const portalData = await db
@@ -109,10 +110,10 @@ export async function getPortalListData() {
                 portalId: portal.portalId,
                 ownerId: portal.ownerId,
                 orgId: portal.orgId,
-                title: portal.title || "Untitled", // Use portal title
-                url: linkData[0]?.url || "#",
+                title: portal.title ?? "Untitled", // Use portal title
+                url: linkData[0]?.url ?? "#",
                 sections: sections.map((sec) => ({
-                    title: sec.title || "",
+                    title: sec.title ?? "",
                     content: sec.content,
                     contentType: sec.contentType,
                 })),
@@ -123,96 +124,92 @@ export async function getPortalListData() {
     return portals;
 }
 
-
-
-
 export async function getPortalDetails(portalId: string) {
-  // Fetch the current organization to filter candidates
-  const { currentOrg } = await getOrganizations();
-  const orgId = currentOrg.id;
+    // Fetch the current organization to filter candidates
+    const { currentOrg } = await getOrganizations();
+    const orgId = currentOrg.id;
 
-  // Fetch portal information
-  const portalData = await db
-      .select({
-          portalId: portal.id,
-          title: portal.title,
-      })
-      .from(portal)
-      .where(eq(portal.id, portalId))
-      .execute()
-      .then((results) => results[0]);
+    // Fetch portal information
+    const portalData = await db
+        .select({
+            portalId: portal.id,
+            title: portal.title,
+        })
+        .from(portal)
+        .where(eq(portal.id, portalId))
+        .execute()
+        .then((results) => results[0]);
 
-  if (!portalData) return null;
+    if (!portalData) return null;
 
-  // Fetch sections associated with the portal
-  const sections = await db
-      .select({
-          contentType: section.contentType,
-          title: section.title,
-          section_id: section.id,
-      })
-      .from(section)
-      .where(eq(section.portalId, portalId))
-      .execute();
+    // Fetch sections associated with the portal
+    const sections = await db
+        .select({
+            contentType: section.contentType,
+            title: section.title,
+            section_id: section.id,
+        })
+        .from(section)
+        .where(eq(section.portalId, portalId))
+        .execute();
 
-  // Fetch links associated with the portal
-  const links = await db
-      .select({
-          url: link.url,
-          candidateId: link.candidateId,
-          id: link.id
-      })
-      .from(link)
-      .where(eq(link.portalId, portalId))
-      .execute();
+    // Fetch links associated with the portal
+    const links = await db
+        .select({
+            url: link.url,
+            candidateId: link.candidateId,
+            id: link.id,
+        })
+        .from(link)
+        .where(eq(link.portalId, portalId))
+        .execute();
 
-  // Collect candidate IDs from links
-  const candidateIds = links.map((link) => link.candidateId);
+    // Collect candidate IDs from links
+    const candidateIds = links.map((link) => link.candidateId);
 
-  // Fetch candidates associated with the portal and current organization
-  const candidates = await db
-      .select({
-          name: candidate.name,
-          email: candidate.email,
-          role: candidate.role,
-          linkedin: candidate.linkedin,
-          candidateId: candidate.id,
-      })
-      .from(candidate)
-      .where(
-          and(
-              inArray(candidate.id, candidateIds), // Use inArray for filtering by candidate IDs
-              eq(candidate.organizationId, orgId) // Combine with organization ID check
-          )
-      )
-      .execute();
+    // Fetch candidates associated with the portal and current organization
+    const candidates = await db
+        .select({
+            name: candidate.name,
+            email: candidate.email,
+            role: candidate.role,
+            linkedin: candidate.linkedin,
+            candidateId: candidate.id,
+        })
+        .from(candidate)
+        .where(
+            and(
+                inArray(candidate.id, candidateIds), // Use inArray for filtering by candidate IDs
+                eq(candidate.organizationId, orgId), // Combine with organization ID check
+            ),
+        )
+        .execute();
 
-  // Return the data in the required format
-  return {
-      portal: {
-          portalId: portalData.portalId,
-          title: portalData.title,
-      },
-      sections: sections.map((section) => ({
-          contentType: section.contentType,
-          title: section.title,
-          section_id: section.section_id
-      })),
-      links: links.map((link) => ({
-          url: link.url,
-          candidateId: link.candidateId,
-          linkId: link.id,
-      })),
-      candidates: candidates.map((candidate) => ({
-          name: candidate.name,
-          email: candidate.email,
-          role: candidate.role,
-          linkedin: candidate.linkedin,
-          candidateId: candidate.candidateId,
-      })),
-  };
+    // Return the data in the required format
+    return {
+        portal: {
+            portalId: portalData.portalId,
+            title: portalData.title,
+        },
+        sections: sections.map((section) => ({
+            contentType: section.contentType,
+            title: section.title,
+            section_id: section.section_id,
+        })),
+        links: links.map((link) => ({
+            url: link.url,
+            candidateId: link.candidateId,
+            linkId: link.id,
+        })),
+        candidates: candidates.map((candidate) => ({
+            name: candidate.name,
+            email: candidate.email,
+            role: candidate.role,
+            linkedin: candidate.linkedin,
+            candidateId: candidate.candidateId,
+        })),
+    };
 }
-
 
 export async function getPortalQuery(portalId: string) {
     const portalObject = await db.query.portal.findFirst({
@@ -243,4 +240,18 @@ export async function getPortalByURLQuery(url: string) {
         candidate: portal,
         portal: await getPortalQuery(portalId),
     };
+}
+
+export async function updatePortalData(portalId: string, data: object) {
+    await db.update(portal).set(data).where(eq(portal.id, portalId)).execute();
+}
+
+export async function getSectionQuery(sectionId: string) {
+    const res = await db
+        .select()
+        .from(section)
+        .where(eq(section.id, sectionId))
+        .innerJoin(portal, eq(portal.id, section.portalId))
+        .execute();
+    return res;
 }
