@@ -87,7 +87,7 @@ function BlockEditor({
         setBlocks((prevBlocks) => {
             const newBlock = {
                 contentType: undefined,
-                title: "title",
+                title: "",
                 content: { title: "", url: "" },
                 id: newId,
                 portalId: portalId,

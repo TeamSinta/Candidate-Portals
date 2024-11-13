@@ -245,3 +245,13 @@ export async function getPortalByURLQuery(url: string) {
 export async function updatePortalData(portalId: string, data: object) {
     await db.update(portal).set(data).where(eq(portal.id, portalId)).execute();
 }
+
+export async function getSectionQuery(sectionId: string) {
+    const res = await db
+        .select()
+        .from(section)
+        .where(eq(section.id, sectionId))
+        .innerJoin(portal, eq(portal.id, section.portalId))
+        .execute();
+    return res;
+}
