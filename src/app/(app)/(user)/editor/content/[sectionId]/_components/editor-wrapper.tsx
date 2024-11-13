@@ -50,7 +50,7 @@ function EditorWrapper({ section, portal }: Props) {
 
     return (
         <AppPageShell
-            title={`${portal.title}  >  ${section.title}`}
+            title={`${portal.title ?? "Untitled"}  >  ${section.title}`}
             description="Edit the contents of your portal here"
             buttons={[
                 <ContentEditorPageButtons

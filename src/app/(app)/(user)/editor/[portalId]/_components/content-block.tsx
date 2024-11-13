@@ -47,8 +47,8 @@ interface ContentBlockProps {
     id: string;
     initialContentType?: SectionContentType;
     initialContentData: ContentDataType;
-    onSaveBlock: (args: SaveBlockArgs) => void;
-    onDeleteBlock: () => void;
+    onSaveBlock: (args: SaveBlockArgs) => Promise<void>;
+    onDeleteBlock: () => Promise<void>;
     editing: boolean;
     editBlock: () => void;
     cancelEdit: () => void;
@@ -98,13 +98,13 @@ function ContentBlock({
         }));
     }
 
-    function handleSave() {
+    async function handleSave() {
         if (!contentType) return;
         const content =
             contentType === SectionContentType.URL
                 ? { ...urlContentData }
                 : { ...yooptaContentData };
-        onSaveBlock({
+        await onSaveBlock({
             id,
             contentType,
             content,

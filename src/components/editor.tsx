@@ -97,7 +97,7 @@ export default function Editor({
                 readOnly={!editable}
                 marks={marks}
                 style={{
-                    width: "80%",
+                    width: "60%",
                 }}
             />
         </div>
