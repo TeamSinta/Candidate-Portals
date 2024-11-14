@@ -10,7 +10,7 @@
 export const siteUrls = {
     publicUrl: "https://app.teamsinta.com",
     github: "https://github.com/alifarooq9/rapidlaunch",
-    home: "/",
+    home: "/dashboard",
     pricing: "/pricing",
     features: "/features",
     support: "/support",
@@ -19,7 +19,7 @@ export const siteUrls = {
     changelogs: "/changelogs",
     maintenance: "/maintenance",
     waitlist: "/waitlist",
-    rapidlaunch: "https://www.teamsinta.com",
+    teamsinta: "https://www.teamsinta.com",
     analytics: "/analytics",
     dashboard: {
         home: "/dashboard",
@@ -64,7 +64,7 @@ export const publicRoutes: string[] = [
     siteUrls.changelogs,
     siteUrls.maintenance,
     siteUrls.waitlist,
-    siteUrls.rapidlaunch,
+    siteUrls.teamsinta,
     siteUrls.view,
 ];
 

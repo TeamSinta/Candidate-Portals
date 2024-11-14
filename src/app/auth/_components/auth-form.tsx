@@ -70,10 +70,10 @@ export function AuthForm({ type }: AuthFormProps) {
             >
                 <div className="flex flex-col items-center space-y-4">
                     <Link
-                        href={siteUrls.home}
+                        href={siteUrls.teamsinta}
                         className="flex w-fit items-center transition-transform hover:scale-90"
                     >
-                        <Icons.logoIcon className="h-10 w-10 fill-primary" />
+                        <Icons.circleLogo className="h-14 w-14 fill-primary" />
                     </Link>
                     <div className="flex flex-col items-center space-y-1">
                         <h1 className="text-center text-2xl font-medium">
@@ -91,7 +91,7 @@ export function AuthForm({ type }: AuthFormProps) {
                         >
                             {type === "signup"
                                 ? "Already have an account? Login"
-                                : "Don't have an account? SignUp"}
+                                : "Don't have an account? Sign up"}
                         </Link>
                     </div>
                 </div>
