@@ -9,7 +9,9 @@ import Callout from "@yoopta/callout";
 import Divider from "@yoopta/divider";
 import YooptaEditor, {
     createYooptaEditor,
+    YooEditor,
     YooptaContentValue,
+    YooptaPlugin,
 } from "@yoopta/editor";
 import Embed from "@yoopta/embed";
 import File from "@yoopta/file";
@@ -30,6 +32,18 @@ import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
 import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
 import { useMemo } from "react";
+
+const TitlePlugin = new YooptaPlugin({
+    type: "title",
+    render: ({}) => <input value={data.title} />, // Render title as read-only
+    properties: {
+        isDraggable: false, // Disable drag
+        isEditable: false, // Disable edit
+        isDeletable: false,
+    },
+
+    options: {},
+});
 const plugins = [
     Paragraph,
     Table,
@@ -69,14 +83,18 @@ export default function Editor({
     content,
     editable = true,
     onChange,
+    title,
+    onTitleChange,
     className,
 }: {
     content: YooptaContentValue;
     editable: boolean;
     onChange: (data: YooptaContentValue) => void;
+    title: string;
+    onTitleChange: (newTitle: string) => void;
     className?: string;
 }) {
-    const editor = useMemo(() => createYooptaEditor(), []);
+    const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
 
     return (
         <div
@@ -85,21 +103,30 @@ export default function Editor({
                 className,
             )}
         >
-            <YooptaEditor
-                key={editable ? "editable" : "readOnly"}
-                editor={editor}
-                placeholder="Type / to open menu"
-                value={content}
-                onChange={onChange}
-                // here we go
-                plugins={plugins}
-                tools={tools}
-                readOnly={!editable}
-                marks={marks}
-                style={{
-                    width: "60%",
-                }}
-            />
+            <div className="w-1/2">
+                <input
+                    type="text"
+                    placeholder={"Section Title"}
+                    className="border-0 p-0 text-6xl font-semibold focus:border-0 active:border-0"
+                    onChange={(e) => onTitleChange(e.target.value)}
+                    value={title}
+                />
+                <YooptaEditor
+                    key={editable ? "editable" : "readOnly"}
+                    editor={editor}
+                    placeholder="Type / to open menu"
+                    value={content}
+                    onChange={onChange}
+                    // here we go
+                    plugins={plugins}
+                    tools={tools}
+                    readOnly={!editable}
+                    marks={marks}
+                    style={{
+                        width: "100%",
+                    }}
+                ></YooptaEditor>
+            </div>
         </div>
     );
 }
