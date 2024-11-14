@@ -1,6 +1,6 @@
 import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import { dashboardPageConfig } from "@/app/(app)/(user)/dashboard/_constants/page-config";
-import { SproutIcon } from "lucide-react";
+import { EllipsisVertical, SproutIcon } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { PlusIcon, FolderPlusIcon } from "lucide-react";
@@ -91,7 +91,7 @@ export default async function DashboardPage() {
             title={dashboardPageConfig.title}
             description={dashboardPageConfig.description}
         >
-            <div className="sticky bg-white p-4 pb-0 dark:bg-gray-900">
+            <div  className=" mx-28 sticky bg-white p-4 pb-0 dark:bg-gray-900">
                 <div className="mb-4 flex items-center justify-between">
                     <div className="space-y-0 sm:space-y-1">
                         <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
@@ -107,16 +107,16 @@ export default async function DashboardPage() {
                         <Button
                             size="icon"
                             variant="outline"
-                            className="rounded border-gray-500 bg-gray-50 hover:bg-gray-200 dark:bg-black hover:dark:bg-muted"
+                            className="rounded border-gray-200 bg-gray-50 hover:bg-gray-200 dark:bg-black hover:dark:bg-muted"
                         >
-                            <FolderPlusIcon
+                            <EllipsisVertical
                                 className="h-5 w-5 shrink-0"
                                 aria-hidden="true"
                             />
                         </Button>
                     </div>
                 </div>
-
+{/*
                 <div className="mb-2 flex justify-end gap-x-2">
                     <div className="relative w-full sm:max-w-xs">
                         <input
@@ -128,9 +128,9 @@ export default async function DashboardPage() {
                     <Button variant="outline" className="rounded-sm text-sm">
                         Sort
                     </Button>
-                </div>
+                </div> */}
 
-                <Separator className="mb-5 bg-gray-200 dark:bg-gray-800" />
+                <Separator className="mb-5 mt-12 bg-gray-200 dark:bg-gray-800" />
 
                 <div className="space-y-4">
                     {portalsWithViews.map((portal) => (

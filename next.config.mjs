@@ -23,7 +23,7 @@ const nextConfig = {
             { hostname: "fakeimg.pl" },
             { hostname: "utfs.io" },
             { hostname: "avatar.vercel.sh" },
-            { hostname: "dicebear.com" },
+            { hostname: "api.dicebear.com" },
         ],
     },
     typescript: {
