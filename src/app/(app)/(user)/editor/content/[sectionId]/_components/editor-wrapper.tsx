@@ -23,6 +23,7 @@ function EditorWrapper({ section, portal }: Props) {
     const [sectionContent, setSectionContent] = useState<YooptaContentValue>(
         section.content as YooptaContentValue,
     );
+    const [title, setTitle] = useState<string>(section.title ?? "");
     const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
     const sidebar = useSidebar();
     const router = useRouter();
@@ -67,6 +68,10 @@ function EditorWrapper({ section, portal }: Props) {
                     content={sectionContent}
                     editable={!isPreviewing}
                     onChange={setSectionContent}
+                    onTitleChange={(newTitle: string) => {
+                        setTitle(newTitle);
+                    }}
+                    title={title ?? ""}
                 />
             </div>
         </AppPageShell>

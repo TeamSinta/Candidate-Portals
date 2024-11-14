@@ -12,7 +12,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
 
     return (
         <AppPageShell
-            title={"Portals" + ` > ` + data.portal.title ?? "Untitled"}
+            title={"Portals" + ` > ` + (data.portal.title ?? "Untitled")}
             description="Edit the contents of your portal here"
             buttons={[<EditorPageButtons key={0} portalId={params.portalId} />]}
         >
