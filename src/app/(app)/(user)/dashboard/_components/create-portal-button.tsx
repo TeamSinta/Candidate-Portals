@@ -23,8 +23,9 @@ export default function CreatePortalButton() {
             className="group flex flex-1 items-center justify-start gap-x-1 whitespace-nowrap rounded px-1 text-left sm:gap-x-3 sm:px-3"
             onClick={handleClick}
         >
+            <span className="text-xs sm:text-base">Create Portal</span>
             <PlusIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
-            <span className="text-xs sm:text-base">Add New Portal</span>
+
         </Button>
     );
 }

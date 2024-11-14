@@ -4,8 +4,9 @@ import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import AnalyticsTable from "./_components/analytics-table";
-import TableCard from "./_components/chart-analytics";
+import AreaChartComponent from "./_components/area-chart-anayltics";
+import VisitorsTable from "./_components/table-users-analytics";
+
 
 export default function AnalyticsPage() {
     return (
@@ -19,14 +20,14 @@ export default function AnalyticsPage() {
                         <h2 className="text-xl mx-28 font-semibold tracking-tight text-foreground sm:text-2xl">
                             Viewer Analytics
                         </h2>
-                        <p className="text-xs  mx-28 leading-4 text-muted-foreground sm:text-sm sm:leading-none">
+                        <p className="text-xs pb-6 mx-28 leading-4 text-muted-foreground sm:text-sm sm:leading-none">
                             Track viewer interactions with your content.
                         </p>
                     </div>
                 </section>
                 {/* <Separator className="mt-16 bg-gray-200 dark:bg-gray-800" /> */}
-                <AnalyticsTable />{" "}
-                <TableCard/>
+                <AreaChartComponent />{" "}
+                <VisitorsTable/>
             </div>
         </AppPageShell>
     );
