@@ -1,130 +1,100 @@
-// components/AnalyticsTable.tsx
 "use client";
 
-import { useState, Fragment } from "react";
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Card, CardContent } from "@/components/ui/card";
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react";
+import { AreaChart, Area, XAxis, CartesianGrid } from "recharts";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
+import { Separator } from "@/components/ui/separator";
 
 const data = [
-    {
-        id: 1,
-        name: "Parker",
-        logo: "/path/to/logo1.png",
-        action: "0:03",
-        page: "DNT - Mid-deal",
-        location: "Mill Valley, CA",
-        timeAgo: "33 min ago",
-    },
-    {
-        id: 2,
-        name: "Stewart",
-        logo: "/path/to/logo2.png",
-        action: "0:04",
-        page: "DNT - Post Demo summary",
-        location: "Mill Valley, CA",
-        timeAgo: "33 min ago",
-    },
-    {
-        id: 3,
-        name: "Elon",
-        logo: "/path/to/logo3.png",
-        action: "0:06",
-        page: "DNT - Prospecting",
-        location: "Mill Valley, CA",
-        timeAgo: "33 min ago",
-    },
+  {
+    id: 1,
+    name: "7:00 PM",
+    action: 0, // Example data point
+  },
+  {
+    id: 2,
+    name: "11:00 PM",
+    action: 0, // Example data point
+  },
+  {
+    id: 3,
+    name: "3:00 AM",
+    action: 0, // Example data point
+  },
+  {
+    id: 4,
+    name: "7:00 AM",
+    action: 0, // Example data point
+  },
+  {
+    id: 5,
+    name: "11:00 AM",
+    action: 0, // Example data point
+  },
+  {
+    id: 6,
+    name: "3:00 PM",
+    action: 1, // Peak data point to create the sharp increase
+  },
 ];
 
-export default function AnalyticsTable() {
-    const [expandedRow, setExpandedRow] = useState<number | null>(null);
+// Configure chart
+const chartConfig = {
+  action: {
+    label: "Views",
+    color: "hsl(var(--chart-1))",
+  },
+} satisfies ChartConfig;
 
-    const toggleRow = (id: number) => {
-        setExpandedRow(expandedRow === id ? null : id);
-    };
+export default function AreaChartComponent() {
+  return (
+    <Card className="shadow-sm rounded-md mx-28 mt-6">
+      <CardHeader className="pb-8">
+        <CardTitle className="text-md font-regular">Views</CardTitle>
 
-    return (
-        <Card>
-            <CardContent>
-                <table className="w-full text-left text-sm">
-                    <thead>
-                        <tr className="border-b">
-                            <th className="p-2">Name</th>
-                            <th className="p-2">Action</th>
-                            <th className="p-2">Page</th>
-                            <th className="p-2">Details</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {data.map((row) => (
-                            <Fragment key={row.id}>
-                                <tr
-                                    className="cursor-pointer border-b hover:bg-gray-50 dark:hover:bg-gray-800"
-                                    onClick={() => toggleRow(row.id)}
-                                >
-                                    <td className="flex items-center gap-2 p-2">
-                                        <Avatar className="h-6 w-6">
-                                            <AvatarImage
-                                                src={row.logo}
-                                                alt={row.name}
-                                            />
-                                            <AvatarFallback>
-                                                {row.name.charAt(0)}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                        <div>
-                                            <p className="font-medium">
-                                                {row.name}
-                                            </p>
-                                            <p className="text-xs text-muted-foreground">
-                                                {row.timeAgo}
-                                            </p>
-                                        </div>
-                                    </td>
-                                    <td className="p-2">
-                                        <span className="flex items-center gap-1">
-                                            <span className="text-muted-foreground">
-                                                📊
-                                            </span>{" "}
-                                            {row.action}
-                                        </span>
-                                    </td>
-                                    <td className="p-2">{row.page}</td>
-                                    <td className="flex items-center gap-1 p-2">
-                                        🇺🇸 {row.location}
-                                        {expandedRow === row.id ? (
-                                            <ChevronUpIcon className="ml-auto h-4 w-4" />
-                                        ) : (
-                                            <ChevronDownIcon className="ml-auto h-4 w-4" />
-                                        )}
-                                    </td>
-                                </tr>
-                                {expandedRow === row.id && (
-                                    <tr>
-                                        <td
-                                            colSpan={4}
-                                            className="bg-gray-50 p-4 dark:bg-gray-800"
-                                        >
-                                            <div className="text-sm text-muted-foreground">
-                                                {/* Example additional data, replace with real stats */}
-                                                <p>
-                                                    View Duration: {row.action}
-                                                </p>
-                                                <p>
-                                                    Interaction Time:{" "}
-                                                    {row.timeAgo}
-                                                </p>
-                                                <p>Location: {row.location}</p>
-                                                <p>Page Viewed: {row.page}</p>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                )}
-                            </Fragment>
-                        ))}
-                    </tbody>
-                </table>
-            </CardContent>
-        </Card>
-    );
+        <CardTitle className="text-4xl ">2</CardTitle>
+      </CardHeader>
+      <CardContent className="">
+      <Separator className="mb-16 bg-gray-200 dark:bg-gray-800" />
+        <ChartContainer config={chartConfig} className="h-64  w-full">
+
+          <AreaChart
+            width={600} // Adjust width
+            height={250} // Adjust height
+            data={data}
+            margin={{ top: 20, right: 30, left: -10, bottom: 0 }}
+          >
+            <CartesianGrid strokeDasharray="2 2" vertical={false} />
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+            />
+            <ChartTooltip
+              cursor={{ stroke: "rgba(0, 0, 0, 0.1)", strokeWidth: 1 }}
+              content={<ChartTooltipContent indicator="dot" />}
+            />
+            <Area
+              type="monotone"
+              dataKey="action"
+              stroke="var(--color-action)"
+              fill="var(--color-action)"
+              fillOpacity={0.3}
+            />
+          </AreaChart>
+        </ChartContainer>
+      </CardContent>
+    </Card>
+  );
 }

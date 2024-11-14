@@ -1,0 +1,1 @@
+ALTER TABLE "sinta-candidate-portals_candidate" DROP CONSTRAINT "sinta-candidate-portals_candidate_email_unique";
