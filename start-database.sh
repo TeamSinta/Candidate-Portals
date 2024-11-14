@@ -1,62 +1,46 @@
 #!/bin/bash
+# Use this script to start a docker container for a local development database
 
-DB_CONTAINER_NAME="candidate-portals"
-DB_NAME="sinta-candidate-portals"
-DB_USER="postgres"
-DB_PORT="5433"
-ENV_FILE=".env"
+# TO RUN ON WINDOWS:
+# 1. Install WSL (Windows Subsystem for Linux) - https://learn.microsoft.com/en-us/windows/wsl/install
+# 2. Install Docker Desktop for Windows - https://docs.docker.com/docker-for-windows/install/
+# 3. Open WSL - `wsl`
+# 4. Run this script - `./start-database.sh`
 
-# Check for Docker installation
+# On Lunux and macOS you can run this script directly - `./start-database.sh`
+
+DB_CONTAINER_NAME="demo-postgres-sinta"
+
 if ! [ -x "$(command -v docker)" ]; then
-  echo "Docker is not installed. Please install Docker and try again."
+  echo "Docker is not installed. Please install docker and try again.\nDocker install guide: https://docs.docker.com/engine/install/"
   exit 1
 fi
 
-# Load existing .env variables if they exist
-if [ -f "$ENV_FILE" ]; then
-  source "$ENV_FILE"
-fi
-
-# Check or generate DB_PASSWORD
-if [[ -z "$DB_PASSWORD" || "$DB_PASSWORD" == "password" ]]; then
-  echo "Generating a new random database password..."
-  DB_PASSWORD=$(openssl rand -base64 12)
-
-  # Update DATABASE_URL in .env or create it if not present
-  NEW_DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}"
-  
-  if grep -q "^DATABASE_URL=" "$ENV_FILE"; then
-    # Update the DATABASE_URL line
-    sed -i -E "s|^DATABASE_URL=.*|DATABASE_URL=$NEW_DATABASE_URL|" "$ENV_FILE"
-  else
-    # Append DATABASE_URL if it doesn’t exist
-    echo "DATABASE_URL=$NEW_DATABASE_URL" >> "$ENV_FILE"
-  fi
-
-  # Also add DB_PASSWORD to .env if needed for consistency
-  if grep -q "^DB_PASSWORD=" "$ENV_FILE"; then
-    sed -i -E "s|^DB_PASSWORD=.*|DB_PASSWORD=$DB_PASSWORD|" "$ENV_FILE"
-  else
-    echo "DB_PASSWORD=$DB_PASSWORD" >> "$ENV_FILE"
-  fi
-else
-  # Construct DATABASE_URL from existing DB_PASSWORD
-  NEW_DATABASE_URL="postgresql://${DB_USER}:${DB_PASSWORD}@localhost:${DB_PORT}/${DB_NAME}"
-  if ! grep -q "^DATABASE_URL=" "$ENV_FILE"; then
-    echo "DATABASE_URL=$NEW_DATABASE_URL" >> "$ENV_FILE"
-  fi
-fi
-
-echo "Updated .env with the new DATABASE_URL and DB_PASSWORD."
-
-# Start or create the Docker container
 if [ "$(docker ps -q -f name=$DB_CONTAINER_NAME)" ]; then
   docker start $DB_CONTAINER_NAME
-  echo "Database container started."
-else
-  docker run --name $DB_CONTAINER_NAME -e POSTGRES_USER=$DB_USER -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=$DB_NAME -d -p $DB_PORT:5432 postgres
-  echo "Database container created with name: $DB_CONTAINER_NAME"
+  echo "Database container started"
+  exit 0
 fi
 
-# Display the updated DATABASE_URL for verification
-echo "Your new DATABASE_URL is: $(grep DATABASE_URL "$ENV_FILE")"
+# import env variables from .env
+set -a
+source .env
+
+DB_PASSWORD=$(echo $DATABASE_URL | awk -F':' '{print $3}' | awk -F'@' '{print $1}')
+echo "Database password: $DB_PASSWORD"
+if [ "$DB_PASSWORD" = "password" ]; then
+  echo "You are using the default database password"
+  read -p "Should we generate a random password for you? [y/N]: " -r REPLY
+  if ! [[ $REPLY =~ ^[Yy]$ ]]; then
+    echo "Please set a password in the .env file and try again"
+    exit 1
+  fi
+  DB_PASSWORD=$(openssl rand -base64 12)
+  sed -i -e "s/:password@/:$DB_PASSWORD@/" .env
+fi
+
+docker run --name $DB_CONTAINER_NAME -e POSTGRES_PASSWORD=$DB_PASSWORD -e POSTGRES_DB=demo -d -p 5432:5432 docker.io/postgres
+
+print POSTGRES_PASSWORD=$DB_PASSWORD
+
+echo "Database container was succesfuly created"

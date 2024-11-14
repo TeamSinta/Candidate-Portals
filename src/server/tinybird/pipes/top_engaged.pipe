@@ -1,0 +1,26 @@
+NODE mv
+SQL >
+
+SELECT
+    link_id,
+    portal_id,
+    user_id,
+    total_duration,
+    last_view_timestamp
+FROM (
+    SELECT
+        link_id,
+        portal_id,
+        user_id,
+        SUM(duration) AS total_duration,
+        MAX(timestamp) AS last_view_timestamp,
+        ROW_NUMBER() OVER (PARTITION BY portal_id ORDER BY SUM(duration) DESC) AS rank
+    FROM
+        db_sinta_events
+    GROUP BY
+        link_id, portal_id, user_id
+) ranked_links
+WHERE
+    rank <= 5
+ORDER BY
+    portal_id, total_duration DESC
