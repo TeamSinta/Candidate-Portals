@@ -1,0 +1,14 @@
+NODE mv
+SQL >
+
+SELECT
+    portal_id,
+    COUNT(DISTINCT link_id) AS unique_views
+FROM
+    db_sinta_events
+WHERE
+    duration IS NOT NULL
+GROUP BY
+    portal_id
+ORDER BY
+    unique_views DESC

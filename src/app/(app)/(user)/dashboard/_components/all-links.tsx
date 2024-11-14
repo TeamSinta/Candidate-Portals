@@ -125,8 +125,6 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                             // Get section data for this link
                             const sectionData =
                                 sectionDataMap[link.linkId] || [];
-                            console.log(sectionData, "sectiondata");
-
                             return (
                                 <React.Fragment key={link.url}>
                                     <TableRow

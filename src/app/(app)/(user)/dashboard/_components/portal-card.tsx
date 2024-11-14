@@ -79,7 +79,7 @@ const PortalCard: React.FC<PortalCardProps> = ({
                 {/* Right Section with Views and Options */}
                 <div className="flex items-center space-x-4">
                     {/* Views Count */}
-                    <div className="flex items-center space-x-1 rounded bg-gray-100 px-3 py-2 text-xs text-gray-500">
+                    <div className="flex items-center rounded bg-gray-100 min-w-24 px-2 gap-2 py-2 text-xs text-gray-500">
                         <BarChartIcon />
                         <span>
                             {views} view{views !== 1 ? "s" : ""}
