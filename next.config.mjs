@@ -19,7 +19,12 @@ const nextConfig = {
         optimizePackageImports: ["lucide-react"],
     },
     images: {
-        remotePatterns: [{ hostname: "fakeimg.pl" }, { hostname: "utfs.io" }, { hostname: "avatar.vercel.sh" }, { hostname: "dicebear.com" } ],
+        remotePatterns: [
+            { hostname: "fakeimg.pl" },
+            { hostname: "utfs.io" },
+            { hostname: "avatar.vercel.sh" },
+            { hostname: "dicebear.com" },
+        ],
     },
     typescript: {
         ignoreBuildErrors: true,
