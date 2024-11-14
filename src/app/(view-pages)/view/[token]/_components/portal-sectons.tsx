@@ -12,6 +12,7 @@ import { SectionContentType } from "@/server/db/schema";
 import CardNavigatorMenu from "./card-navigator-nenu";
 import YooptaReader from "./yoopta-reader";
 import LinkComponent from "./url-reader";
+import { PortalReaderData } from "@/types/portal";
 
 type Section = {
     sectionId: string;
@@ -20,20 +21,8 @@ type Section = {
     contentType: SectionContentType;
 };
 
-type PortalData = {
-    candidateName: string;
-    candidateEmail: string | null;
-    roleTitle: string;
-    orgName: string;
-    userName: string;
-    portalId: string;
-    linkId: string;
-    customContent: object | string | null;
-    sections: Section[];
-};
-
 type PortalContentProps = {
-    portalData?: PortalData;
+    portalData?: PortalReaderData;
 };
 
 export default function PortalContent({ portalData }: PortalContentProps) {
@@ -57,10 +46,6 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         sections,
         portalId,
         linkId,
-        candidateName,
-        roleTitle,
-        orgName,
-        userName,
     } = portalData;
     const selectedSection = sections[selectedSectionIndex];
 
@@ -88,35 +73,35 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         }
     };
 
-    // useEffect(() => {
-    //   const handleVisibilityChange = async () => {
-    //     if (document.visibilityState === "hidden") {
-    //       await sendDurationData();
-    //     } else {
-    //       startTimeRef.current = Date.now();
-    //     }
-    //   };
+    useEffect(() => {
+      const handleVisibilityChange = async () => {
+        if (document.visibilityState === "hidden") {
+          await sendDurationData();
+        } else {
+          startTimeRef.current = Date.now();
+        }
+      };
 
-    //   document.addEventListener("visibilitychange", handleVisibilityChange);
-    //   return () => {
-    //     document.removeEventListener("visibilitychange", handleVisibilityChange);
-    //   };
-    // }, []);
+      document.addEventListener("visibilitychange", handleVisibilityChange);
+      return () => {
+        document.removeEventListener("visibilitychange", handleVisibilityChange);
+      };
+    }, []);
 
-    // useEffect(() => {
-    //   if (isInitialMountRef.current) {
-    //     isInitialMountRef.current = false;
-    //     setTimeout(() => {
-    //       startTimeRef.current = Date.now();
-    //     }, 100);
-    //   } else {
-    //     sendDurationData();
-    //     startTimeRef.current = Date.now();
-    //   }
+    useEffect(() => {
+      if (isInitialMountRef.current) {
+        isInitialMountRef.current = false;
+        setTimeout(() => {
+          startTimeRef.current = Date.now();
+        }, 100);
+      } else {
+        sendDurationData();
+        startTimeRef.current = Date.now();
+      }
 
-    //   sectionIndexRef.current = selectedSectionIndex;
-    //   cumulativeDurationRef.current = 0;
-    // }, [selectedSectionIndex]);
+      sectionIndexRef.current = selectedSectionIndex;
+      cumulativeDurationRef.current = 0;
+    }, [selectedSectionIndex]);
 
     const handleSectionSelect = (index: number) => {
         setSelectedSectionIndex(index);
