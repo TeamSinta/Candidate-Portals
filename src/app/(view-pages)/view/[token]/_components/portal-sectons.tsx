@@ -11,6 +11,7 @@ import { Card } from "@/components/ui/card";
 import { SectionContentType } from "@/server/db/schema";
 import CardNavigatorMenu from "./card-navigator-nenu";
 import YooptaReader from "./yoopta-reader";
+import LinkComponent from "./url-reader";
 
 type Section = {
   sectionId: string;
@@ -122,8 +123,8 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         sectionId={section.sectionId}
         content={section.content}
       />
-      // case SectionContentType.URL:
-      //   return <LinkComponent url={section.content} />;
+      case SectionContentType.URL:
+        return <LinkComponent urlData={section.content} />;
       // case SectionContentType.DOC:
       //   return <DocumentComponent documentData={section.content} />;
       // case SectionContentType.NOTION:
@@ -136,8 +137,8 @@ export default function PortalContent({ portalData }: PortalContentProps) {
   };
 
   return (
-    <div className="my-2 flex flex-1 flex-col">
-      <div className="flex-1 p-6">
+    <div className="">
+      <div className="">
         {selectedSection ? (
           <>
             {/* <h1 className="text-lg font-bold">{selectedSection.title}</h1> */}
