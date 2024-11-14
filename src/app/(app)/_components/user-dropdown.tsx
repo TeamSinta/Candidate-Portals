@@ -143,7 +143,7 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
                 <DropdownMenuSeparator />
 
                 {/* Logout Button */}
-                <SignoutTrigger callbackUrl={siteUrls.home} asChild>
+                <SignoutTrigger callbackUrl={siteUrls.auth.login} asChild>
                     <DropdownMenuItem className="text-red-500">
                         <LogOut className="mr-2 h-4 w-4" />
                         Log out
