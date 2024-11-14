@@ -1,8 +1,12 @@
-
 "use server";
 
 import { db } from "@/server/db";
-import { candidate, createCandidateInsertSchema, createLinkInsertSchema, link } from "@/server/db/schema";
+import {
+    candidate,
+    createCandidateInsertSchema,
+    createLinkInsertSchema,
+    link,
+} from "@/server/db/schema";
 import { getOrganizations } from "../organization/queries";
 import { generateCustomUrl } from "@/lib/utils";
 
@@ -17,8 +21,8 @@ export async function createLinkAndCandidateMutation(props: {
 }) {
     const { currentOrg } = await getOrganizations();
 
-
-    const cleanedEmail = props.email && props.email.trim() !== "" ? props.email : undefined;
+    const cleanedEmail =
+        props.email && props.email.trim() !== "" ? props.email : undefined;
 
     // Parse and validate candidate input
     const candidateParse = await createCandidateInsertSchema.safeParseAsync({

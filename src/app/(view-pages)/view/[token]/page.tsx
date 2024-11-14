@@ -10,7 +10,7 @@ export default async function ViewPage({
     params: { token: string };
 }) {
     const portalData = await getPortalData(token);
-    console.log(portalData, "portaldata")
+    console.log(portalData, "portaldata");
 
     if (!portalData) {
         return <div>Not found</div>;

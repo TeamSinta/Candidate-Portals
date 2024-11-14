@@ -1,96 +1,101 @@
 "use server";
 import { db } from "@/server/db";
-import { link, portal, candidate, section, organizations, users } from "@/server/db/schema";
+import {
+    link,
+    portal,
+    candidate,
+    section,
+    organizations,
+    users,
+} from "@/server/db/schema";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { getOrganizations } from "../organization/queries";
 import { protectedProcedure } from "@/server/procedures";
 
 export async function getPortalData(token: string) {
-  // Query the link table to find the candidate's portal linked to the token
-  const linkData = await db
-      .select({
-          id: link.id, // Adding link_id
-          portalId: link.portalId, // Adding portal_id
-          candidateId: link.candidateId, // Needed for fetching candidate data
-          customContent: link.customContent,
-      })
-      .from(link)
-      .where(eq(link.url, token))
-      .execute()
-      .then((results) => results[0]);
+    // Query the link table to find the candidate's portal linked to the token
+    const linkData = await db
+        .select({
+            id: link.id, // Adding link_id
+            portalId: link.portalId, // Adding portal_id
+            candidateId: link.candidateId, // Needed for fetching candidate data
+            customContent: link.customContent,
+        })
+        .from(link)
+        .where(eq(link.url, token))
+        .execute()
+        .then((results) => results[0]);
 
-  if (!linkData) return null;
+    if (!linkData) return null;
 
-  // Fetch candidate data associated with the link
-  const candidateData = await db
-      .select({
-          candidateName: candidate.name,
-          candidateEmail: candidate.email,
-          roleTitle: candidate.role, // Adding role title
-          organizationId: candidate.organizationId, // Adding organizationId to link to organizations table
-      })
-      .from(candidate)
-      .where(eq(candidate.id, linkData.candidateId))
-      .execute()
-      .then((results) => results[0]);
+    // Fetch candidate data associated with the link
+    const candidateData = await db
+        .select({
+            candidateName: candidate.name,
+            candidateEmail: candidate.email,
+            roleTitle: candidate.role, // Adding role title
+            organizationId: candidate.organizationId, // Adding organizationId to link to organizations table
+        })
+        .from(candidate)
+        .where(eq(candidate.id, linkData.candidateId))
+        .execute()
+        .then((results) => results[0]);
 
-  if (!candidateData) return null;
+    if (!candidateData) return null;
 
-  // Fetch organization name using organizationId
-  const organizationData = await db
-      .select({
-          orgName: organizations.name, // Fetch organization name
-          ownerId: organizations.ownerId
-      })
-      .from(organizations)
-      .where(eq(organizations.id, candidateData.organizationId))
-      .execute()
-      .then((results) => results[0]);
+    // Fetch organization name using organizationId
+    const organizationData = await db
+        .select({
+            orgName: organizations.name, // Fetch organization name
+            ownerId: organizations.ownerId,
+        })
+        .from(organizations)
+        .where(eq(organizations.id, candidateData.organizationId))
+        .execute()
+        .then((results) => results[0]);
 
-  if (!organizationData) return null;
+    if (!organizationData) return null;
 
-  // Fetch user data using organization ownerId from the organizations table
-  const userData = await db
-      .select({
-          userName: users.name, // Fetch user name
-      })
-      .from(users)
-      .where(eq(users.id, organizationData.ownerId))
-      .execute()
-      .then((results) => results[0]);
+    // Fetch user data using organization ownerId from the organizations table
+    const userData = await db
+        .select({
+            userName: users.name, // Fetch user name
+        })
+        .from(users)
+        .where(eq(users.id, organizationData.ownerId))
+        .execute()
+        .then((results) => results[0]);
 
-  if (!userData) return null;
+    if (!userData) return null;
 
-  const sections = await db
-      .select({
-          id: section.id, // Adding section_id
-          title: section.title,
-          content: section.content,
-          contentType: section.contentType,
-      })
-      .from(section)
-      .where(eq(section.portalId, linkData.portalId))
-      .execute();
+    const sections = await db
+        .select({
+            id: section.id, // Adding section_id
+            title: section.title,
+            content: section.content,
+            contentType: section.contentType,
+        })
+        .from(section)
+        .where(eq(section.portalId, linkData.portalId))
+        .execute();
 
-  return {
-      candidateName: candidateData.candidateName,
-      candidateEmail: candidateData.candidateEmail,
-      roleTitle: candidateData.roleTitle, // Include role title
-      orgName: organizationData.orgName, // Include organization name
-      userName: userData.userName, // Include user name
-      portalId: linkData.portalId, // Include portal_id
-      linkId: linkData.id, // Include link_id
-      customContent: linkData.customContent as object | string | null, // Explicitly type it here
-      sections: sections.map((section) => ({
-          sectionId: section.id, // Include section_id
-          title: section.title,
-          content: section.content as string, // Ensure content is string for rendering
-          contentType: section.contentType,
-      })),
-  };
+    return {
+        candidateName: candidateData.candidateName,
+        candidateEmail: candidateData.candidateEmail,
+        roleTitle: candidateData.roleTitle, // Include role title
+        orgName: organizationData.orgName, // Include organization name
+        userName: userData.userName, // Include user name
+        portalId: linkData.portalId, // Include portal_id
+        linkId: linkData.id, // Include link_id
+        customContent: linkData.customContent as object | string | null, // Explicitly type it here
+        sections: sections.map((section) => ({
+            sectionId: section.id, // Include section_id
+            title: section.title,
+            content: section.content as string, // Ensure content is string for rendering
+            contentType: section.contentType,
+        })),
+    };
 }
-
-
 
 // Define the function to fetch portal list data
 export async function getPortalListData() {

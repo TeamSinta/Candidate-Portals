@@ -8,9 +8,5 @@ type AppLayoutProps = {
 };
 
 export default function AppLayout({ children }: AppLayoutProps) {
-    return (
-        <PageWithLoadingEffect>
-            {children}
-        </PageWithLoadingEffect>
-    );
+    return <PageWithLoadingEffect>{children}</PageWithLoadingEffect>;
 }

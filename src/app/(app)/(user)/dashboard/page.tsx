@@ -9,14 +9,13 @@ import PortalCard from "./_components/portal-card";
 import CreatePortalButton from "./_components/create-portal-button";
 
 type Section = {
-  title: string | null;
-  content: unknown;
-  contentType: "yoopta" | "url" | "doc" | "notion" | "pdf";
+    title: string | null;
+    content: unknown;
+    contentType: "yoopta" | "url" | "doc" | "notion" | "pdf";
 };
 
 export default async function DashboardPage() {
     const portals = await getPortalListData();
-
 
     return (
         <AppPageShell
@@ -34,7 +33,7 @@ export default async function DashboardPage() {
                         </p>
                     </div>
                     <div className="flex items-center gap-x-2">
-                       <CreatePortalButton />
+                        <CreatePortalButton />
 
                         <Button
                             size="icon"

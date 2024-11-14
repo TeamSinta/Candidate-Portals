@@ -18,16 +18,13 @@ export default function CreatePortalButton() {
             toast.error("Failed to create Portal");
         }
     }
-    return <Button
-    className="group flex flex-1 items-center justify-start gap-x-1 whitespace-nowrap rounded px-1 text-left sm:gap-x-3 sm:px-3"
-    onClick={handleClick}
->
-    <PlusIcon
-        className="h-5 w-5 shrink-0"
-        aria-hidden="true"
-    />
-    <span className="text-xs sm:text-base">
-        Add New Portal
-    </span>
-</Button>
+    return (
+        <Button
+            className="group flex flex-1 items-center justify-start gap-x-1 whitespace-nowrap rounded px-1 text-left sm:gap-x-3 sm:px-3"
+            onClick={handleClick}
+        >
+            <PlusIcon className="h-5 w-5 shrink-0" aria-hidden="true" />
+            <span className="text-xs sm:text-base">Add New Portal</span>
+        </Button>
+    );
 }

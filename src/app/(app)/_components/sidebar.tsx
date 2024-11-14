@@ -77,8 +77,6 @@ export async function AppSidebar({
                         >
                             <Icons.logo className="h-10 w-16 fill-primary" />
                         </Link>
-
-
                     </div>
                 )}
                 {showOrgSwitcher && (
@@ -102,7 +100,7 @@ export async function AppSidebar({
             </SidebarContent>
 
             <SidebarFooter>
-            {/* <Tooltip>
+                {/* <Tooltip>
                             <TooltipTrigger asChild>
                                 <Link
                                     href={siteUrls.feedback}

@@ -1,4 +1,9 @@
-import { EyeIcon, MoreHorizontalIcon, FileIcon, BarChartIcon } from "lucide-react";
+import {
+    EyeIcon,
+    MoreHorizontalIcon,
+    FileIcon,
+    BarChartIcon,
+} from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPortalDetails } from "@/server/actions/portal/queries";
@@ -26,7 +31,10 @@ import { BarChartComponent } from "@/app/(app)/_components/bar-chart";
 import { TopEngagingUsersChart } from "@/app/(app)/_components/side-bar-chart";
 import { MergedEngagedData, MergedSectionData } from "@/types/portal";
 import { averageDurationData, topEngagedData } from "@/server/tinybird/utils";
-import { getAverageDuration, getTopEngaged } from "@/server/tinybird/pipes/pipes";
+import {
+    getAverageDuration,
+    getTopEngaged,
+} from "@/server/tinybird/pipes/pipes";
 
 interface Props {
     params: { id: string };
@@ -42,41 +50,53 @@ export default async function PortalView({ params }: Props) {
 
     // Fetch Tinybird data and merge with portal sections
 
-    const tinybirdData = (await getAverageDuration({ portal_id: portalID })) || {};
-    console.log(tinybirdData, "testing")
-    const engagedTinybirdData = await getTopEngaged({ portal_id: portalID }) || {};
+    const tinybirdData =
+        (await getAverageDuration({ portal_id: portalID })) || {};
+    console.log(tinybirdData, "testing");
+    const engagedTinybirdData =
+        (await getTopEngaged({ portal_id: portalID })) || {};
 
-    const AverageData: MergedSectionData[] = averageDurationData(portalData, tinybirdData);
-    const EngagedData: MergedEngagedData[] = topEngagedData(portalData, engagedTinybirdData);
+    const AverageData: MergedSectionData[] = averageDurationData(
+        portalData,
+        tinybirdData,
+    );
+    const EngagedData: MergedEngagedData[] = topEngagedData(
+        portalData,
+        engagedTinybirdData,
+    );
     const averageDurationText = calculateTotalAverageDuration(AverageData);
 
     // Check if there is chart data
     const hasChartData = AverageData.length > 0 || EngagedData.length > 0;
 
     return (
-      <div className="w-full mb-2">
-      <div className="flex items-center justify-between px-2">
-          <div className="flex items-center gap-2">
-              <SidebarTrigger className="-ml-1" />
-              <Separator orientation="vertical" className="mr-2 h-4" />
-              <Breadcrumb>
-                  <BreadcrumbList>
-                      <BreadcrumbItem className="hidden md:block">
-                          <BreadcrumbLink>Portals</BreadcrumbLink>
-                      </BreadcrumbItem>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                          <BreadcrumbPage>{portalData.portal.title}</BreadcrumbPage>
-                      </BreadcrumbItem>
-                  </BreadcrumbList>
-              </Breadcrumb>
-          </div>
+        <div className="mb-2 w-full">
+            <div className="flex items-center justify-between px-2">
+                <div className="flex items-center gap-2">
+                    <SidebarTrigger className="-ml-1" />
+                    <Separator orientation="vertical" className="mr-2 h-4" />
+                    <Breadcrumb>
+                        <BreadcrumbList>
+                            <BreadcrumbItem className="hidden md:block">
+                                <BreadcrumbLink>Portals</BreadcrumbLink>
+                            </BreadcrumbItem>
+                            <BreadcrumbSeparator className="hidden md:block" />
+                            <BreadcrumbItem>
+                                <BreadcrumbPage>
+                                    {portalData.portal.title}
+                                </BreadcrumbPage>
+                            </BreadcrumbItem>
+                        </BreadcrumbList>
+                    </Breadcrumb>
+                </div>
                 <div className="flex items-center gap-2">
                     <Tooltip>
                         <TooltipTrigger asChild>
                             <Link
                                 href={`/view/${params.id}`}
-                                className={cn("z-10 transition-transform hover:scale-90")}
+                                className={cn(
+                                    "z-10 transition-transform hover:scale-90",
+                                )}
                             >
                                 <EyeIcon className="h-5 w-5 cursor-pointer" />
                             </Link>
@@ -96,16 +116,18 @@ export default async function PortalView({ params }: Props) {
                     <div className="flex gap-4 ">
                         {/* Left Bar Chart */}
                         <div className="h-full flex-1">
-
                             {hasChartData ? (
                                 <BarChartComponent data={AverageData} />
                             ) : (
-                                <Card className="flex items-center justify-center p-8 h-80  mt-12 rounded-sm shadow-none">
+                                <Card className="mt-12 flex h-80 items-center justify-center  rounded-sm p-8 shadow-none">
                                     <CardContent className="flex flex-col items-center justify-center space-y-2">
                                         <BarChartIcon className="h-10 w-10 text-muted-foreground" />
-                                        <p className="text-lg font-medium">No bar chart data available</p>
+                                        <p className="text-lg font-medium">
+                                            No bar chart data available
+                                        </p>
                                         <p className="text-sm text-muted-foreground">
-                                            Engagement metrics will be shown here when available.
+                                            Engagement metrics will be shown
+                                            here when available.
                                         </p>
                                     </CardContent>
                                 </Card>
@@ -117,12 +139,15 @@ export default async function PortalView({ params }: Props) {
                             {hasChartData ? (
                                 <TopEngagingUsersChart data={EngagedData} />
                             ) : (
-                                <Card className="flex items-center justify-center p-8 h-80 mt-12 shadow-none rounded-sm">
+                                <Card className="mt-12 flex h-80 items-center justify-center rounded-sm p-8 shadow-none">
                                     <CardContent className="flex flex-col items-center justify-center space-y-2">
                                         <BarChartIcon className="h-10 w-10 text-muted-foreground" />
-                                        <p className="text-lg font-medium">No engagement data available</p>
+                                        <p className="text-lg font-medium">
+                                            No engagement data available
+                                        </p>
                                         <p className="text-sm text-muted-foreground">
-                                            Engagement details will be displayed here when available.
+                                            Engagement details will be displayed
+                                            here when available.
                                         </p>
                                     </CardContent>
                                 </Card>
@@ -137,16 +162,22 @@ export default async function PortalView({ params }: Props) {
                                 <CardTitle>Number of Visits</CardTitle>
                             </CardHeader>
                             <CardContent className="text-center">
-                                <p className="text-2xl">{portalData.candidates?.length || 0}</p>
+                                <p className="text-2xl">
+                                    {portalData.candidates?.length || 0}
+                                </p>
                             </CardContent>
                         </Card>
 
                         <Card className="rounded-sm shadow-none">
                             <CardHeader>
-                                <CardTitle>Total Average View Duration</CardTitle>
+                                <CardTitle>
+                                    Total Average View Duration
+                                </CardTitle>
                             </CardHeader>
                             <CardContent className="text-center">
-                                <p className="text-2xl">{averageDurationText}</p>
+                                <p className="text-2xl">
+                                    {averageDurationText}
+                                </p>
                             </CardContent>
                         </Card>
                     </div>
@@ -155,15 +186,16 @@ export default async function PortalView({ params }: Props) {
                     <LinksCard portalData={portalData} />
                 </div>
             ) : (
-                <Card className="flex items-center justify-center flex-1 m-16  p-56">
+                <Card className="m-16 flex flex-1 items-center justify-center  p-56">
                     <CardContent className="flex flex-col items-center justify-center gap-2 ">
                         <MarqueeCardVertical />
                         <p className="text-lg font-medium">No links found</p>
                         <p className="text-sm text-muted-foreground">
-                            Create and share personalized links to enhance and track engagement.
+                            Create and share personalized links to enhance and
+                            track engagement.
                         </p>
                         <ClientSheet portalData={portalData} />
-                        </CardContent>
+                    </CardContent>
                 </Card>
             )}
         </div>
