@@ -10,7 +10,9 @@
 export const siteUrls = {
     publicUrl: "https://app.teamsinta.com",
     github: "https://github.com/alifarooq9/rapidlaunch",
-    home: "/dashboard",
+    home: "/",
+    dev:"https://5bc1e5fa5023dc7a.ngrok.app/",
+    prod:"https://sinta-candidate-portals.vercel.app/",
     pricing: "/pricing",
     features: "/features",
     support: "/support",

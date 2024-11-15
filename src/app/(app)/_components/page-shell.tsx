@@ -28,7 +28,7 @@ export function AppPageShell({
 
     return (
         <div className="flex h-full w-full flex-col space-y-4">
-            <div className="flex items-center gap-2 px-4">
+            <div className="z-10 flex items-center gap-2 px-4">
                 <SidebarTrigger className="-ml-1" />
                 <Separator orientation="vertical" className="mr-2 h-4" />
                 <Breadcrumb>

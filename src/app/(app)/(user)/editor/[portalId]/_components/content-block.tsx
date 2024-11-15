@@ -136,7 +136,7 @@ function ContentBlock({
         <>
             <div
                 className={cn(
-                    "flex w-[50rem] flex-col rounded-lg border-2 bg-white p-4 px-8 shadow transition-shadow duration-300",
+                    "flex w-[50rem] z-10  flex-col rounded-sm space-y-2 border bg-white p-8 px-8  transition-shadow duration-300",
                     !editing && "hover:shadow-lg ",
                 )}
             >
@@ -161,32 +161,31 @@ function ContentBlock({
                             What would you like your candidate to review?
                         </div>
 
-                        <div className="mt-4 flex flex-col self-start">
-                            <div className="text-sm font-semibold">
-                                Content Type
-                            </div>
+                        <div className="pt-8  flex flex-col self-start">
+
                             <Tabs
                                 value={contentType}
                                 onValueChange={(value: string) =>
                                     setContentType(value as SectionContentType)
                                 }
+                                className="rounded pb-4"
                             >
-                                <TabsList className="">
+                                <TabsList className="rounded-sm py-6 bg-slate-100">
                                     <TabsTrigger
                                         value={SectionContentType.URL}
-                                        className="px-8"
+                                        className="px-10 rounded-sm py-2"
                                     >
                                         Link
                                     </TabsTrigger>
                                     <TabsTrigger
                                         value={SectionContentType.DOC}
-                                        className="px-8"
+                                        className="px-8 rounded-sm py-2"
                                     >
                                         Attach
                                     </TabsTrigger>
                                     <TabsTrigger
                                         value={SectionContentType.YOOPTA}
-                                        className="px-8"
+                                        className="px-8 rounded-sm py-2"
                                     >
                                         Content
                                     </TabsTrigger>

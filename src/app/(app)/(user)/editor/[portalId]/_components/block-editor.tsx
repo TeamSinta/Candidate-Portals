@@ -15,6 +15,7 @@ import { updatePortalData } from "@/server/actions/portal/queries";
 import { toast } from "sonner";
 import PortalEditBlock from "./portal-edit-block";
 import { useRouter } from "next/navigation";
+import { PlusCircleIcon, PlusIcon } from "lucide-react";
 function BlockEditor({
     portalId,
     sections,
@@ -128,14 +129,13 @@ function BlockEditor({
                             cancelEdit={() => setSelectedBlock(undefined)}
                         />
                     ))}
-                    <div className="flex flex-row items-center justify-center gap-4 font-light">
-                        <Button variant="link" onClick={handleCreateBlock}>
+                    <div className="flex flex-row items-center justify-center gap-4 z-10 w-96">
+                        <Button className="w-full shadow-lg" variant="default" onClick={handleCreateBlock}>
+                          <PlusIcon className="h-4 w-4"/>
                             Add Section
                         </Button>
-                        <div className="h-12 w-[1px] bg-slate-200" />
-                        <Button variant="link" onClick={handleCreateBlock}>
-                            Add Section
-                        </Button>
+                        {/* <div className="h-12 w-[1px] bg-slate-200" /> */}
+
                     </div>
                 </div>
             )}

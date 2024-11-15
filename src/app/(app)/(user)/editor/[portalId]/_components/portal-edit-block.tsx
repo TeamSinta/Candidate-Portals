@@ -37,8 +37,8 @@ function PortalEditBlock({
     return (
         <div
             className={cn(
-                "flex w-[50rem] flex-col gap-4 rounded-lg border-2 bg-white p-4 shadow transition-shadow duration-300",
-                !editing && "cursor-pointer hover:shadow-lg ",
+              "flex w-[50rem] z-10  flex-col rounded-sm space-y-2 border bg-white p-8 px-8  transition-shadow duration-300",
+              !editing && "cursor-pointer hover:shadow-lg ",
             )}
             onClick={onClick}
         >
@@ -48,13 +48,13 @@ function PortalEditBlock({
                         Candidate Portal
                     </div>
                     <div className="flex flex-col gap-2 text-sm">
-                        <label className="font-semibold">
+                        <label className="font-medium">
                             Candidate Portal Name
                         </label>
                         <input
                             type="text"
                             placeholder={"Candidate Portal Name"}
-                            className="min-w-[30rem] rounded-md border-2 border-gray-200 p-2"
+                            className="min-w-[30rem] rounded border-2 border-gray-200 p-2"
                             onChange={(e) => setTitle(e.target.value)}
                             value={title}
                         />
