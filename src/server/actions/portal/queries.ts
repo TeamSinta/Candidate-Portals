@@ -59,7 +59,8 @@ export async function getPortalData(token: string) {
     // Fetch user data using organization ownerId from the organizations table
     const userData = await db
         .select({
-            userName: users.name, // Fetch user name
+            userName: users.name,
+            userId: users.id // Fetch user name
         })
         .from(users)
         .where(eq(users.id, organizationData.ownerId))
@@ -84,7 +85,8 @@ export async function getPortalData(token: string) {
         candidateEmail: candidateData.candidateEmail,
         roleTitle: candidateData.roleTitle, // Include role title
         orgName: organizationData.orgName, // Include organization name
-        userName: userData.userName, // Include user name
+        userName: userData.userName,
+        userId: userData.userId,// Include user name
         portalId: linkData.portalId, // Include portal_id
         linkId: linkData.id, // Include link_id
         customContent: linkData.customContent as object | string | null, // Explicitly type it here
