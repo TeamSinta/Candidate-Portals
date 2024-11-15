@@ -147,7 +147,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     handleCopyToClipboard(
-                                                        siteUrls.publicUrl +
+                                                        siteUrls.dev +
                                                             siteUrls.view +
                                                             link.url,
                                                     );
@@ -155,7 +155,7 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                                             >
                                                 <div className="w-[400px] rounded-full bg-blue-50 p-2 text-center transition hover:border-blue-400 group-hover:border group-hover:bg-white">
                                                     <span className="text-sm text-black group-hover:hidden">
-                                                        {siteUrls.prod +
+                                                        {siteUrls.dev +
                                                             siteUrls.view +
                                                             link.url}
                                                     </span>
