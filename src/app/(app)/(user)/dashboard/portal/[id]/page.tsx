@@ -189,7 +189,7 @@ export default async function PortalView({ params }: Props) {
                     <LinksCard portalData={portalData} />
                 </div>
             ) : (
-                <Card className="m-16 flex flex-1 items-center justify-center  p-56">
+                <Card className="m-24 flex flex-1 items-center justify-center  p-56">
                     <CardContent className="flex flex-col items-center justify-center gap-2 ">
                         <MarqueeCardVertical />
                         <p className="text-lg font-medium">No links found</p>
