@@ -101,7 +101,7 @@ function BlockEditor({
 
     return (
         <>
-            <PortalEditBlock
+            {/* <PortalEditBlock
                 onRenamePortal={handleRenamePortal}
                 portalData={portalData}
                 editing={Boolean(selectedBlock) && selectedBlock === "portal"}
@@ -109,7 +109,7 @@ function BlockEditor({
                 onClick={() => {
                     if (selectedBlock !== "portal") setSelectedBlock("portal");
                 }}
-            />
+            /> */}
             {blocks.length > 0 && (
                 <div className="flex flex-col items-center gap-8">
                     {blocks.map((section, index) => (

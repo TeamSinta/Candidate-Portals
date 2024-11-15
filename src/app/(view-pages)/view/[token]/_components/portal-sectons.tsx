@@ -48,7 +48,6 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         linkId,
     } = portalData;
     const selectedSection = sections[selectedSectionIndex];
-
     // Function to send duration data to Tinybird
     const sendDurationData = async () => {
         const currentSection = sections[sectionIndexRef.current];
@@ -119,7 +118,11 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                     />
                 );
             case SectionContentType.URL:
-                return <LinkComponent urlData={section.content} />;
+                return (
+                  <div className="h-screen">
+                <LinkComponent urlData={section.content} />
+                </div>
+                );;
             // case SectionContentType.DOC:
             //   return <DocumentComponent documentData={section.content} />;
             // case SectionContentType.NOTION:

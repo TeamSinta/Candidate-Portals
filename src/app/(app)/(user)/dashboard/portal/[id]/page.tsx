@@ -36,6 +36,7 @@ import {
     getTopEngaged,
 } from "@/server/tinybird/pipes/pipes";
 import ClientModal from "../../_components/success-modal";
+import PreviewDialog from "../../_components/preview-page";
 
 interface Props {
     params: { id: string };
@@ -53,7 +54,6 @@ export default async function PortalView({ params }: Props) {
 
     const tinybirdData =
         (await getAverageDuration({ portal_id: portalID })) || {};
-    console.log(tinybirdData, "testing");
     const engagedTinybirdData =
         (await getTopEngaged({ portal_id: portalID })) || {};
 
@@ -91,19 +91,8 @@ export default async function PortalView({ params }: Props) {
                     </Breadcrumb>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Tooltip>
-                        <TooltipTrigger asChild>
-                            <Link
-                                href={`/view/${params.id}`}
-                                className={cn(
-                                    "z-10 transition-transform hover:scale-90",
-                                )}
-                            >
-                                <EyeIcon className="h-5 w-5 cursor-pointer" />
-                            </Link>
-                        </TooltipTrigger>
-                        <TooltipContent side="top">Preview</TooltipContent>
-                    </Tooltip>
+                <PreviewDialog portalData={portalData} />
+
 
                     <Separator orientation="vertical" className="h-6" />
                     <MoreHorizontalIcon className="h-5 w-5 cursor-pointer rounded-full bg-gray-100 p-1 dark:bg-gray-700" />

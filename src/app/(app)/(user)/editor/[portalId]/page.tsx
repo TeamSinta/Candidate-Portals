@@ -39,7 +39,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
         )}
       />
 
-                <div className=" z-10 flex w-max gap-2 rounded-sm  border bg-white p-2 transition-shadow duration-300 hover:shadow-lg lg:min-w-[30rem]">
+                {/* <div className=" z-10 flex w-max gap-2 rounded-sm  border bg-white p-2 transition-shadow duration-300 hover:shadow-lg lg:min-w-[30rem]">
                     <Terminal className="mt-1 h-4" />
                     <div className="flex flex-col text-sm">
                         <div className="font-medium">Heads up!</div>
@@ -47,7 +47,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
                             Click Preview to see the Candidate Experience Live
                         </div>
                     </div>
-                </div>
+                </div> */}
                 <BlockEditor
                     sections={data.sections || []}
                     portalId={params.portalId}

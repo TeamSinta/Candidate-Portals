@@ -185,6 +185,7 @@ export async function getPortalDetails(portalId: string) {
             contentType: section.contentType,
             title: section.title,
             section_id: section.id,
+            sectionContent: section.content
         })
         .from(section)
         .where(eq(section.portalId, portalId))
@@ -232,6 +233,7 @@ export async function getPortalDetails(portalId: string) {
             contentType: section.contentType,
             title: section.title,
             section_id: section.section_id,
+            content: section.sectionContent
         })),
         links: links.map((link) => ({
             url: link.url,

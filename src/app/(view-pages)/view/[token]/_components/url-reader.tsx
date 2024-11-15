@@ -13,9 +13,9 @@ const LinkComponent: React.FC<LinkComponentProps> = ({ urlData }) => {
     const { url, title } = urlData;
 
     return (
-        <div>
+        <div className="h-full">
             {/* Try using embed */}
-            <embed src={url} className="h-screen w-screen" />
+            <embed src={url} className="h-full w-full" />
 
             {/* Fallback using object */}
         </div>

@@ -98,6 +98,7 @@ export default function Editor({
                 marks={marks}
                 style={{
                     width: "60%",
+
                 }}
             />
         </div>
