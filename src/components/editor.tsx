@@ -106,13 +106,16 @@ export default function Editor({
         }
     }, [content]);
 
+    function createFirstBlock() {
+        ParagraphCommands.insertParagraph(editor, { focus: true });
+    }
     const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === "Enter") {
             event.preventDefault();
             // If there's no content on the editor, you're unable to focus. So you gotta create a Content Block first.
             if (editor.isEmpty()) {
                 // console.log("CREATE");
-                ParagraphCommands.insertParagraph(editor, { focus: true });
+                createFirstBlock();
             } else {
                 editor.focus();
             }
@@ -143,7 +146,14 @@ export default function Editor({
                 {Object.keys(content).length === 0 && (
                     <div className="my-4 text-gray-700">
                         <div>
-                            Press <b>Enter</b> to get started.
+                            Press{" "}
+                            <b
+                                className="cursor-pointer rounded-sm bg-slate-200 px-2 py-1 text-sm font-semibold"
+                                onClick={createFirstBlock}
+                            >
+                                Enter
+                            </b>{" "}
+                            to get started.
                         </div>
                         <div>
                             Type <b>/</b> to see what blocks are available.

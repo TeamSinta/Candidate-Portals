@@ -32,7 +32,7 @@ function EditorWrapper({ section, portal }: Props) {
             await updateSectionContent({
                 id: section.id,
                 portalId: portal.id,
-                title: section.title ?? "",
+                title: title ?? "",
                 content: sectionContent,
                 contentType: SectionContentType.YOOPTA,
                 index: section.index,
