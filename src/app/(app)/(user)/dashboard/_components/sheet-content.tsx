@@ -95,7 +95,7 @@ export default function CreateLinkSheetContent({
     };
 
     return (
-        <div className="flex h-full flex-col justify-between space-y-6">
+        <div className="flex h-full flex-col justify-between space-y-6 overflow-scroll">
             {/* Header */}
             <SheetHeader>
                 <SheetTitle className="text-xl font-semibold text-gray-900">
@@ -129,7 +129,7 @@ export default function CreateLinkSheetContent({
 
                 {/* Optional Fields */}
                 <Accordion
-                    type="single"
+                  type="single"
                     collapsible
                     defaultValue="optional-fields"
                 >
