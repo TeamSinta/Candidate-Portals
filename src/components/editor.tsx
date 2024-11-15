@@ -1,6 +1,6 @@
 "use client";
 import ContentEditorPage from "@/app/(app)/(user)/editor/content/[sectionId]/page";
-import { cn } from "@/lib/utils";
+import { cn, generateGUID } from "@/lib/utils";
 import Accordion from "@yoopta/accordion";
 import ActionMenuList, {
     DefaultActionMenuRender,
@@ -35,19 +35,54 @@ import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Skeleton } from "./ui/skeleton";
 
-const TitlePlugin = new YooptaPlugin({
-    type: "title",
-    render: ({}) => <input value={data.title} />, // Render title as read-only
-    properties: {
-        isDraggable: false, // Disable drag
-        isEditable: false, // Disable edit
-        isDeletable: false,
-    },
+function replaceText(text: string): string {
+    // Replace {{name}} with a specified name
+    text = text.replace(/{{name}}/g, "John Doe");
 
-    options: {},
-});
+    // Replace {{email address}} with a corresponding specified email address
+    text = text.replace(/{{email address}}/g, "john.doe@example.com");
+
+    return text;
+}
+
 const plugins = [
-    Paragraph,
+    Paragraph.extend({
+        renders: {
+            paragraph: ({ attributes, children, element }) => {
+                // const text = element?.children?.[0]?.text as string;
+                const text = children[0]?.props?.text?.text as string;
+                if (text) {
+                    console.log("text", text, typeof text);
+                    const replacedText = replaceText(text);
+                    // const updatedChild = {
+                    //     ...element.children[0],
+                    //     text: replacedText,
+                    // };
+                    if (replacedText === text) {
+                        // return element;
+                        return <p {...attributes}>{children}</p>;
+                    }
+                    const updatedChild = {
+                        ...children[0].props,
+                        text: { text: replacedText },
+                    };
+                    // const newChildren = [
+                    //     updatedChild,
+                    //     ...element.children.slice(1),
+                    // ];
+                    children[0].props.text.text = replacedText;
+                    console.log("ELEMENT", element);
+                    console.log("CHILDREN", children);
+                    return (
+                        <p {...attributes} {...element}>
+                            {children}
+                        </p>
+                    );
+                }
+                return <p {...attributes}>{children}</p>;
+            },
+        },
+    }),
     Table,
     NumberedList,
     BulletedList,
@@ -88,12 +123,14 @@ export default function Editor({
     title,
     onTitleChange,
     className,
+    replacements = {},
 }: {
     content: YooptaContentValue;
     editable: boolean;
     onChange: (data: YooptaContentValue) => void;
     title: string;
     onTitleChange: (newTitle: string) => void;
+    replacements?: Record<string, string>;
     className?: string;
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
@@ -174,7 +211,7 @@ export default function Editor({
                     style={{
                         width: "100%",
                     }}
-                ></YooptaEditor>
+                />
             </div>
         </div>
     );

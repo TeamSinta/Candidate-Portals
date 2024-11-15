@@ -72,6 +72,7 @@ function EditorWrapper({ section, portal }: Props) {
                         setTitle(newTitle);
                     }}
                     title={title ?? ""}
+                    replacements={{ name: "Evan", email: "zwerewre@gmail.com" }}
                 />
             </div>
         </AppPageShell>
