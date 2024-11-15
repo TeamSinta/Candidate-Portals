@@ -35,6 +35,7 @@ import {
     getAverageDuration,
     getTopEngaged,
 } from "@/server/tinybird/pipes/pipes";
+import ClientModal from "../../_components/success-modal";
 
 interface Props {
     params: { id: string };
@@ -108,6 +109,8 @@ export default async function PortalView({ params }: Props) {
                     <MoreHorizontalIcon className="h-5 w-5 cursor-pointer rounded-full bg-gray-100 p-1 dark:bg-gray-700" />
 
                     <ClientSheet portalData={portalData} />
+                    <ClientModal portalData={portalData} />
+
                 </div>
             </div>
 

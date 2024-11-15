@@ -15,21 +15,12 @@ interface ClientSheetProps {
 
 export default function ClientSheet({ portalData }: ClientSheetProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const searchParams = useSearchParams();
-    const router = useRouter();
-    useEffect(() => {
-        setIsOpen(searchParams.get("createLink") === "true");
-    }, []);
+
+    // useEffect(() => {
+    //     setIsOpen(searchParams.get("createLink") === "true");
+    // }, []);
 
     const toggleSheet = () => {
-        const params = new URLSearchParams(searchParams.toString());
-        if (isOpen) {
-            params.delete("createLink");
-        } else {
-            params.set("createLink", "true");
-        }
-        // Update the URL with new parameters
-        router.push(`?${params.toString()}`);
         setIsOpen(!isOpen);
     };
     return (
@@ -44,7 +35,7 @@ export default function ClientSheet({ portalData }: ClientSheetProps) {
                 </Button>
             </SheetTrigger>
             <SheetContent>
-                {portalData.links.length === 0 && (
+                {/* {portalData.links.length === 0 && (
                     <div
                         style={{
                             position: "absolute",
@@ -70,7 +61,7 @@ export default function ClientSheet({ portalData }: ClientSheetProps) {
                             }}
                         />
                     </div>
-                )}
+                )} */}
 
                 <CreateLinkSheetContent
                     portalData={portalData}
