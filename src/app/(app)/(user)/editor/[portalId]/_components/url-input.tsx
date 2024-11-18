@@ -66,11 +66,11 @@ function UrlInput({
             />
             <InputField
                 fieldKey="engagement"
-                value="0"
+                value=""
                 label="Expected Engagement Time"
                 placeholder="~5min"
                 onChange={onChange}
-                editable={editable}
+                editable={false}
             />
         </div>
     );

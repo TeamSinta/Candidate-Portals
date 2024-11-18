@@ -12,8 +12,8 @@ import ContentEditorPageButtons from "./content-editor-page-buttons";
 import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/ui/sidebar";
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
 
 interface Props {
     section: SectionSelect;
@@ -23,6 +23,7 @@ function EditorWrapper({ section, portal }: Props) {
     const [sectionContent, setSectionContent] = useState<YooptaContentValue>(
         section.content as YooptaContentValue,
     );
+    const [title, setTitle] = useState<string>(section.title ?? "");
     const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
     const sidebar = useSidebar();
     const router = useRouter();
@@ -31,7 +32,7 @@ function EditorWrapper({ section, portal }: Props) {
             await updateSectionContent({
                 id: section.id,
                 portalId: portal.id,
-                title: section.title ?? "",
+                title: title ?? "",
                 content: sectionContent,
                 contentType: SectionContentType.YOOPTA,
                 index: section.index,
@@ -64,9 +65,28 @@ function EditorWrapper({ section, portal }: Props) {
             <div className="container">
                 <Editor
                     // key={isPreviewing ? "preview" : "edit"}
-                    content={sectionContent}
+                    // content={JSON.parse(
+                    //     replaceText(
+                    //         JSON.stringify(sectionContent),
+                    //         sampleDictionary,
+                    //     ),
+                    // )}
+                    content={
+                        isPreviewing
+                            ? JSON.parse(
+                                  replaceText(
+                                      JSON.stringify(sectionContent),
+                                      sampleDictionary,
+                                  ),
+                              )
+                            : sectionContent
+                    }
                     editable={!isPreviewing}
                     onChange={setSectionContent}
+                    onTitleChange={(newTitle: string) => {
+                        setTitle(newTitle);
+                    }}
+                    title={title ?? ""}
                 />
             </div>
         </AppPageShell>

@@ -177,12 +177,12 @@ function ContentBlock({
                                     >
                                         Link
                                     </TabsTrigger>
-                                    <TabsTrigger
+                                    {/* <TabsTrigger
                                         value={SectionContentType.DOC}
                                         className="px-8 rounded-sm py-2"
                                     >
                                         Attach
-                                    </TabsTrigger>
+                                    </TabsTrigger> */}
                                     <TabsTrigger
                                         value={SectionContentType.YOOPTA}
                                         className="px-8 rounded-sm py-2"
@@ -203,7 +203,7 @@ function ContentBlock({
                         editable={editing}
                     />
                 )}
-                {contentType === SectionContentType.YOOPTA && (
+                {/* {contentType === SectionContentType.YOOPTA && (
                     <div className="my-4 flex flex-row items-center justify-end gap-4 text-sm">
                         <label className="font-semibold">Content Title</label>
                         <input
@@ -224,8 +224,8 @@ function ContentBlock({
                     //     title={title}
                     //     onTitleChange={setTitle}
                     // />
-                )}
-                {contentType === SectionContentType.DOC && <AttachmentBlock />}
+                )} */}
+                {/* {contentType === SectionContentType.DOC && <AttachmentBlock />} */}
                 {editing && (
                     <div className="flex gap-2 self-end">
                         <Button variant="outline" onClick={handleCancel}>

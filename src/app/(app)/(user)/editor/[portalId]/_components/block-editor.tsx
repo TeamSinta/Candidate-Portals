@@ -32,6 +32,7 @@ function BlockEditor({
     const [portalData, setPortalData] =
         useState<PortalSelect>(initialPortalData);
     const router = useRouter();
+    const fillerGUID = generateGUID();
     async function handleRenamePortal(newName: string) {
         const updatedPortal = { ...portalData, title: newName };
         try {
@@ -142,11 +143,11 @@ function BlockEditor({
             {blocks.length === 0 && (
                 <ContentBlock
                     index={1}
-                    id={""}
+                    id={fillerGUID}
                     initialTitle=""
                     initialContentData={{ url: "" }}
                     onSaveBlock={(data) =>
-                        handleSaveBlock(0, { ...data, id: generateGUID() })
+                        handleSaveBlock(0, { ...data, id: fillerGUID })
                     }
                     onDeleteBlock={() => {
                         return;
