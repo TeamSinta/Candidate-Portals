@@ -51,7 +51,7 @@ function EditorWrapper({ section, portal }: Props) {
 
     return (
         <AppPageShell
-            title={`${portal.title ?? "Untitled"}  >  ${section.title}`}
+            title={`${portal.title ?? "Untitled"}`}
             description="Edit the contents of your portal here"
             buttons={[
                 <ContentEditorPageButtons
@@ -61,6 +61,7 @@ function EditorWrapper({ section, portal }: Props) {
                     isPreviewing={isPreviewing}
                 />,
             ]}
+            breadcrumbs={[section.title ?? "Untitled"]}
         >
             <div className="container">
                 <Editor
@@ -86,7 +87,11 @@ function EditorWrapper({ section, portal }: Props) {
                     onTitleChange={(newTitle: string) => {
                         setTitle(newTitle);
                     }}
-                    title={title ?? ""}
+                    title={
+                        isPreviewing
+                            ? replaceText(title, sampleDictionary)
+                            : (title ?? "")
+                    }
                 />
             </div>
         </AppPageShell>

@@ -12,9 +12,10 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
 
     return (
         <AppPageShell
-            title={"Portals" + ` > ` + (data.portal.title ?? "Untitled")}
+            title={"Portals"}
             description="Edit the contents of your portal here"
             buttons={[<EditorPageButtons key={0} portalId={params.portalId} />]}
+            breadcrumbs={[data.portal.title ?? "Untitled"]}
         >
             <div
                 className="flex h-full min-h-[80vh] flex-col items-center gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30"
