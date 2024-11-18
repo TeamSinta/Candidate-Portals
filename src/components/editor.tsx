@@ -1,26 +1,14 @@
 "use client";
-import ContentEditorPage from "@/app/(app)/(user)/editor/content/[sectionId]/page";
-import { cn, generateGUID } from "@/lib/utils";
-import Accordion from "@yoopta/accordion";
+import { cn } from "@/lib/utils";
 import ActionMenuList, {
     DefaultActionMenuRender,
 } from "@yoopta/action-menu-list";
-import Blockquote from "@yoopta/blockquote";
-import Callout from "@yoopta/callout";
-import Divider from "@yoopta/divider";
 import YooptaEditor, {
     createYooptaEditor,
     YooEditor,
     YooptaContentValue,
-    YooptaPlugin,
 } from "@yoopta/editor";
-import Embed from "@yoopta/embed";
-import File from "@yoopta/file";
-import { HeadingOne, HeadingThree, HeadingTwo } from "@yoopta/headings";
-import Image from "@yoopta/image";
-import Link from "@yoopta/link";
 import LinkTool, { DefaultLinkToolRender } from "@yoopta/link-tool";
-import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
 import {
     Bold,
     CodeMark,
@@ -29,76 +17,11 @@ import {
     Strike,
     Underline,
 } from "@yoopta/marks";
-import Paragraph, { ParagraphCommands } from "@yoopta/paragraph";
-import Table from "@yoopta/table";
+import { ParagraphCommands } from "@yoopta/paragraph";
 import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Skeleton } from "./ui/skeleton";
 
-function replaceText(text: string): string {
-    // Replace {{name}} with a specified name
-    text = text.replace(/{{name}}/g, "John Doe");
-
-    // Replace {{email address}} with a corresponding specified email address
-    text = text.replace(/{{email address}}/g, "john.doe@example.com");
-
-    return text;
-}
-
-const plugins = [
-    Paragraph.extend({
-        renders: {
-            paragraph: ({ attributes, children, element }) => {
-                // const text = element?.children?.[0]?.text as string;
-                const text = children[0]?.props?.text?.text as string;
-                if (text) {
-                    console.log("text", text, typeof text);
-                    const replacedText = replaceText(text);
-                    // const updatedChild = {
-                    //     ...element.children[0],
-                    //     text: replacedText,
-                    // };
-                    if (replacedText === text) {
-                        // return element;
-                        return <p {...attributes}>{children}</p>;
-                    }
-                    const updatedChild = {
-                        ...children[0].props,
-                        text: { text: replacedText },
-                    };
-                    // const newChildren = [
-                    //     updatedChild,
-                    //     ...element.children.slice(1),
-                    // ];
-                    children[0].props.text.text = replacedText;
-                    console.log("ELEMENT", element);
-                    console.log("CHILDREN", children);
-                    return (
-                        <p {...attributes} {...element}>
-                            {children}
-                        </p>
-                    );
-                }
-                return <p {...attributes}>{children}</p>;
-            },
-        },
-    }),
-    Table,
-    NumberedList,
-    BulletedList,
-    TodoList,
-    Embed,
-    Blockquote,
-    Accordion,
-    Divider,
-    Image,
-    Link,
-    File,
-    Callout,
-    HeadingOne,
-    HeadingTwo,
-    HeadingThree,
-];
 const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
 const tools = {
@@ -124,6 +47,7 @@ export default function Editor({
     onTitleChange,
     className,
     replacements = {},
+    plugins,
 }: {
     content: YooptaContentValue;
     editable: boolean;
@@ -132,6 +56,7 @@ export default function Editor({
     onTitleChange: (newTitle: string) => void;
     replacements?: Record<string, string>;
     className?: string;
+    plugins: any[];
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
     const titleRef = useRef<HTMLInputElement>(null);
@@ -181,11 +106,11 @@ export default function Editor({
                     ref={titleRef}
                 />
                 {Object.keys(content).length === 0 && (
-                    <div className="my-4 text-gray-700">
+                    <div className="my-4 text-sm  text-gray-700">
                         <div>
                             Press{" "}
                             <b
-                                className="cursor-pointer rounded-sm bg-slate-200 px-2 py-1 text-sm font-semibold"
+                                className="cursor-pointer rounded-sm bg-slate-200 px-2 py-1 text-xs font-semibold"
                                 onClick={createFirstBlock}
                             >
                                 Enter
@@ -194,6 +119,14 @@ export default function Editor({
                         </div>
                         <div>
                             Type <b>/</b> to see what blocks are available.
+                        </div>
+                        <div className="mt-4">
+                            Type{" "}
+                            <b className=" rounded-sm bg-gray-200 px-2 py-1 font-mono text-xs font-bold text-gray-500">{`{{name}}`}</b>{" "}
+                            or{" "}
+                            <b className="rounded-sm bg-gray-200 px-2 py-1 font-mono text-xs font-bold text-gray-500">{`{{email}}`}</b>{" "}
+                            to personalize your content with your
+                            candidate&apos;s details.
                         </div>
                     </div>
                 )}
@@ -212,6 +145,7 @@ export default function Editor({
                         width: "100%",
                     }}
                 />
+                {/* {JSON.stringify(content)} */}
             </div>
         </div>
     );

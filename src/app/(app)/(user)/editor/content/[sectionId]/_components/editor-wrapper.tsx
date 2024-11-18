@@ -12,8 +12,12 @@ import ContentEditorPageButtons from "./content-editor-page-buttons";
 import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/ui/sidebar";
-import { Router } from "lucide-react";
 import { useRouter } from "next/navigation";
+import {
+    plugins,
+    replaceText,
+    sampleDictionary,
+} from "../../../utils/yoopta-config";
 
 interface Props {
     section: SectionSelect;
@@ -65,14 +69,29 @@ function EditorWrapper({ section, portal }: Props) {
             <div className="container">
                 <Editor
                     // key={isPreviewing ? "preview" : "edit"}
-                    content={sectionContent}
+                    // content={JSON.parse(
+                    //     replaceText(
+                    //         JSON.stringify(sectionContent),
+                    //         sampleDictionary,
+                    //     ),
+                    // )}
+                    content={
+                        isPreviewing
+                            ? JSON.parse(
+                                  replaceText(
+                                      JSON.stringify(sectionContent),
+                                      sampleDictionary,
+                                  ),
+                              )
+                            : sectionContent
+                    }
                     editable={!isPreviewing}
                     onChange={setSectionContent}
                     onTitleChange={(newTitle: string) => {
                         setTitle(newTitle);
                     }}
                     title={title ?? ""}
-                    replacements={{ name: "Evan", email: "zwerewre@gmail.com" }}
+                    plugins={plugins}
                 />
             </div>
         </AppPageShell>
