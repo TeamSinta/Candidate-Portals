@@ -13,11 +13,7 @@ import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
-import {
-    plugins,
-    replaceText,
-    sampleDictionary,
-} from "../../../utils/yoopta-config";
+import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
 
 interface Props {
     section: SectionSelect;
@@ -91,7 +87,6 @@ function EditorWrapper({ section, portal }: Props) {
                         setTitle(newTitle);
                     }}
                     title={title ?? ""}
-                    plugins={plugins}
                 />
             </div>
         </AppPageShell>

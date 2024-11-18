@@ -13,6 +13,8 @@ import CardNavigatorMenu from "./card-navigator-nenu";
 import YooptaReader from "./yoopta-reader";
 import LinkComponent from "./url-reader";
 import { PortalReaderData } from "@/types/portal";
+import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
+import Editor from "@/components/editor";
 
 type Section = {
     sectionId: string;
@@ -42,11 +44,7 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         return <div>Loading...</div>;
     }
 
-    const {
-        sections,
-        portalId,
-        linkId,
-    } = portalData;
+    const { sections, portalId, linkId } = portalData;
     const selectedSection = sections[selectedSectionIndex];
 
     // Function to send duration data to Tinybird
@@ -74,33 +72,36 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     };
 
     useEffect(() => {
-      const handleVisibilityChange = async () => {
-        if (document.visibilityState === "hidden") {
-          await sendDurationData();
-        } else {
-          startTimeRef.current = Date.now();
-        }
-      };
+        const handleVisibilityChange = async () => {
+            if (document.visibilityState === "hidden") {
+                await sendDurationData();
+            } else {
+                startTimeRef.current = Date.now();
+            }
+        };
 
-      document.addEventListener("visibilitychange", handleVisibilityChange);
-      return () => {
-        document.removeEventListener("visibilitychange", handleVisibilityChange);
-      };
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+        return () => {
+            document.removeEventListener(
+                "visibilitychange",
+                handleVisibilityChange,
+            );
+        };
     }, []);
 
     useEffect(() => {
-      if (isInitialMountRef.current) {
-        isInitialMountRef.current = false;
-        setTimeout(() => {
-          startTimeRef.current = Date.now();
-        }, 100);
-      } else {
-        sendDurationData();
-        startTimeRef.current = Date.now();
-      }
+        if (isInitialMountRef.current) {
+            isInitialMountRef.current = false;
+            setTimeout(() => {
+                startTimeRef.current = Date.now();
+            }, 100);
+        } else {
+            sendDurationData();
+            startTimeRef.current = Date.now();
+        }
 
-      sectionIndexRef.current = selectedSectionIndex;
-      cumulativeDurationRef.current = 0;
+        sectionIndexRef.current = selectedSectionIndex;
+        cumulativeDurationRef.current = 0;
     }, [selectedSectionIndex]);
 
     const handleSectionSelect = (index: number) => {
@@ -112,10 +113,21 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         switch (section.contentType) {
             case SectionContentType.YOOPTA:
                 return (
-                    <YooptaReader
-                        portalData={portalData}
-                        sectionId={section.sectionId}
-                        content={section.content}
+                    <Editor
+                        content={JSON.parse(
+                            replaceText(JSON.stringify(section.content), {
+                                name: portalData.candidateName,
+                                email: portalData.candidateEmail,
+                            }),
+                        )}
+                        editable={false}
+                        onChange={() => {
+                            return null;
+                        }}
+                        onTitleChange={() => {
+                            return null;
+                        }}
+                        title={section.title}
                     />
                 );
             case SectionContentType.URL:
@@ -137,7 +149,9 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                 {selectedSection ? (
                     <>
                         {/* <h1 className="text-lg font-bold">{selectedSection.title}</h1> */}
-                        {renderSectionContent(selectedSection)}
+                        {renderSectionContent(
+                            sections[selectedSectionIndex] as Section,
+                        )}
                     </>
                 ) : (
                     <p>No content available</p>

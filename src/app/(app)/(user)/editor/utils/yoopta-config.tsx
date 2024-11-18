@@ -1,16 +1,3 @@
-import Accordion from "@yoopta/accordion";
-import Blockquote from "@yoopta/blockquote";
-import Callout from "@yoopta/callout";
-import Divider from "@yoopta/divider";
-import Embed from "@yoopta/embed";
-import File from "@yoopta/file";
-import { HeadingOne, HeadingThree, HeadingTwo } from "@yoopta/headings";
-import Image from "@yoopta/image";
-import Link from "@yoopta/link";
-import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
-import Paragraph from "@yoopta/paragraph";
-import Table from "@yoopta/table";
-
 export const sampleDictionary = {
     name: "James Bob",
     email: "james.bob@teamsinta.com",
@@ -136,22 +123,3 @@ export function replaceText(
 //         },
 //     });
 // }
-
-export const plugins = [
-    Paragraph,
-    Table,
-    NumberedList,
-    BulletedList,
-    TodoList,
-    Embed,
-    Blockquote,
-    Accordion,
-    Divider,
-    Image,
-    Link,
-    File,
-    Callout,
-    HeadingOne,
-    HeadingTwo,
-    HeadingThree,
-];

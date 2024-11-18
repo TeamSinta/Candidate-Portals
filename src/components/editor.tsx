@@ -21,6 +21,36 @@ import { ParagraphCommands } from "@yoopta/paragraph";
 import Toolbar, { DefaultToolbarRender } from "@yoopta/toolbar";
 import { useEffect, useMemo, useRef } from "react";
 import { Skeleton } from "./ui/skeleton";
+import Accordion from "@yoopta/accordion";
+import Blockquote from "@yoopta/blockquote";
+import Callout from "@yoopta/callout";
+import Divider from "@yoopta/divider";
+import Embed from "@yoopta/embed";
+import File from "@yoopta/file";
+import { HeadingOne, HeadingThree, HeadingTwo } from "@yoopta/headings";
+import Image from "@yoopta/image";
+import Link from "@yoopta/link";
+import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
+import Paragraph from "@yoopta/paragraph";
+import Table from "@yoopta/table";
+export const plugins = [
+    Paragraph,
+    Table,
+    NumberedList,
+    BulletedList,
+    TodoList,
+    Embed,
+    Blockquote,
+    Accordion,
+    Divider,
+    Image,
+    Link,
+    File,
+    Callout,
+    HeadingOne,
+    HeadingTwo,
+    HeadingThree,
+];
 
 const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
 
@@ -46,17 +76,13 @@ export default function Editor({
     title,
     onTitleChange,
     className,
-    replacements = {},
-    plugins,
 }: {
     content: YooptaContentValue;
     editable: boolean;
     onChange: (data: YooptaContentValue) => void;
     title: string;
     onTitleChange: (newTitle: string) => void;
-    replacements?: Record<string, string>;
     className?: string;
-    plugins: any[];
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
     const titleRef = useRef<HTMLInputElement>(null);
