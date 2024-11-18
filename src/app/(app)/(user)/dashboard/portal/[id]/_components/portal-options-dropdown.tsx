@@ -58,7 +58,7 @@ function PortalOptionsDropdown({
                 open={deleteModalOpen}
                 onOpenChange={setDeleteModalOpen}
             >
-                <AlertDialogContent>
+                <AlertDialogContent onClick={(e) => e.stopPropagation()}>
                     <AlertDialogHeader>
                         <AlertDialogTitle>
                             {`Delete Candidate Portal "${portalTitle}"?`}
@@ -90,20 +90,29 @@ function PortalOptionsDropdown({
             <DropdownMenu>
                 <DropdownMenuTrigger
                     onClick={(e) => {
-                        e.preventDefault();
+                        e.stopPropagation();
                     }}
                     className="text-gray-400 hover:text-gray-600 focus:outline-none"
                 >
                     {children ? (
                         children
                     ) : (
-                        <EllipsisVertical className="h-4 w-4" />
+                        <EllipsisVertical
+                            className="h-4 w-4"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                            }}
+                        />
                     )}
                 </DropdownMenuTrigger>
-                <DropdownMenuContent>
+                <DropdownMenuContent
+                    onClick={(e) => {
+                        e.stopPropagation();
+                    }}
+                >
                     <DropdownMenuItem
-                        onClick={() => {
-                            console.log("edit");
+                        onClick={(e) => {
+                            e.stopPropagation();
                         }}
                     >
                         <Link href={`/editor/${portalId}`}>Edit Portal</Link>
@@ -111,6 +120,7 @@ function PortalOptionsDropdown({
 
                     <DropdownMenuItem
                         onClick={(e) => {
+                            e.stopPropagation();
                             e.preventDefault();
                             setDeleteModalOpen(true);
                         }}
