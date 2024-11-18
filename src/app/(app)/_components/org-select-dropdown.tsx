@@ -79,7 +79,7 @@ export function OrgSelectDropdown({
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
-                            className="flex items-center gap-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                            className="flex items-center justify-start p-0 pr-2 rounded gap-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-8 w-8 rounded-sm">
                                 {currentOrg?.image ? (
@@ -95,14 +95,14 @@ export function OrgSelectDropdown({
                             </Avatar>
 
                             <div className="text-md grid flex-1 text-left leading-tight">
-                                <span className="truncate text-lg font-semibold">
+                                <span className="truncate text-sm font-medium">
                                     {currentOrg?.name}
                                 </span>
                                 <span className="truncate text-xs">
                                     {currentOrg?.plan}
                                 </span>
                             </div>
-                            <ChevronsUpDown className="ml-auto" />
+                            <ChevronsUpDown className="" />
                         </SidebarMenuButton>
                     </DropdownMenuTrigger>
 
