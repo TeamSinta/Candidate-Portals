@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Section } from "@/types/portal";
+import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
 
 type PortalData = {
     candidateName: string;
@@ -33,6 +34,7 @@ type CardNavigatorMenuProps = {
     isCardCollapsed: boolean;
     onSectionSelect: (index: number) => void;
     toggleCardCollapse: () => void;
+    customData: Record<string, string>;
 };
 
 const CardNavigatorMenu: React.FC<CardNavigatorMenuProps> = ({
@@ -41,6 +43,7 @@ const CardNavigatorMenu: React.FC<CardNavigatorMenuProps> = ({
     isCardCollapsed,
     onSectionSelect,
     toggleCardCollapse,
+    customData,
 }) => {
     const { candidateName, roleTitle, orgName, userName, sections } =
         portalData;
@@ -102,7 +105,10 @@ const CardNavigatorMenu: React.FC<CardNavigatorMenuProps> = ({
                                     <div className="flex items-center gap-2">
                                         <Circle className="h-4 w-4 text-gray-300" />
                                         <span className="text-sm">
-                                            {section.title}
+                                            {replaceText(
+                                                section.title,
+                                                customData,
+                                            )}
                                         </span>
                                     </div>
                                 </div>

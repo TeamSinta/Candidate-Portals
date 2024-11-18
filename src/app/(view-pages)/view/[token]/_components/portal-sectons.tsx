@@ -170,6 +170,7 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                 isCardCollapsed={isCardCollapsed}
                 onSectionSelect={handleSectionSelect}
                 toggleCardCollapse={toggleCardCollapse}
+                customData={replaceData}
             />
         </div>
     );
