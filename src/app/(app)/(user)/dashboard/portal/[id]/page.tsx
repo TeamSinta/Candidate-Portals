@@ -35,7 +35,30 @@ import {
     getAverageDuration,
     getTopEngaged,
 } from "@/server/tinybird/pipes/pipes";
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { deletePortal } from "@/server/actions/portal/mutations";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import PortalOptionsDropdown from "./_components/portal-options-dropdown";
 interface Props {
     params: { id: string };
 }
@@ -105,7 +128,13 @@ export default async function PortalView({ params }: Props) {
                     </Tooltip>
 
                     <Separator orientation="vertical" className="h-6" />
-                    <MoreHorizontalIcon className="h-5 w-5 cursor-pointer rounded-full bg-gray-100 p-1 dark:bg-gray-700" />
+                    <PortalOptionsDropdown
+                        portalId={params.id}
+                        portalTitle={portalData.portal.title ?? ""}
+                        redirect={true}
+                    >
+                        <MoreHorizontalIcon className="h-5 w-5 cursor-pointer rounded-full bg-gray-100 p-1 dark:bg-gray-700" />
+                    </PortalOptionsDropdown>
 
                     <ClientSheet portalData={portalData} />
                 </div>
