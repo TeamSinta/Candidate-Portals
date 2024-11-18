@@ -108,17 +108,20 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         setSelectedSectionIndex(index);
         setIsCardCollapsed(false);
     };
-
+    const replaceData = {
+        name: portalData.candidateName,
+        email: portalData.candidateEmail,
+    } as Record<string, string>;
     const renderSectionContent = (section: Section) => {
         switch (section.contentType) {
             case SectionContentType.YOOPTA:
                 return (
                     <Editor
                         content={JSON.parse(
-                            replaceText(JSON.stringify(section.content), {
-                                name: portalData.candidateName,
-                                email: portalData.candidateEmail,
-                            }),
+                            replaceText(
+                                JSON.stringify(section.content),
+                                replaceData,
+                            ),
                         )}
                         editable={false}
                         onChange={() => {
@@ -127,7 +130,7 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                         onTitleChange={() => {
                             return null;
                         }}
-                        title={section.title}
+                        title={replaceText(section.title, replaceData)}
                     />
                 );
             case SectionContentType.URL:

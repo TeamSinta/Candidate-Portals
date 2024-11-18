@@ -37,6 +37,10 @@ export async function createPortal() {
     return newPortal;
 }
 
+export async function deletePortal(portalId: string) {
+    await db.delete(portal).where(eq(portal.id, portalId));
+}
+
 export async function updateSectionContent({
     id,
     portalId,
