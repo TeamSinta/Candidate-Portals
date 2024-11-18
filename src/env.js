@@ -32,7 +32,6 @@ export const env = createEnv({
         LEMONSQUEEZY_API_KEY: z.string(),
         LEMONSQUEEZY_STORE_ID: z.string(),
         LEMONSQUEEZY_WEBHOOK_SECRET: z.string(),
-
     },
 
     /**
@@ -72,9 +71,12 @@ export const env = createEnv({
         NEXT_PUBLIC_POSTHOG_KEY: process.env.NEXT_PUBLIC_POSTHOG_KEY,
         NEXT_PUBLIC_WAITLIST_MODE: process.env.NEXT_PUBLIC_WAITLIST_MODE,
         NEXT_PUBLIC_MAINTENANCE_MODE: process.env.NEXT_PUBLIC_MAINTENANCE_MODE,
-        NEXT_PUBLIC_TINYBIRD_INGESTION_TOKEN: process.env.NEXT_PUBLIC_TINYBIRD_INGESTION_TOKEN,
-        NEXT_PUBLIC_TINYBIRD_DATASOURCE: process.env.NEXT_PUBLIC_TINYBIRD_DATASOURCE,
-        NEXT_PUBLIC_TINYBIRD_PIPE_TOKEN: process.env.NEXT_PUBLIC_TINYBIRD_PIPE_TOKEN,
+        NEXT_PUBLIC_TINYBIRD_INGESTION_TOKEN:
+            process.env.NEXT_PUBLIC_TINYBIRD_INGESTION_TOKEN,
+        NEXT_PUBLIC_TINYBIRD_DATASOURCE:
+            process.env.NEXT_PUBLIC_TINYBIRD_DATASOURCE,
+        NEXT_PUBLIC_TINYBIRD_PIPE_TOKEN:
+            process.env.NEXT_PUBLIC_TINYBIRD_PIPE_TOKEN,
     },
     /**
      * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially

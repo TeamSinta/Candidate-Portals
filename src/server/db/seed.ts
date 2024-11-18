@@ -95,7 +95,9 @@ const main = async () => {
                     section.index,
                 ],
             );
-            console.log(`Section inserted with ID: ${sectionResult.rows[0].id}`);
+            console.log(
+                `Section inserted with ID: ${sectionResult.rows[0].id}`,
+            );
         }
 
         // Insert link

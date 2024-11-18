@@ -57,7 +57,13 @@ export default function CreateLinkSheetContent({
 
     const onSubmit = async () => {
         try {
-            console.log(name, email, roleTitle, linkedProfile, portalData.portal.portalId);
+            console.log(
+                name,
+                email,
+                roleTitle,
+                linkedProfile,
+                portalData.portal.portalId,
+            );
 
             await mutateAsync();
 
@@ -82,13 +88,14 @@ export default function CreateLinkSheetContent({
         } catch (error) {
             // Show error toast
             toast.error(
-                (error as { message?: string })?.message ?? "Organization could not be created"
+                (error as { message?: string })?.message ??
+                    "Organization could not be created",
             );
         }
     };
 
     return (
-        <div className="flex flex-col h-full justify-between space-y-6">
+        <div className="flex h-full flex-col justify-between space-y-6">
             {/* Header */}
             <SheetHeader>
                 <SheetTitle className="text-xl font-semibold text-gray-900">
@@ -97,14 +104,18 @@ export default function CreateLinkSheetContent({
                     </div>
                 </SheetTitle>
                 <SheetDescription className="text-sm text-gray-500">
-                    Configure your link settings to ensure proper access and security.
+                    Configure your link settings to ensure proper access and
+                    security.
                 </SheetDescription>
             </SheetHeader>
 
             {/* Main Form */}
             <div className="flex-grow space-y-6">
                 <div>
-                    <Label htmlFor="name" className="text-sm font-medium text-gray-700">
+                    <Label
+                        htmlFor="name"
+                        className="text-sm font-medium text-gray-700"
+                    >
                         Name
                     </Label>
                     <Input
@@ -117,7 +128,11 @@ export default function CreateLinkSheetContent({
                 </div>
 
                 {/* Optional Fields */}
-                <Accordion type="single" collapsible defaultValue="optional-fields">
+                <Accordion
+                    type="single"
+                    collapsible
+                    defaultValue="optional-fields"
+                >
                     <AccordionItem value="optional-fields">
                         <AccordionTrigger className="flex items-center justify-between text-sm font-medium text-gray-800">
                             <div className="flex items-center space-x-2">
@@ -127,10 +142,14 @@ export default function CreateLinkSheetContent({
                         </AccordionTrigger>
                         <AccordionContent className="mt-2 space-y-4">
                             <SheetDescription className="text-xs text-gray-500">
-                                Add these fields to use custom variables in your portals.
+                                Add these fields to use custom variables in your
+                                portals.
                             </SheetDescription>
                             <div>
-                                <Label htmlFor="email" className="text-sm font-medium text-gray-700">
+                                <Label
+                                    htmlFor="email"
+                                    className="text-sm font-medium text-gray-700"
+                                >
                                     Email (Optional)
                                 </Label>
                                 <Input
@@ -142,25 +161,35 @@ export default function CreateLinkSheetContent({
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="roleTitle" className="text-sm font-medium text-gray-700">
+                                <Label
+                                    htmlFor="roleTitle"
+                                    className="text-sm font-medium text-gray-700"
+                                >
                                     Role Title (Optional)
                                 </Label>
                                 <Input
                                     id="roleTitle"
                                     value={roleTitle}
-                                    onChange={(e) => setRoleTitle(e.target.value)}
+                                    onChange={(e) =>
+                                        setRoleTitle(e.target.value)
+                                    }
                                     placeholder="Enter role title"
                                     className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
                                 />
                             </div>
                             <div>
-                                <Label htmlFor="linkedProfile" className="text-sm font-medium text-gray-700">
+                                <Label
+                                    htmlFor="linkedProfile"
+                                    className="text-sm font-medium text-gray-700"
+                                >
                                     Linked Profile Link (Optional)
                                 </Label>
                                 <Input
                                     id="linkedProfile"
                                     value={linkedProfile}
-                                    onChange={(e) => setLinkedProfile(e.target.value)}
+                                    onChange={(e) =>
+                                        setLinkedProfile(e.target.value)
+                                    }
                                     placeholder="LinkedIn URL"
                                     className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
                                 />
@@ -194,7 +223,9 @@ export default function CreateLinkSheetContent({
                                 />
                             </div>
                             <div className="flex items-center justify-between">
-                                <span className="text-sm text-gray-700">Set Expiry</span>
+                                <span className="text-sm text-gray-700">
+                                    Set Expiry
+                                </span>
                                 <Switch
                                     id="expiry"
                                     checked={expiryEnabled}
@@ -209,36 +240,36 @@ export default function CreateLinkSheetContent({
 
             {/* Buttons at the Bottom */}
             <div className="mt-6 flex justify-end space-x-2">
-            {name ? (
+                {name ? (
                     <div className="mt-6 flex w-full justify-end">
-                    <div className="group relative w-full">
-                        <span
-                            className="absolute inset-0 animate-rainbow rounded-md bg-[linear-gradient(90deg,theme('colors.red.300'),theme('colors.purple.300'),theme('colors.blue.300'),theme('colors.cyan.300'),theme('colors.lime.300'),theme('colors.orange.300'))] bg-[length:200%] blur-[5px] group-hover:blur-[2px]"
-                            aria-hidden="true"
-                        ></span>
+                        <div className="group relative w-full">
+                            <span
+                                className="absolute inset-0 animate-rainbow rounded-md bg-[linear-gradient(90deg,theme('colors.red.300'),theme('colors.purple.300'),theme('colors.blue.300'),theme('colors.cyan.300'),theme('colors.lime.300'),theme('colors.orange.300'))] bg-[length:200%] blur-[5px] group-hover:blur-[2px]"
+                                aria-hidden="true"
+                            ></span>
 
-                        <Button
-                            variant="rainbow"
-                            onClick={onSubmit}
-                            disabled={isPending || isMutatePending}
-                            className="relative w-full text-white"
-                        >
-                            Create Link
-                        </Button>
+                            <Button
+                                variant="rainbow"
+                                onClick={onSubmit}
+                                disabled={isPending || isMutatePending}
+                                className="relative w-full text-white"
+                            >
+                                Create Link
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            ) : (
-                <div className="mt-6 flex w-full justify-end">
-                    <div className="group relative w-full">
-                        <Button
-                            variant="default"
-                            disabled={true}
-                            className="relative w-full"
-                        >
-                            Create Link
-                        </Button>
+                ) : (
+                    <div className="mt-6 flex w-full justify-end">
+                        <div className="group relative w-full">
+                            <Button
+                                variant="default"
+                                disabled={true}
+                                className="relative w-full"
+                            >
+                                Create Link
+                            </Button>
+                        </div>
                     </div>
-                </div>
                 )}
             </div>
         </div>

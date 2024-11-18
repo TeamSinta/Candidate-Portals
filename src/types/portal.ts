@@ -24,6 +24,7 @@ export interface PortalData {
 
 // Update the Section type to use the specific content types from PortalData
 export type Section = {
+  sectionId: Key | null | undefined;
   id: string;
   title: string;
   content: any;
@@ -79,3 +80,17 @@ export interface MergedEngagedData {
   last_view_timestamp: string; // Timestamp in string format
   candidate_name: string; // Name of the candidate
 }
+
+
+export type PortalReaderData = {
+  candidateName: string;
+  candidateEmail: string | null;
+  roleTitle: string;
+  orgName: string;
+  userName: string;
+  portalId: string;
+  linkId: string;
+  userId: string
+  customContent: object | string | null;
+  sections: Section[];
+};

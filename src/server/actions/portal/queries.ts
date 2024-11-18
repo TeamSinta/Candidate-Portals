@@ -1,6 +1,13 @@
 "use server";
 import { db } from "@/server/db";
-import { link, portal, candidate, section } from "@/server/db/schema";
+import {
+    link,
+    portal,
+    candidate,
+    section,
+    organizations,
+    users,
+} from "@/server/db/schema";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { getOrganizations } from "../organization/queries";
 import { protectedProcedure } from "@/server/procedures";
@@ -21,12 +28,13 @@ export async function getPortalData(token: string) {
 
     if (!linkData) return null;
 
-    // Fetch candidate and portal data associated with the link
+    // Fetch candidate data associated with the link
     const candidateData = await db
         .select({
             candidateName: candidate.name,
             candidateEmail: candidate.email,
-            userId: candidate.id, // Adding user_id
+            roleTitle: candidate.role, // Adding role title
+            organizationId: candidate.organizationId, // Adding organizationId to link to organizations table
         })
         .from(candidate)
         .where(eq(candidate.id, linkData.candidateId))
@@ -34,6 +42,31 @@ export async function getPortalData(token: string) {
         .then((results) => results[0]);
 
     if (!candidateData) return null;
+
+    // Fetch organization name using organizationId
+    const organizationData = await db
+        .select({
+            orgName: organizations.name, // Fetch organization name
+            ownerId: organizations.ownerId,
+        })
+        .from(organizations)
+        .where(eq(organizations.id, candidateData.organizationId))
+        .execute()
+        .then((results) => results[0]);
+
+    if (!organizationData) return null;
+
+    // Fetch user data using organization ownerId from the organizations table
+    const userData = await db
+        .select({
+            userName: users.name, // Fetch user name
+        })
+        .from(users)
+        .where(eq(users.id, organizationData.ownerId))
+        .execute()
+        .then((results) => results[0]);
+
+    if (!userData) return null;
 
     const sections = await db
         .select({
@@ -49,12 +82,14 @@ export async function getPortalData(token: string) {
     return {
         candidateName: candidateData.candidateName,
         candidateEmail: candidateData.candidateEmail,
-        userId: candidateData.userId, // Including user_id
-        portalId: linkData.portalId, // Including portal_id
-        linkId: linkData.id, // Including link_id
+        roleTitle: candidateData.roleTitle, // Include role title
+        orgName: organizationData.orgName, // Include organization name
+        userName: userData.userName, // Include user name
+        portalId: linkData.portalId, // Include portal_id
+        linkId: linkData.id, // Include link_id
         customContent: linkData.customContent as object | string | null, // Explicitly type it here
         sections: sections.map((section) => ({
-            sectionId: section.id, // Including section_id
+            sectionId: section.id, // Include section_id
             title: section.title,
             content: section.content as string, // Ensure content is string for rendering
             contentType: section.contentType,

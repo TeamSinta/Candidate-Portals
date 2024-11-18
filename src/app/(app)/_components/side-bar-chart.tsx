@@ -53,7 +53,9 @@ export function TopEngagingUsersChart({ data }: { data: MergedEngagedData[] }) {
         <Card className="border-none shadow-none">
             <CardHeader>
                 <CardTitle>Top Engaging Users</CardTitle>
-                <CardDescription>Showing the top users by engagement</CardDescription>
+                <CardDescription>
+                    Showing the top users by engagement
+                </CardDescription>
             </CardHeader>
             <CardContent>
                 <ChartContainer
@@ -66,7 +68,6 @@ export function TopEngagingUsersChart({ data }: { data: MergedEngagedData[] }) {
                         margin={{
                             left: 12,
                         }}
-
                     >
                         <YAxis
                             dataKey="candidate_name"

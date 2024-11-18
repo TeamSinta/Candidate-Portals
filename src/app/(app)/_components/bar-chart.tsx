@@ -1,5 +1,11 @@
 "use client";
-import { Bar, BarChart, CartesianGrid, ResponsiveContainer, XAxis } from "recharts";
+import {
+    Bar,
+    BarChart,
+    CartesianGrid,
+    ResponsiveContainer,
+    XAxis,
+} from "recharts";
 import {
     Card,
     CardContent,
@@ -42,7 +48,10 @@ export function BarChartComponent({ data }: BarChartComponentProps) {
                 <CardDescription>Time Spent Per Section (Avg.)</CardDescription>
             </CardHeader>
             <CardContent>
-                <ChartContainer config={chartConfig} className="max-h-[250px] w-full">
+                <ChartContainer
+                    config={chartConfig}
+                    className="max-h-[250px] w-full"
+                >
                     <ResponsiveContainer width="100%" height={250}>
                         <BarChart data={data}>
                             <CartesianGrid vertical={false} />
