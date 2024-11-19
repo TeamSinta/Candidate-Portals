@@ -141,7 +141,11 @@ const SlidingSidebar = () => {
                 onChange={(key, value) => setUrlContentData({ ...urlContentData, [key]: value })}
                 onTitleChange={setTitle}
                 editable={true}
+                onSave={() => { /* Define what happens when Save is clicked */ }}
+                isSlidingSidebarOpen={isSlidingSidebarOpen}
+                setSlidingSidebarOpen={setSlidingSidebarOpen}
               />
+
             )}
             {!loading && contentType === SectionContentType.YOOPTA && sectionData && portalData && (
               <EditorWrapper section={sectionData} portal={portalData} />

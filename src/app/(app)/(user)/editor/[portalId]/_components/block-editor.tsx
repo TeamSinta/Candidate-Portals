@@ -104,23 +104,6 @@ function BlockEditor({
         await deleteSection(sectionId, portalId);
     }
 
-    function handleCreateBlock() {
-        const newId = generateGUID();
-        setBlocks((prevBlocks) => {
-            const newBlock = {
-                contentType: undefined,
-                title: "",
-                content: { title: "", url: "" },
-                id: newId,
-                portalId: portalId,
-                index: Math.max(...prevBlocks.map((block) => block.index)) + 1,
-            };
-            return [...prevBlocks, newBlock];
-        });
-        setSelectedBlock(newId);
-    }
-
-
     return (
         <>
             {/* <PortalEditBlock
