@@ -85,7 +85,7 @@ export default function Editor({
     className?: string;
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
-    const titleRef = useRef<HTMLInputElement>(null);
+    const titleRef = useRef<HTMLTextAreaElement>(null);
 
     useEffect(() => {
         // If the last content block is deleted, go back to the title
@@ -94,10 +94,24 @@ export default function Editor({
         }
     }, [content]);
 
+    useEffect(() => {
+        if (titleRef.current) {
+            const textarea = titleRef.current;
+            textarea.style.height = "auto"; // Reset height to auto for correct calculation
+            textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to fit content
+        }
+    }, [title]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        onTitleChange(e.target.value);
+    };
+
     function createFirstBlock() {
         ParagraphCommands.insertParagraph(editor, { focus: true });
     }
-    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleEnterPress = (
+        event: React.KeyboardEvent<HTMLTextAreaElement>,
+    ) => {
         if (event.key === "Enter") {
             event.preventDefault();
             // If there's no content on the editor, you're unable to focus. So you gotta create a Content Block first.
@@ -121,15 +135,18 @@ export default function Editor({
             )}
         >
             <div className="w-1/2">
-                <input
-                    type="text"
+                <textarea
+                    // type="text"
                     placeholder={"Section Title"}
-                    className="border-0 p-0 text-4xl font-semibold focus:border-0 focus:outline-none"
-                    onChange={(e) => onTitleChange(e.target.value)}
+                    className="w-full resize-none overflow-hidden text-pretty border-0 p-0 text-4xl font-semibold focus:border-0 focus:outline-none"
+                    // onChange={(e) => onTitleChange(e.target.value)}
+                    onChange={handleInputChange}
                     value={title}
                     onKeyDown={handleEnterPress}
                     autoFocus={Object.keys(content).length === 0}
-                    ref={titleRef}
+                    ref={(el) => {
+                        titleRef.current = el;
+                    }}
                 />
                 {Object.keys(content).length === 0 && (
                     <div className="my-4 text-sm  text-gray-700">
