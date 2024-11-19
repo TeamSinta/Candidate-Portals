@@ -3,7 +3,7 @@ import { getPortalQuery } from "@/server/actions/portal/queries";
 import { notFound } from "next/navigation";
 import BlockEditor from "./_components/block-editor";
 import GridPattern from "@/components/ui/grid-pattern";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
 import { Separator } from "@/components/ui/separator";
 import TitleEditorClient from "./_components/portal-edit-block";
 import DotPattern from "@/components/ui/dot-pattern";
@@ -34,10 +34,10 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
       {/* Main Content Section */}
       <div className="relative flex h-full  flex items-start gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30">
         {/* Grid Background Pattern and Block Editor */}
-        <div className="absolute inset-0 z-5 h-full min-h-[90vh]">
+        <div className="absolute inset-0 z-5">
         <GridPattern
         className={cn(
-          "[mask-image:radial-gradient(600px_circle_at_center,white,transparent)]",
+          "[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
         )}
       />
         </div>

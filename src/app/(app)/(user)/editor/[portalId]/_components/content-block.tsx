@@ -36,6 +36,7 @@ import { useRouter } from "next/navigation";
 import NextLink from "next/link";
 import { NotionLogoIcon } from "@radix-ui/react-icons";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { useSlidingSidebar } from "./sliding-sidebar";
 
 export interface SaveBlockArgs {
     content: ContentDataType;
@@ -63,19 +64,19 @@ function ContentBlock({
     initialContentType,
     initialContentData,
     initialTitle,
-    onSaveBlock,
     onDeleteBlock,
     editing,
     editBlock,
     cancelEdit,
 }: ContentBlockProps) {
-    const [contentType, setContentType] = useState<
+    const [contentType,] = useState<
         SectionContentType | undefined
     >(initialContentType);
-    const [title, setTitle] = useState<string>(initialTitle ?? "");
-    const [urlContentData, setUrlContentData] = useState<UrlContentData>(
+    const [title,] = useState<string>(initialTitle ?? "");
+    const [urlContentData,] = useState<UrlContentData>(
         isUrlContentData(initialContentData) ? initialContentData : { url: "" },
     );
+    console.log(initialContentData, "inistal data")
     const [yooptaContentData, setYooptaContentData] =
         useState<YooptaContentValue>(
             isYooptaContentData(initialContentData) ? initialContentData : {},
@@ -92,7 +93,12 @@ function ContentBlock({
         isYooptaContentData(initialContentData) ? initialContentData : {},
     );
 
+    // Toggle Sidebar
+    const { toggleSlidingSidebar, setContentType, setTitle, setSectionId, setUrlContentData } = useSlidingSidebar();
+
+
     const router = useRouter();
+
     function handleUrlContentDataChange(key: string, value: string) {
         setUrlContentData((prevData) => ({
             ...prevData,
@@ -100,30 +106,7 @@ function ContentBlock({
         }));
     }
 
-    async function handleSave() {
-        if (!contentType) return;
-        const content =
-            contentType === SectionContentType.URL
-                ? { ...urlContentData }
-                : { ...yooptaContentData };
-        await onSaveBlock({
-            id,
-            contentType,
-            content,
-            title,
-        });
 
-        // Navigate to section/notion editor page
-        if (contentType === SectionContentType.YOOPTA) {
-            router.push("/editor/content/" + id);
-        } else {
-            // Update backup with saved data
-            setBackupContentType(contentType);
-            setBackupTitle(title);
-            setBackupUrlContentData({ ...urlContentData });
-            setBackupYooptaContentData({ ...yooptaContentData });
-        }
-    }
     function handleCancel() {
         // Revert to backup data
         setContentType(backupContentType);
@@ -134,10 +117,19 @@ function ContentBlock({
         cancelEdit();
     }
 
+
+    function handleViewClick() {
+      setContentType(initialContentType);
+      setTitle(initialTitle);
+      setSectionId(id); // Pass the section ID
+      setUrlContentData(urlContentData);
+      toggleSlidingSidebar();
+    }
+
     return (
       <div className="relative group">
       {/* Card Container */}
-      <Card className="overflow-hidden h-[15rem] w-[22rem] rounded-sm shadow-sm border border-gray-200 transition-transform duration-300 hover:shadow-lg hover:scale-105">
+      <Card className="overflow-hidden h-[15rem] max-w-[24rem]  rounded-sm shadow-sm border border-gray-200 transition-transform duration-300 hover:shadow-lg hover:scale-105">
         {/* Number Container */}
         <div className="absolute top-2 left-2 bg-white text-black text-sm font-semibold rounded-full h-8 w-8 flex items-center justify-center shadow">
           {index}
@@ -173,8 +165,8 @@ function ContentBlock({
 
         {/* Grayed-out Effect and View Button on Hover */}
         <div className="absolute inset-0 bg-black bg-opacity-30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <Button variant="ghost" className="bg-white text-black px-4 py-2 rounded">
-            View
+        <Button variant="ghost" onClick={handleViewClick} className="bg-white text-black px-4 py-2 rounded">
+        View
           </Button>
         </div>
 

@@ -44,7 +44,7 @@ export default function CreatePortalButton() {
           <PlusIcon className="h-5 w-5" aria-hidden="true" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px] rounded-lg">
+      <DialogContent className="sm:max-w-[425px] rounded-lg ">
         <DialogHeader>
           <DialogTitle>Name your Portal</DialogTitle>
           <DialogDescription>
@@ -60,7 +60,7 @@ export default function CreatePortalButton() {
             value={portalName}
             onChange={(e) => setPortalName(e.target.value)}
             placeholder="Enter workspace name"
-            className="w-full"
+            className="w-full rounded"
           />
         </div>
         <div className="flex justify-start">
@@ -69,7 +69,7 @@ export default function CreatePortalButton() {
             disabled={loading}
             className={loading ? "loading rounded" : "rounded"}
           >
-            {loading ? "Creating..." : "Create"}
+            {loading ? "Creating..." : "Submit"}
           </Button>
         </div>
       </DialogContent>

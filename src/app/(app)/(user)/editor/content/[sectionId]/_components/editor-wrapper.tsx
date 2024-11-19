@@ -50,19 +50,21 @@ function EditorWrapper({ section, portal }: Props) {
     }
 
     return (
-        <AppPageShell
-            title={`${portal.title ?? "Untitled"}  >  ${section.title}`}
-            description="Edit the contents of your portal here"
-            buttons={[
-                <ContentEditorPageButtons
+        <>
+          <div className="relative">
+      {/* Sticky Toolbar */}
+
+      <div className="sticky top-0 z-10 p-4">
+         <ContentEditorPageButtons
                     key={0}
                     onSave={handleSave}
                     onTogglePreview={handleTogglePreview}
                     isPreviewing={isPreviewing}
-                />,
-            ]}
-        >
-            <div className="container">
+                    sectionid={section.id}
+                />
+                  </div>
+
+            <div >
                 <Editor
                     // key={isPreviewing ? "preview" : "edit"}
                     // content={JSON.parse(
@@ -89,7 +91,8 @@ function EditorWrapper({ section, portal }: Props) {
                     title={title ?? ""}
                 />
             </div>
-        </AppPageShell>
+            </div>
+        </>
     );
 }
 

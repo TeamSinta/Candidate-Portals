@@ -89,7 +89,7 @@ const DATA = {
 
 export function HoverBar() {
   return (
-    <div className="fixed bottom-5 left-0 right-0 flex items-center justify-center gap-4 p-4 rounded-t-2xl">
+    <div className="sticky bottom-0 left-0 right-0  flex z-50 items-center justify-center items-center gap-4 p-4 rounded-t-2xl ">
 
       <TooltipProvider>
         <Dock direction="middle" className="w-1000px shadow-md" >
