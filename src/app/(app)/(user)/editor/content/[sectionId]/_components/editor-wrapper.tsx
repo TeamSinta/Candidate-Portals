@@ -52,6 +52,7 @@ function EditorWrapper({ section, portal }: Props) {
     return (
         <AppPageShell
             title={`${portal.title ?? "Untitled"}`}
+            titleLink={`/editor/${portal.id}`}
             description="Edit the contents of your portal here"
             buttons={[
                 <ContentEditorPageButtons
