@@ -2,7 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
-import { CalendarIcon, EyeIcon, HomeIcon, Link2Icon, LinkIcon, MailIcon, PencilIcon } from "lucide-react";
+import { CalendarIcon, EyeIcon, FileText, HomeIcon, Link2Icon, LinkIcon, MailIcon, PencilIcon } from "lucide-react";
 
 import { Separator } from "@/components/ui/separator";
 import {
@@ -14,12 +14,13 @@ import {
 import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Dock, DockIcon } from "@/components/ui/dock";
+import ShinyButton from "@/components/ui/shiny-button";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
 const Icons = {
   calendar: (props: IconProps) => <CalendarIcon {...props} />,
-  email: (props: IconProps) => <MailIcon {...props} />,
+  email: (props: IconProps) => <FileText {...props} />,
   link: (props: IconProps) => <LinkIcon {...props} />,
   linkedin: (props: IconProps) => (
     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" {...props}>
@@ -74,18 +75,8 @@ const DATA = {
         url: "#",
         icon: Icons.link,
       },
-      LinkedIn: {
-        name: "LinkedIn",
-        url: "#",
-        icon: Icons.linkedin,
-      },
-      X: {
-        name: "X",
-        url: "#",
-        icon: Icons.x,
-      },
-      email: {
-        name: "Send Email",
+      Create: {
+        name: "Create Doc",
         url: "#",
         icon: Icons.email,
       },
@@ -103,12 +94,12 @@ export function HoverBar() {
       <TooltipProvider>
         <Dock direction="middle" className="w-1000px shadow-md" >
 
-            <DockIcon size={48} className="w-480 mx-12">
+            <DockIcon size={48} className="w-480 mx-14">
             <Tooltip>
-                <TooltipTrigger asChild>
-                <Button variant={'default'} className=" bg-indigo-500 text-white text-sm  rounded-sm hover:bg-indigo-600 ">
+                <TooltipTrigger asChild className="w-96">
+                <ShinyButton className=" bg-indigo-500 text-white text-sm  rounded-sm hover:bg-indigo-600 ">
         Share my Portal
-      </Button>
+      </ShinyButton>
                 </TooltipTrigger>
                 <TooltipContent>
                   <p>Publish</p>

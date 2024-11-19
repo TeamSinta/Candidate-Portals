@@ -13,29 +13,27 @@ import { YooptaContentValue } from "@yoopta/editor";
 import { asc, eq } from "drizzle-orm";
 
 // portal should be initialized with an initial section
-export async function createPortal() {
-    const { user } = await protectedProcedure();
-    const { currentOrg } = await getOrganizations();
-
-    if (!currentOrg.id || !user.id) throw new Error("Missing data");
-
-    const [newPortal] = await db
-        .insert(portal)
-        .values({ orgId: currentOrg.id, ownerId: user.id })
-        .returning()
-        .execute();
-
-    if (!newPortal?.id) throw new Error("Failed to create portal");
-
-    // const newSection = await db.insert(section).values({
-    //     portalId: newPortal.id,
-    //     title: "title",
-    //     content: {},
-    //     contentType: SectionContentType.YOOPTA,
-    //     index: 0,
-    // });
-    return newPortal;
+interface CreatePortalParams {
+  title: string;
 }
+
+export async function createPortal({ title }: CreatePortalParams) {
+  const { user } = await protectedProcedure();
+  const { currentOrg } = await getOrganizations();
+
+  if (!currentOrg.id || !user.id) throw new Error("Missing data");
+
+  const [newPortal] = await db
+    .insert(portal)
+    .values({ orgId: currentOrg.id, ownerId: user.id, title })
+    .returning()
+    .execute();
+
+  if (!newPortal?.id) throw new Error("Failed to create portal");
+
+  return newPortal;
+}
+
 
 export async function updateSectionContent({
     id,

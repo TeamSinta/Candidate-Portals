@@ -15,8 +15,10 @@ import { updatePortalData } from "@/server/actions/portal/queries";
 import { toast } from "sonner";
 import PortalEditBlock from "./portal-edit-block";
 import { useRouter } from "next/navigation";
-import { PlusCircleIcon, PlusIcon } from "lucide-react";
+import { FileText, Link, PlusCircleIcon, PlusIcon } from "lucide-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTrigger } from "@/components/ui/dialog";
+import { DialogTitle } from "@radix-ui/react-dialog";
 function BlockEditor({
     portalId,
     sections,
@@ -140,37 +142,107 @@ function BlockEditor({
 
                     </div> */}
 
-<div className="relative group cursor-pointer" onClick={handleCreateBlock}>
-      {/* Skeleton Card Container */}
-      <Card className="flex flex-col items-center justify-center h-[15rem] w-[22rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
-        {/* Skeleton Header */}
-        <CardHeader className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
-          <PlusIcon size={32} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
-        </CardHeader>
-        {/* Skeleton Content */}
-        <CardContent className="text-center text-sm text-gray-500 sm:pt-8">
-          Add Page
-        </CardContent>
-      </Card>
-    </div>
+<Dialog>
+           <DialogTrigger asChild>
+             <div className="relative group cursor-pointer">
+               {/* Skeleton Card Container */}
+               <Card className="flex flex-col items-center justify-center h-[15rem] w-[22rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
+                 <div className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
+                   <PlusIcon size={32} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+                 </div>
+                 <CardContent className="text-center justify-center text-sm text-gray-500 sm:pt-8">
+                   Add Page
+                 </CardContent>
+               </Card>
+             </div>
+           </DialogTrigger>
+           <DialogContent className="sm:max-w-[700px] rounded-lg">
+             <DialogHeader>
+               <DialogTitle>
+                 <h1 className="text-2xl font-semibold font-heading">Add a Section</h1>
+               </DialogTitle>
+             </DialogHeader>
+             <div className="flex justify-around py-6">
+               {/* Box 1: Link */}
+               <div className="flex  flex-col items-center">
+                 <div className="flex flex-col items-center justify-center border rounded-lg p-16 hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-gray-50">
+                   <Link size={24} className="text-gray-500 mb-2" />
+                   <h3 className="font-semibold text-base">Link</h3>
+                   <p className="text-sm text-gray-500 text-center mt-1">Attach an external link.</p>
+                 </div>
+                 {/* Description Under Box 1 */}
+                 <p className="text-xs text-gray-400 text-center mt-4 max-w-64">
+                   You can add links to external resources or documentation.
+                 </p>
+               </div>
+               {/* Box 2: Custom Page */}
+               <div className="flex flex-col items-center">
+                 <div className="flex flex-col items-center justify-center border rounded-lg p-16 hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-gray-50">
+                   <FileText size={24} className="text-gray-500 mb-2" />
+                   <h3 className="font-semibold text-base">Create Page</h3>
+                   <p className="text-sm text-gray-500 text-center mt-1">Create a Notion-like page.</p>
+                 </div>
+                 {/* Description Under Box 2 */}
+                 <p className="text-xs text-gray-400 text-center mt-4 max-w-64">
+                   Build a fully customizable page for your workspace.
+                 </p>
+               </div>
+             </div>
+           </DialogContent>
+         </Dialog>
 
 
                 </div>
             )}
             {blocks.length === 0 && (
-                <div className="relative group cursor-pointer" onClick={handleCreateBlock}>
-                {/* Skeleton Card Container */}
-                <Card className="flex flex-col items-center justify-center h-[15rem] w-[22rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
-                  {/* Skeleton Header */}
-                  <CardHeader className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
-                    <PlusIcon size={32} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
-                  </CardHeader>
-                  {/* Skeleton Content */}
-                  <CardContent className="text-center text-sm text-gray-500 sm:pt-8">
-                    Add Page
-                  </CardContent>
-                </Card>
-              </div>
+           <Dialog>
+           <DialogTrigger asChild>
+             <div className="relative group cursor-pointer">
+               {/* Skeleton Card Container */}
+               <Card className="flex flex-col items-center justify-center h-[15rem] w-[22rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
+                 <div className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
+                   <PlusIcon size={32} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+                 </div>
+                 <CardContent className="text-center justify-center text-sm text-gray-500 sm:pt-8">
+                   Add Page
+                 </CardContent>
+               </Card>
+             </div>
+           </DialogTrigger>
+           <DialogContent className="sm:max-w-[800px] rounded-lg">
+             <DialogHeader>
+               <DialogTitle>
+                 <h1 className="text-2xl font-semibold font-heading">Add a Section</h1>
+               </DialogTitle>
+             </DialogHeader>
+             <div className="flex justify-around py-6">
+               {/* Box 1: Link */}
+               <div className="flex  flex-col items-center">
+               <div className="flex flex-col items-center justify-center border rounded-lg p-16 hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-gray-50">
+                   <Link size={24} className="text-gray-500 mb-2" />
+                   <h3 className="font-semibold text-base">Link</h3>
+                   <p className="text-sm text-gray-500 text-center mt-1">Attach an external link.</p>
+                 </div>
+                 {/* Description Under Box 1 */}
+                 <p className="text-xs text-gray-400 text-center mt-4 max-w-64">
+                   You can add links to external resources or documentation.
+                 </p>
+               </div>
+               {/* Box 2: Custom Page */}
+               <div className="flex flex-col items-center">
+                 <div className="flex flex-col items-center justify-center border rounded-lg p-16 hover:shadow-lg transition-shadow duration-300 cursor-pointer bg-gray-50">
+                   <FileText size={24} className="text-gray-500 mb-2" />
+                   <h3 className="font-semibold text-base">Create Page</h3>
+                   <p className="text-sm text-gray-500 text-center mt-1">Create a Notion-like page.</p>
+                 </div>
+                 {/* Description Under Box 2 */}
+                 <p className="text-xs text-gray-400 text-center mt-4 max-w-64">
+                   Build a fully customizable page for your workspace.
+                 </p>
+               </div>
+             </div>
+           </DialogContent>
+         </Dialog>
             )}
         </>
     );
