@@ -15,6 +15,7 @@ import LinkComponent from "./url-reader";
 import { PortalReaderData } from "@/types/portal";
 import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
 import Editor from "@/components/editor";
+import { ColumnAliasProxyHandler } from "drizzle-orm";
 
 type Section = {
     sectionId: string;
@@ -78,13 +79,18 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                 startTimeRef.current = Date.now();
             }
         };
+        const handleBeforeUnload = async () => {
+            await sendDurationData(); // Ensure the final session is captured before the window/tab is closed
+        };
 
         document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("beforeunload", handleBeforeUnload);
         return () => {
             document.removeEventListener(
                 "visibilitychange",
                 handleVisibilityChange,
             );
+            window.removeEventListener("beforeunload", handleBeforeUnload);
         };
     }, []);
 
@@ -134,10 +140,10 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                 );
             case SectionContentType.URL:
                 return (
-                  <div className="h-screen">
-                <LinkComponent urlData={section.content} />
-                </div>
-                );;
+                    <div className="h-screen">
+                        <LinkComponent urlData={section.content} />
+                    </div>
+                );
             // case SectionContentType.DOC:
             //   return <DocumentComponent documentData={section.content} />;
             // case SectionContentType.NOTION:
