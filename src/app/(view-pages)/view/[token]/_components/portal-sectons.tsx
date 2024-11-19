@@ -1,21 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { sendEventToTinybird } from "@/server/tinybird/client";
-import { Card } from "@/components/ui/card";
+import { useEffect, useRef, useState } from "react";
 // import NotionEditorComponent from "@/components/NotionEditorComponent";
 // import LinkComponent from "@/components/LinkComponent";
 // import DocumentComponent from "@/components/DocumentComponent";
 // import PdfViewer from "@/components/PdfViewer";
-import { SectionContentType } from "@/server/db/schema";
-import CardNavigatorMenu from "./card-navigator-nenu";
-import YooptaReader from "./yoopta-reader";
-import LinkComponent from "./url-reader";
-import { PortalReaderData } from "@/types/portal";
 import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
 import Editor from "@/components/editor";
-import { ColumnAliasProxyHandler } from "drizzle-orm";
+import { SectionContentType } from "@/server/db/schema";
+import { PortalReaderData } from "@/types/portal";
+import CardNavigatorMenu from "./card-navigator-nenu";
+import LinkComponent from "./url-reader";
 
 type Section = {
     sectionId: string;
