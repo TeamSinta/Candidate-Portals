@@ -14,6 +14,7 @@ type AppPageShellProps = {
     children: React.ReactNode;
     as?: ElementType;
     title: string;
+    titleLink?: string;
     description: string;
     buttons?: React.ReactNode[];
     breadcrumbs?: string[];
@@ -23,6 +24,7 @@ export function AppPageShell({
     as,
     children,
     title,
+    titleLink,
     buttons,
     breadcrumbs,
 }: AppPageShellProps) {
@@ -36,7 +38,9 @@ export function AppPageShell({
                 <Breadcrumb>
                     <BreadcrumbList>
                         <BreadcrumbItem className="hidden md:block">
-                            <BreadcrumbLink href="#">{title}</BreadcrumbLink>
+                            <BreadcrumbLink href={titleLink ? titleLink : "#"}>
+                                {title}
+                            </BreadcrumbLink>
                         </BreadcrumbItem>
                         {breadcrumbs?.map((crumb, index) => (
                             <>

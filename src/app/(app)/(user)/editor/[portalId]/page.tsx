@@ -17,28 +17,22 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
     return (
         <AppPageShell
             title={"Portals"}
+            titleLink={"/dashboard"}
             description="Edit the contents of your portal here"
             buttons={[<EditorPageButtons key={0} portalId={params.portalId} />]}
             breadcrumbs={[data.portal.title ?? "Untitled"]}
         >
-
-
-
-
-            <div
-                className="flex h-full min-h-[80vh] flex-col items-center gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30"
-
-            >
-          <GridPattern
-        width={30}
-        height={30}
-        x={-1}
-        y={-1}
-        strokeDasharray={"4 2"}
-        className={cn(
-          "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)]",
-        )}
-      />
+            <div className="flex h-full min-h-[80vh] flex-col items-center gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30">
+                <GridPattern
+                    width={30}
+                    height={30}
+                    x={-1}
+                    y={-1}
+                    strokeDasharray={"4 2"}
+                    className={cn(
+                        "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)]",
+                    )}
+                />
 
                 <div className=" z-10 flex w-max gap-2 rounded-sm  border bg-white p-2 transition-shadow duration-300 hover:shadow-lg lg:min-w-[30rem]">
                     <Terminal className="mt-1 h-4" />
@@ -54,7 +48,6 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
                     portalId={params.portalId}
                     initialPortalData={data.portal}
                 />
-
             </div>
         </AppPageShell>
     );
