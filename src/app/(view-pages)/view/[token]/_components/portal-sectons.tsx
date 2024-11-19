@@ -1,20 +1,17 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
 import { sendEventToTinybird } from "@/server/tinybird/client";
-import { Card } from "@/components/ui/card";
+import { useEffect, useRef, useState } from "react";
 // import NotionEditorComponent from "@/components/NotionEditorComponent";
 // import LinkComponent from "@/components/LinkComponent";
 // import DocumentComponent from "@/components/DocumentComponent";
 // import PdfViewer from "@/components/PdfViewer";
-import { SectionContentType } from "@/server/db/schema";
-import CardNavigatorMenu from "./card-navigator-nenu";
-import YooptaReader from "./yoopta-reader";
-import LinkComponent from "./url-reader";
-import { PortalReaderData } from "@/types/portal";
 import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
 import Editor from "@/components/editor";
+import { SectionContentType } from "@/server/db/schema";
+import { PortalReaderData } from "@/types/portal";
+import CardNavigatorMenu from "./card-navigator-nenu";
+import LinkComponent from "./url-reader";
 
 type Section = {
     sectionId: string;
@@ -78,13 +75,18 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                 startTimeRef.current = Date.now();
             }
         };
+        const handleBeforeUnload = async () => {
+            await sendDurationData(); // Ensure the final session is captured before the window/tab is closed
+        };
 
         document.addEventListener("visibilitychange", handleVisibilityChange);
+        window.addEventListener("beforeunload", handleBeforeUnload);
         return () => {
             document.removeEventListener(
                 "visibilitychange",
                 handleVisibilityChange,
             );
+            window.removeEventListener("beforeunload", handleBeforeUnload);
         };
     }, []);
 
@@ -134,10 +136,10 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                 );
             case SectionContentType.URL:
                 return (
-                  <div className="h-screen">
-                <LinkComponent urlData={section.content} />
-                </div>
-                );;
+                    <div className="h-screen">
+                        <LinkComponent urlData={section.content} />
+                    </div>
+                );
             // case SectionContentType.DOC:
             //   return <DocumentComponent documentData={section.content} />;
             // case SectionContentType.NOTION:
