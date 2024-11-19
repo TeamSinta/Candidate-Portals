@@ -16,6 +16,7 @@ import { toast } from "sonner";
 import PortalEditBlock from "./portal-edit-block";
 import { useRouter } from "next/navigation";
 import { PlusCircleIcon, PlusIcon } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 function BlockEditor({
     portalId,
     sections,
@@ -102,7 +103,7 @@ function BlockEditor({
 
     return (
         <>
-            <PortalEditBlock
+            {/* <PortalEditBlock
                 onRenamePortal={handleRenamePortal}
                 portalData={portalData}
                 editing={Boolean(selectedBlock) && selectedBlock === "portal"}
@@ -110,53 +111,66 @@ function BlockEditor({
                 onClick={() => {
                     if (selectedBlock !== "portal") setSelectedBlock("portal");
                 }}
-            />
+            /> */}
             {blocks.length > 0 && (
-                <div className="flex flex-col items-center gap-8">
-                    {blocks.map((section, index) => (
-                        <ContentBlock
-                            key={section.id}
-                            id={section.id}
-                            index={index + 1}
-                            initialContentData={
-                                section.content as ContentDataType
-                            }
-                            initialTitle={section.title ?? ""}
-                            initialContentType={section.contentType}
-                            onSaveBlock={(data) => handleSaveBlock(index, data)}
-                            onDeleteBlock={() => handleDeleteBlock(section.id)}
-                            editing={selectedBlock === section.id}
-                            editBlock={() => setSelectedBlock(section.id)}
-                            cancelEdit={() => setSelectedBlock(undefined)}
-                        />
-                    ))}
-                    <div className="flex flex-row items-center justify-center gap-4 z-10 w-96">
-                        <Button className="w-full shadow-lg" variant="default" onClick={handleCreateBlock}>
-                          <PlusIcon className="h-4 w-4"/>
-                            Add Section
-                        </Button>
-                        {/* <div className="h-12 w-[1px] bg-slate-200" /> */}
+               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 pt-6">
+               {blocks.map((section, index) => (
+                 <ContentBlock
+                   key={section.id}
+                   id={section.id}
+                   index={index + 1}
+                   initialContentData={section.content as ContentDataType}
+                   initialTitle={section.title ?? ""}
+                   initialContentType={section.contentType}
+                   onSaveBlock={(data) => handleSaveBlock(index, data)}
+                   onDeleteBlock={() => handleDeleteBlock(section.id)}
+                   editing={selectedBlock === section.id}
+                   editBlock={() => setSelectedBlock(section.id)}
+                   cancelEdit={() => setSelectedBlock(undefined)}
+                 />
+               ))}
 
-                    </div>
+                    {/* <div className="flex items-center justify-center gap-4 z-10 w-96">
+                        <Button className="w-full rounded shadow-lg" variant="default" onClick={handleCreateBlock}>
+
+                            Add Page
+                            <PlusIcon className="h-4 w-4 ml-2"/>
+                        </Button>
+                        <div className="h-12 w-[1px] bg-slate-200" />
+
+                    </div> */}
+
+<div className="relative group cursor-pointer" onClick={handleCreateBlock}>
+      {/* Skeleton Card Container */}
+      <Card className="flex flex-col items-center justify-center h-[15rem] w-[22rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
+        {/* Skeleton Header */}
+        <CardHeader className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
+          <PlusIcon size={32} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+        </CardHeader>
+        {/* Skeleton Content */}
+        <CardContent className="text-center text-sm text-gray-500 sm:pt-8">
+          Add Page
+        </CardContent>
+      </Card>
+    </div>
+
+
                 </div>
             )}
             {blocks.length === 0 && (
-                <ContentBlock
-                    index={1}
-                    id={fillerGUID}
-                    initialTitle=""
-                    initialContentData={{ url: "" }}
-                    onSaveBlock={(data) =>
-                        handleSaveBlock(0, { ...data, id: fillerGUID })
-                    }
-                    onDeleteBlock={() => {
-                        return;
-                    }}
-                    editing={true}
-                    editBlock={() => {
-                        return;
-                    }}
-                />
+                <div className="relative group cursor-pointer" onClick={handleCreateBlock}>
+                {/* Skeleton Card Container */}
+                <Card className="flex flex-col items-center justify-center h-[15rem] w-[22rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
+                  {/* Skeleton Header */}
+                  <CardHeader className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
+                    <PlusIcon size={32} className="text-gray-400 group-hover:text-gray-600 transition-colors duration-300" />
+                  </CardHeader>
+                  {/* Skeleton Content */}
+                  <CardContent className="text-center text-sm text-gray-500 sm:pt-8">
+                    Add Page
+                  </CardContent>
+                </Card>
+              </div>
             )}
         </>
     );

@@ -1,83 +1,76 @@
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { PortalSelect } from "@/server/db/schema";
-import { Edit } from "lucide-react";
-import React, { useState } from "react";
+"use client"; // Mark this as a client-side component
+import { useState, useRef, useEffect } from "react";
 import { toast } from "sonner";
+import { updatePortalData } from "@/server/actions/portal/queries";
 
-function PortalEditBlock({
-    portalData,
-    onRenamePortal,
-    editing = false,
-    onCancel,
-    onClick,
+function TitleEditorClient({
+  initialTitle,
+  portalId,
 }: {
-    portalData: PortalSelect;
-    onRenamePortal: (newName: string) => void;
-    editing: boolean;
-    onCancel: () => void;
-    onClick: () => void;
+  initialTitle: string;
+  portalId: string;
 }) {
-    const [title, setTitle] = useState<string>(portalData.title ?? "");
+  const [title, setTitle] = useState(initialTitle || "");
+  const [isEditing, setIsEditing] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
-    function handleCancel() {
-        console.log("CLicked cancel");
-        onCancel();
+  // Focus the input automatically when editing starts
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
+  async function handleSave() {
+    if (!title.trim()) {
+      toast("Title is required");
+      setTitle(initialTitle); // Revert to the initial title if empty
+      return;
     }
 
-    function handleSave() {
-        if (!title) {
-            toast("Portal name is required");
-            return;
-        }
-
-        onRenamePortal(title);
+    try {
+      await updatePortalData(portalId, { title });
+      toast.success("Title updated successfully");
+    } catch {
+      toast.error("Failed to update title");
     }
+  }
 
-    return (
+  function handleBlur() {
+    setIsEditing(false);
+    handleSave(); // Save when the user clicks away
+  }
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLInputElement>) {
+    if (event.key === "Enter") {
+      setIsEditing(false);
+      handleSave(); // Save when the user presses Enter
+    }
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      {isEditing ? (
+        <input
+          ref={inputRef}
+          type="text"
+          className="rounded border-2 border-gray-200 p-2"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          onBlur={handleBlur}
+          onKeyDown={handleKeyDown}
+          placeholder="Enter title here"
+        />
+      ) : (
         <div
-            className={cn(
-              "flex w-[50rem] z-10  flex-col rounded-sm space-y-2 border bg-white p-8 px-8  transition-shadow duration-300",
-              !editing && "cursor-pointer hover:shadow-lg ",
-            )}
-            onClick={onClick}
+          className="cursor-pointer font-semibold text-xl"
+          onDoubleClick={() => setIsEditing(true)}
         >
-            {editing && (
-                <>
-                    <div className="text-2xl font-semibold">
-                        Candidate Portal
-                    </div>
-                    <div className="flex flex-col gap-2 text-sm">
-                        <label className="font-medium">
-                            Candidate Portal Name
-                        </label>
-                        <input
-                            type="text"
-                            placeholder={"Candidate Portal Name"}
-                            className="min-w-[30rem] rounded border-2 border-gray-200 p-2"
-                            onChange={(e) => setTitle(e.target.value)}
-                            value={title}
-                        />
-                    </div>
-                    <div className="flex gap-2 self-end">
-                        <Button variant="outline" onClick={handleCancel}>
-                            Cancel
-                        </Button>
-                        <Button onClick={handleSave}>Save</Button>
-                    </div>
-                </>
-            )}
-            {!editing && (
-                <div className="flex flex-row items-center justify-between gap-2 text-2xl font-normal">
-                    <div className="flex flex-row items-center gap-2">
-                        Candidate Portal:
-                        <div className="font-semibold">{title}</div>
-                    </div>
-                    <Edit className="h-6 w-6 cursor-pointer text-slate-400" />
-                </div>
-            )}
+          {title || "Untitled"} {/* Show "Untitled" if title is empty */}
         </div>
-    );
+      )}
+    </div>
+  );
 }
 
-export default PortalEditBlock;
+export default TitleEditorClient;
