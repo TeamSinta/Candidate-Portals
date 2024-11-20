@@ -129,7 +129,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
       {url && !iframeError ? (
         <iframe
           src={url}
-          className="w-full h-[80vh] border rounded-lg"
+          className=" h-[80vh] border rounded-lg"
           onError={() => setIframeError(true)}
         ></iframe>
       ) : (

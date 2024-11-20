@@ -28,7 +28,7 @@ export function AppLayoutShell({
         >
                      <SlidingSidebarProvider>
 
-            <div className=" flex w-[100%] items-start ">
+            <div className=" flex items-start w-full ">
                 <Suspense fallback={<SidebarLoading />}>
                     <AppSidebar
                         sidebarNavIncludeIds={sideNavIncludedIds}
@@ -39,16 +39,12 @@ export function AppLayoutShell({
                 </Suspense>
 
 
-                <SidebarInset className="border p-6 dark:bg-gray-900">
+                <SidebarInset className="w-full border p-6 dark:bg-gray-900">
                 <ScrollArea style={{ height: "calc(100vh - 4.5rem)", overflow:"scroll" }}>
 
-                    {children}
+                  {children}
                     </ScrollArea>
                 </SidebarInset>
-
-
-
-
 
 
             </div>

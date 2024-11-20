@@ -46,7 +46,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
           initialPortalData={data.portal}
         />
       </div>
-      <HoverBar portalData={data} />
+      {/* <HoverBar portalData={data} /> */}
       </div>
   );
 }

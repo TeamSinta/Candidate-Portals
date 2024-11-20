@@ -50,8 +50,8 @@ function AddNewSectionDialog({ maxWidth, onAddLink, onCreatePage }: SectionDialo
   return (
     <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
       <DialogTrigger asChild>
-        <div className="relative group cursor-pointer w-full h-full">
-          <Card className="flex flex-col items-center justify-center h-[15rem] max-w-[24rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
+        <div className="relative group cursor-pointer h-[15rem] max-w-[24rem] min-w-[19rem] ">
+          <Card className="flex flex-col overflow-hidden items-center justify-center h-[15rem] max-w-[24rem] rounded-sm shadow-sm border-2 border-dashed border-gray-300 hover:shadow-md transition-transform duration-300 hover:scale-105">
             <div className="flex items-center justify-center bg-gray-100 rounded-t h-full w-full">
               <PlusIcon
                 size={32}
