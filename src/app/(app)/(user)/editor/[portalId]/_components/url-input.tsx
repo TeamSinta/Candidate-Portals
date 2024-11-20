@@ -94,7 +94,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
             type="url"
             value={url}
             onChange={(e) => onChange("url", e.target.value)}
-            className="w-[600px] border-gray-300 rounded text-center"
+            className="w-full border-gray-300 rounded text-center"
             placeholder="Enter a URL"
           />
         </div>
