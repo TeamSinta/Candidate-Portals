@@ -12,7 +12,7 @@ import { and, asc, eq, inArray } from "drizzle-orm";
 import { getOrganizations } from "../organization/queries";
 import { protectedProcedure } from "@/server/procedures";
 
-export async function getPortalData(token: string) {
+export async function getPublicPortalData(token: string) {
     // Query the link table to find the candidate's portal linked to the token
     const linkData = await db
         .select({
@@ -162,22 +162,35 @@ export async function getPortalListData() {
 }
 
 export async function getPortalDetails(portalId: string) {
-    // Fetch the current organization to filter candidates
+    // Fetch the current user and organization
+    const { user } = await protectedProcedure();
     const { currentOrg } = await getOrganizations();
     const orgId = currentOrg.id;
+    const userId = user.id;
 
-    // Fetch portal information
+    // Fetch portal information and ensure it belongs to the current organization or user
     const portalData = await db
         .select({
             portalId: portal.id,
             title: portal.title,
+            orgId: portal.orgId,
+            ownerId: portal.ownerId,
         })
         .from(portal)
         .where(eq(portal.id, portalId))
         .execute()
         .then((results) => results[0]);
 
-    if (!portalData) return null;
+    // If the portal doesn't exist or doesn't belong to the current org/user, throw an error
+    if (!portalData) {
+        throw new Error("Portal not found.");
+    }
+
+    if (portalData.orgId !== orgId || portalData.ownerId !== userId) {
+        throw new Error(
+            "Access denied. You do not have permission to access this portal.",
+        );
+    }
 
     // Fetch sections associated with the portal
     const sections = await db
