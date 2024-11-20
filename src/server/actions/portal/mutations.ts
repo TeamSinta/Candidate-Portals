@@ -13,54 +13,76 @@ import { YooptaContentValue } from "@yoopta/editor";
 import { asc, eq } from "drizzle-orm";
 
 // portal should be initialized with an initial section
-export async function createPortal() {
-    const { user } = await protectedProcedure();
-    const { currentOrg } = await getOrganizations();
-
-    if (!currentOrg.id || !user.id) throw new Error("Missing data");
-
-    const [newPortal] = await db
-        .insert(portal)
-        .values({ orgId: currentOrg.id, ownerId: user.id })
-        .returning()
-        .execute();
-
-    if (!newPortal?.id) throw new Error("Failed to create portal");
-
-    // const newSection = await db.insert(section).values({
-    //     portalId: newPortal.id,
-    //     title: "title",
-    //     content: {},
-    //     contentType: SectionContentType.YOOPTA,
-    //     index: 0,
-    // });
-    return newPortal;
+interface CreatePortalParams {
+  title: string;
 }
+
+export async function createPortal({ title }: CreatePortalParams) {
+  const { user } = await protectedProcedure();
+  const { currentOrg } = await getOrganizations();
+
+  if (!currentOrg.id || !user.id) throw new Error("Missing data");
+
+  const [newPortal] = await db
+    .insert(portal)
+    .values({ orgId: currentOrg.id, ownerId: user.id, title })
+    .returning()
+    .execute();
+
+  if (!newPortal?.id) throw new Error("Failed to create portal");
+
+  return newPortal;
+}
+
 
 export async function deletePortal(portalId: string) {
     await db.delete(portal).where(eq(portal.id, portalId));
 }
 
 export async function updateSectionContent({
-    id,
-    portalId,
-    title,
-    content,
-    contentType,
-    index,
+  id,
+  portalId,
+  title,
+  content,
+  contentType,
+  index,
 }: {
-    id: string;
-    portalId: string;
-    title: string;
-    content: YooptaContentValue;
-    contentType: SectionContentType;
-    index: number;
+  id: string;
+  portalId: string;
+  title: string;
+  content: YooptaContentValue;
+  contentType: SectionContentType;
+  index: number;
 }) {
-    return await db
-        .insert(section)
-        .values({ id, portalId, title, content, contentType, index })
-        .onConflictDoUpdate({ target: section.id, set: { content, title } })
-        .execute();
+  try {
+      // Log the inputs to the function
+      console.log("updateSectionContent called with:");
+      console.log("ID:", id);
+      console.log("Portal ID:", portalId);
+      console.log("Title:", title);
+      console.log("Content:", content);
+      console.log("Content Type:", contentType);
+      console.log("Index:", index);
+
+      // Perform the database operation
+      const result = await db
+          .insert(section)
+          .values({ id, portalId, title, content, contentType, index })
+          .onConflictDoUpdate({
+              target: section.id,
+              set: { content, title },
+          })
+          .execute();
+
+      // Log the result of the database operation
+      console.log("Database operation successful. Result:", result);
+
+      return result;
+  } catch (error) {
+      // Log any error that occurs
+      console.error("Error in updateSectionContent:", error);
+      throw error; // Re-throw the error after logging it
+  }
 }
 
 export async function reIndexSections(portalId: string) {

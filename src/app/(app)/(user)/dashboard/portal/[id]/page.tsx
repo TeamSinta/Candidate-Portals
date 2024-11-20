@@ -37,6 +37,8 @@ import {
 } from "@/server/tinybird/pipes/pipes";
 import ClientModal from "../../_components/success-modal";
 import PreviewDialog from "../../_components/preview-page";
+import PreviewButton from "../../_components/preview-button";
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -57,7 +59,6 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Input } from "@/components/ui/input";
-import { deletePortal } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import PortalOptionsDropdown from "./_components/portal-options-dropdown";
@@ -114,7 +115,9 @@ export default async function PortalView({ params }: Props) {
                     </Breadcrumb>
                 </div>
                 <div className="flex items-center gap-2">
-                    <PreviewDialog portalData={portalData} />
+
+                <PreviewButton portalData={portalData} />
+
 
                     <Separator orientation="vertical" className="h-6" />
                     <PortalOptionsDropdown

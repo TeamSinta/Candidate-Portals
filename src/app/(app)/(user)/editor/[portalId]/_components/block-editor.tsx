@@ -6,8 +6,7 @@ import {
     SectionSelect,
 } from "@/server/db/schema";
 import ContentBlock, { SaveBlockArgs } from "./content-block";
-import { YooptaBlockData } from "@yoopta/editor";
-import { Button } from "@/components/ui/button";
+
 import { generateGUID } from "@/lib/utils";
 import { deleteSection, saveSection } from "@/server/actions/portal/mutations";
 import { ContentDataType } from "../utils/types";
@@ -15,7 +14,9 @@ import { updatePortalData } from "@/server/actions/portal/queries";
 import { toast } from "sonner";
 import PortalEditBlock from "./portal-edit-block";
 import { useRouter } from "next/navigation";
-import { PlusCircleIcon, PlusIcon } from "lucide-react";
+
+import AddNewSectionDialog from "./add-new-section";
+import { useSlidingSidebar } from "./sliding-sidebar";
 function BlockEditor({
     portalId,
     sections,
@@ -31,6 +32,8 @@ function BlockEditor({
     );
     const [portalData, setPortalData] =
         useState<PortalSelect>(initialPortalData);
+    const { setSlidingSidebarOpen, setSectionId, setContentType, isSlidingSidebarOpen } = useSlidingSidebar();
+
     const router = useRouter();
     const fillerGUID = generateGUID();
     async function handleRenamePortal(newName: string) {
@@ -73,6 +76,43 @@ function BlockEditor({
         await saveSection({ ...updatedBlockData, portalId, index });
     }
 
+    const handleAddLink = (url: string) => {
+      const newId = generateGUID();
+      const newBlock: SectionSelect = {
+        id: newId,
+        portalId: portalId,
+        title: "New Link", // Default title for the link block
+        content: { url }, // Save the URL in the content field
+        contentType: SectionContentType.URL, // Set the content type to URL
+        index: blocks.length,
+      };
+      setBlocks((prevBlocks) => [...prevBlocks, newBlock]);
+      saveSection({ ...newBlock, portalId }).catch((error) =>
+        console.error("Error saving section:", error)
+      );
+    };
+
+    const handleCreatePage = (title: string) => {
+      const newId = generateGUID();
+      const newBlock: SectionSelect = {
+        id: newId,
+        portalId,
+        title: title,
+        content: {}, // Initial content for a new Yoopta page
+        contentType: SectionContentType.YOOPTA,
+        index: blocks.length,
+      };
+      setBlocks((prevBlocks) => [...prevBlocks, newBlock]);
+      saveSection(newBlock)
+        .then(() => {
+          setSectionId(newId);
+          setContentType(SectionContentType.YOOPTA);
+          setSlidingSidebarOpen(true);
+        })
+        .catch((error) => console.error("Error saving section:", error));
+    };
+
+
     async function handleDeleteBlock(sectionId: string) {
         setBlocks((prevBlocks) => {
             const updatedBlocks = prevBlocks.filter(
@@ -84,25 +124,9 @@ function BlockEditor({
         await deleteSection(sectionId, portalId);
     }
 
-    function handleCreateBlock() {
-        const newId = generateGUID();
-        setBlocks((prevBlocks) => {
-            const newBlock = {
-                contentType: undefined,
-                title: "",
-                content: { title: "", url: "" },
-                id: newId,
-                portalId: portalId,
-                index: Math.max(...prevBlocks.map((block) => block.index)) + 1,
-            };
-            return [...prevBlocks, newBlock];
-        });
-        setSelectedBlock(newId);
-    }
-
     return (
         <>
-            <PortalEditBlock
+            {/* <PortalEditBlock
                 onRenamePortal={handleRenamePortal}
                 portalData={portalData}
                 editing={Boolean(selectedBlock) && selectedBlock === "portal"}
@@ -110,55 +134,46 @@ function BlockEditor({
                 onClick={() => {
                     if (selectedBlock !== "portal") setSelectedBlock("portal");
                 }}
-            />
-            {blocks.length > 0 && (
-                <div className="flex flex-col items-center gap-8">
-                    {blocks.map((section, index) => (
-                        <ContentBlock
-                            key={section.id}
-                            id={section.id}
-                            index={index + 1}
-                            initialContentData={
-                                section.content as ContentDataType
-                            }
-                            initialTitle={section.title ?? ""}
-                            initialContentType={section.contentType}
-                            onSaveBlock={(data) => handleSaveBlock(index, data)}
-                            onDeleteBlock={() => handleDeleteBlock(section.id)}
-                            editing={selectedBlock === section.id}
-                            editBlock={() => setSelectedBlock(section.id)}
-                            cancelEdit={() => setSelectedBlock(undefined)}
-                        />
-                    ))}
-                    <div className="flex flex-row items-center justify-center gap-4 z-10 w-96">
-                        <Button className="w-full shadow-lg" variant="default" onClick={handleCreateBlock}>
-                          <PlusIcon className="h-4 w-4"/>
-                            Add Section
-                        </Button>
-                        {/* <div className="h-12 w-[1px] bg-slate-200" /> */}
+            /> */}
 
-                    </div>
-                </div>
-            )}
-            {blocks.length === 0 && (
-                <ContentBlock
-                    index={1}
-                    id={fillerGUID}
-                    initialTitle=""
-                    initialContentData={{ url: "" }}
-                    onSaveBlock={(data) =>
-                        handleSaveBlock(0, { ...data, id: fillerGUID })
-                    }
-                    onDeleteBlock={() => {
-                        return;
-                    }}
-                    editing={true}
-                    editBlock={() => {
-                        return;
-                    }}
-                />
-            )}
-        </>
+      {blocks.length > 0 && (
+        <div
+          className={`${
+            isSlidingSidebarOpen
+              ? "flex flex-col gap-4 px-6 pt-6" // Column layout when sidebar is open
+              : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 pt-6" // Grid layout when sidebar is closed
+          }`}
+        >
+          {blocks.map((section, index) => (
+            <ContentBlock
+              key={section.id}
+              id={section.id}
+              index={index + 1}
+              initialContentData={section.content as ContentDataType}
+              initialTitle={section.title ?? ""}
+              initialContentType={section.contentType}
+              onSaveBlock={(data) => handleSaveBlock(index, data)}
+              onDeleteBlock={() => handleDeleteBlock(section.id)}
+              editing={selectedBlock === section.id}
+              editBlock={() => setSelectedBlock(section.id)}
+              cancelEdit={() => setSelectedBlock(undefined)}
+              portalId={portalId}
+            />
+          ))}
+          <AddNewSectionDialog
+        maxWidth="sm:max-w-[700px]"
+        onAddLink={handleAddLink}
+        onCreatePage={handleCreatePage} // Pass the function to AddNewSectionDialog
+      />
+
+        </div>
+      )}
+      {blocks.length === 0 &&   <AddNewSectionDialog
+        maxWidth="sm:max-w-[700px]"
+        onAddLink={handleAddLink}
+        onCreatePage={handleCreatePage} // Pass the function to AddNewSectionDialog
+      />}
+    </>
     );
 }
 

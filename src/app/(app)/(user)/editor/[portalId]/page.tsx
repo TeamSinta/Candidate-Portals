@@ -1,56 +1,54 @@
 import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import { getPortalQuery } from "@/server/actions/portal/queries";
-import { Terminal } from "lucide-react";
 import { notFound } from "next/navigation";
 import BlockEditor from "./_components/block-editor";
-import EditorPageButtons from "./editor-page-buttons";
-import AnimatedGridPattern from "@/components/ui/animated-grid-pattern";
-import { cn } from "@/lib/utils";
-import DotPattern from "@/components/ui/dot-pattern";
 import GridPattern from "@/components/ui/grid-pattern";
+import { SidebarInset, SidebarTrigger } from "@/components/ui/sidebar";
+import { Separator } from "@/components/ui/separator";
+import TitleEditorClient from "./_components/portal-edit-block";
+import DotPattern from "@/components/ui/dot-pattern";
+import { cn } from "@/lib/utils";
+import { HoverBar } from "./_components/hover-bar";
+import EditorPageButtons from "./editor-page-buttons";
 
 async function PortalEditPage({ params }: { params: { portalId: string } }) {
-    const data = await getPortalQuery(params.portalId);
-    if (!data.portal) return notFound();
-    console.log("PORTAL DATA", data);
+  const data = await getPortalQuery(params.portalId);
+  if (!data.portal) return notFound();
 
-    return (
-        <AppPageShell
-            title={"Portals"}
-            titleLink={"/dashboard"}
-            description="Edit the contents of your portal here"
-            buttons={[<EditorPageButtons key={0} portalId={params.portalId} />]}
-            breadcrumbs={[data.portal.title ?? "Untitled"]}
-        >
-            <div className="flex h-full min-h-[80vh] flex-col items-center gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30">
-                <GridPattern
-                    width={30}
-                    height={30}
-                    x={-1}
-                    y={-1}
-                    strokeDasharray={"4 2"}
-                    className={cn(
-                        "[mask-image:radial-gradient(900px_circle_at_center,white,transparent)]",
-                    )}
-                />
+  return (
+<div className="flex h-full w-full flex-col space-y-4">
+{/* Header Section */}
+<div className="flex justify-between">
+      <div className="z-10 flex items-center gap-2 ">
+        <SidebarTrigger className="-ml-1" />
+        <Separator orientation="vertical" className="mr-2 h-4" />
+        <TitleEditorClient
+          initialTitle={data.portal.title ?? ""}
+          portalId={params.portalId}
+        />
 
-                <div className=" z-10 flex w-max gap-2 rounded-sm  border bg-white p-2 transition-shadow duration-300 hover:shadow-lg lg:min-w-[30rem]">
-                    <Terminal className="mt-1 h-4" />
-                    <div className="flex flex-col text-sm">
-                        <div className="font-medium">Heads up!</div>
-                        <div className="">
-                            Click Preview to see the Candidate Experience Live
-                        </div>
-                    </div>
-                </div>
-                <BlockEditor
-                    sections={data.sections || []}
-                    portalId={params.portalId}
-                    initialPortalData={data.portal}
-                />
-            </div>
-        </AppPageShell>
-    );
+      </div>
+      <EditorPageButtons key={0}  data={data} />
+      </div>
+      {/* Main Content Section */}
+      <div className="relative flex h-full  flex items-start gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30">
+        {/* Grid Background Pattern and Block Editor */}
+        <div className="absolute inset-0 z-5">
+        <GridPattern
+        className={cn(
+          "[mask-image:radial-gradient(400px_circle_at_center,white,transparent)]",
+        )}
+      />
+        </div>
+        <BlockEditor
+          sections={data.sections || []}
+          portalId={params.portalId}
+          initialPortalData={data.portal}
+        />
+      </div>
+      <HoverBar portalData={data} />
+      </div>
+  );
 }
 
 export default PortalEditPage;
