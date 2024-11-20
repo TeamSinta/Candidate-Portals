@@ -1,6 +1,5 @@
 "use client";
 
-import { sendEventToTinybird } from "@/server/tinybird/client";
 import { useEffect, useRef, useState } from "react";
 // import NotionEditorComponent from "@/components/NotionEditorComponent";
 // import LinkComponent from "@/components/LinkComponent";
@@ -45,27 +44,48 @@ export default function PortalContent({ portalData }: PortalContentProps) {
     const selectedSection = sections[selectedSectionIndex];
     // Function to send duration data to Tinybird
     const sendDurationData = async () => {
-        const currentSection = sections[sectionIndexRef.current];
-        if (!currentSection || startTimeRef.current === null) return;
+      const currentSection = sections[sectionIndexRef.current];
+      if (!currentSection || startTimeRef.current === null) return;
 
-        const endTime = Date.now();
-        const duration = Math.round(endTime - startTimeRef.current);
+      const endTime = Date.now();
+      const duration = Math.round(endTime - startTimeRef.current);
 
-        if (duration >= 100) {
-            cumulativeDurationRef.current += duration;
-            await sendEventToTinybird({
-                event_name: "Section Duration",
-                section_id: currentSection.sectionId,
-                user_id: portalData.userId,
-                portal_id: portalId,
-                link_id: linkId,
-                section_title: currentSection.title,
-                duration: cumulativeDurationRef.current,
-                timestamp: new Date().toISOString(),
-                session_id: sessionIdRef.current,
-            });
-        }
-    };
+      if (duration >= 100) {
+          cumulativeDurationRef.current += duration;
+
+          // Use the new API route to send the event to Tinybird
+          try {
+              const response = await fetch('/api/tinybird', {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify({
+                      eventData: {
+                          event_name: "Section Duration",
+                          section_id: currentSection.sectionId,
+                          user_id: portalData.userId,
+                          portal_id: portalId,
+                          link_id: linkId,
+                          section_title: currentSection.title,
+                          duration: cumulativeDurationRef.current,
+                          timestamp: new Date().toISOString(),
+                          session_id: sessionIdRef.current,
+                      },
+                  }),
+              });
+
+              if (!response.ok) {
+                  console.error("Failed to send duration data to Tinybird:", await response.json());
+              } else {
+                  console.log("Duration data sent to Tinybird successfully!");
+              }
+          } catch (error) {
+              console.error("Error sending duration data to Tinybird:", error);
+          }
+      }
+  };
+
 
     useEffect(() => {
         const handleVisibilityChange = async () => {
