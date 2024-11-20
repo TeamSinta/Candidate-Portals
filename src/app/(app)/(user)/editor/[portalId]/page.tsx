@@ -29,7 +29,7 @@ async function PortalEditPage({ params }: { params: { portalId: string } }) {
         />
 
       </div>
-      <EditorPageButtons key={0}  portalData={data} />
+      <EditorPageButtons key={0}  data={data} />
       </div>
       {/* Main Content Section */}
       <div className="relative flex h-full  flex items-start gap-8 border-t-2 border-t-border bg-background pt-8 dark:border-t-border dark:bg-background/30">

@@ -37,6 +37,7 @@ import {
 } from "@/server/tinybird/pipes/pipes";
 import ClientModal from "../../_components/success-modal";
 import PreviewDialog from "../../_components/preview-page";
+import PreviewButton from "../../_components/preview-button";
 
 interface Props {
     params: { id: string };
@@ -91,7 +92,8 @@ export default async function PortalView({ params }: Props) {
                     </Breadcrumb>
                 </div>
                 <div className="flex items-center gap-2">
-                <PreviewDialog portalData={portalData} />
+
+                <PreviewButton portalData={portalData} />
 
 
                     <Separator orientation="vertical" className="h-6" />

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { CalendarIcon, EyeIcon, FileText, HomeIcon, Link2Icon, LinkIcon, MailIcon, PencilIcon } from "lucide-react";
 
@@ -15,6 +15,7 @@ import { cn } from "@/lib/utils";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Dock, DockIcon } from "@/components/ui/dock";
 import ShinyButton from "@/components/ui/shiny-button";
+import PreviewDialog from "../../../dashboard/_components/preview-page";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -87,62 +88,74 @@ const DATA = {
 
 
 
-export function HoverBar() {
+export function HoverBar({ portalData }) {
+  const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+
+  const handleOpenChange = (open) => {
+    setIsPreviewOpen(open);
+  };
+
   return (
-    <div className="sticky bottom-0 left-0 right-0  flex z-50 items-center justify-center items-center gap-4 p-4 rounded-t-2xl ">
+    <div className="sticky bottom-0 left-0 right-0 flex z-50 items-center justify-center items-center gap-4 p-4 rounded-t-2xl">
+    <TooltipProvider>
+      <Dock direction="middle" className="w-1000px shadow-md">
+        <DockIcon size={48} className="w-480 mx-14">
+          <Tooltip>
+            <TooltipTrigger asChild className="w-96">
+              <ShinyButton className="bg-indigo-500 text-white text-sm rounded-sm hover:bg-indigo-600">
+                Share my Portal
+              </ShinyButton>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Publish</p>
+            </TooltipContent>
+          </Tooltip>
+        </DockIcon>
 
-      <TooltipProvider>
-        <Dock direction="middle" className="w-1000px shadow-md" >
+        <Separator orientation="vertical" className="h-1/2" />
 
-            <DockIcon size={48} className="w-480 mx-14">
-            <Tooltip>
-                <TooltipTrigger asChild className="w-96">
-                <ShinyButton className=" bg-indigo-500 text-white text-sm  rounded-sm hover:bg-indigo-600 ">
-        Share my Portal
-      </ShinyButton>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Publish</p>
-                </TooltipContent>
-              </Tooltip>
-            </DockIcon>
-
-          <Separator orientation="vertical" className="h-1/2" />
-          {Object.entries(DATA.contact.social).map(([name, social]) => (
-            <DockIcon key={name}>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Link
-                    href={social.url}
-                    aria-label={social.name}
-                    className={cn(
-                      buttonVariants({ variant: "ghost", size: "icon" }),
-                      "size-8 rounded-full",
-                    )}
-                  >
-                    <social.icon className="size-4" />
-                  </Link>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>{name}</p>
-                </TooltipContent>
-              </Tooltip>
-            </DockIcon>
-          ))}
-          <Separator orientation="vertical" className="h-1/2 py-2" />
-          <DockIcon>
-
+        {Object.entries(DATA.contact.social).map(([name, social]) => (
+          <DockIcon key={name}>
             <Tooltip>
               <TooltipTrigger asChild>
-              <EyeIcon className="h-5 w-5"/>
+                <Link
+                  href={social.url}
+                  aria-label={social.name}
+                  className={cn(buttonVariants({ variant: "ghost", size: "icon" }), "size-8 rounded-full")}
+                >
+                  <social.icon className="size-4" />
+                </Link>
               </TooltipTrigger>
               <TooltipContent>
-              <p>Preview</p>
+                <p>{name}</p>
               </TooltipContent>
             </Tooltip>
           </DockIcon>
-        </Dock>
-      </TooltipProvider>
-    </div>
+        ))}
+
+        <Separator orientation="vertical" className="h-1/2 py-2" />
+
+        {/* Preview Button */}
+        <DockIcon>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <button
+                className="transition-transform hover:scale-90"
+                onClick={() => handleOpenChange(true)} // Open the preview dialog
+              >
+                <EyeIcon className="h-5 w-5" />
+              </button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Preview</p>
+            </TooltipContent>
+          </Tooltip>
+        </DockIcon>
+      </Dock>
+    </TooltipProvider>
+
+    {/* Preview Dialog */}
+    <PreviewDialog portalData={portalData} isPreviewOpen={isPreviewOpen} setIsPreviewOpen={setIsPreviewOpen} />
+  </div>
   );
 }

@@ -2,11 +2,10 @@
 
 import { Button } from "@/components/ui/button";
 import { EyeIcon, Upload } from "lucide-react";
-import Link from "next/link";
 import React, { useState } from "react";
 import PreviewDialog from "../../dashboard/_components/preview-page";
 
-function EditorPageButtons({ data }: { portalId: string }) {
+function EditorPageButtons({ data }: { data: string }) {
 
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
