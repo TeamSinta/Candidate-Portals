@@ -1,7 +1,7 @@
 // app/view/[token]/page.tsx
 
 import React from "react";
-import { getPortalData } from "@/server/actions/portal/queries";
+import { getPublicPortalData } from "@/server/actions/portal/queries";
 import PortalContent from "./_components/portal-sectons";
 
 export default async function ViewPage({
@@ -9,7 +9,7 @@ export default async function ViewPage({
 }: {
     params: { token: string };
 }) {
-    const portalData = await getPortalData(token);
+    const portalData = await getPublicPortalData(token);
     console.log(portalData, "portaldata");
 
     if (!portalData) {
