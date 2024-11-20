@@ -4,6 +4,7 @@ import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Sidebar, SidebarContent, SidebarFooter, SidebarHeader, SidebarInset, SidebarProvider, SidebarRail } from "@/components/ui/sidebar";
 import { Suspense } from "react";
 import SlidingSidebar, { SlidingSidebarProvider } from "../(user)/editor/[portalId]/_components/sliding-sidebar";
+import { BlockEditorProvider } from "./block-editor-context";
 
 type AppLayoutProps = {
     children: React.ReactNode;
@@ -27,6 +28,7 @@ export function AppLayoutShell({
             }
         >
                      <SlidingSidebarProvider>
+                     <BlockEditorProvider>
 
             <div className=" flex items-start w-full ">
                 <Suspense fallback={<SidebarLoading />}>
@@ -51,6 +53,7 @@ export function AppLayoutShell({
 
 
             <SlidingSidebar/>
+            </BlockEditorProvider>
             </SlidingSidebarProvider>
         </SidebarProvider>
     );
