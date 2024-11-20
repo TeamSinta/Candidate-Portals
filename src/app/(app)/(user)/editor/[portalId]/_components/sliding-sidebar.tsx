@@ -1,7 +1,7 @@
 // SlidingSidebar.jsx
 "use client";
 
-import React, { createContext, useContext, useState, useEffect, Dispatch, SetStateAction } from "react";
+import React, { createContext, useContext, useState, useEffect, Dispatch, SetStateAction, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { SidebarInset } from "@/components/ui/sidebar"; // Adjust the import path
 import { usePathname } from "next/navigation"; // Use usePathname from next/navigation
@@ -132,6 +132,26 @@ const SlidingSidebar = () => {
 
 
 
+  const [sidebarWidth, setSidebarWidth] = useState(640); // Initial width in px (40rem)
+    const sidebarRef = useRef<HTMLDivElement | null>(null);
+
+    const handleMouseDown = (e: React.MouseEvent) => {
+        const startX = e.clientX;
+        const startWidth = sidebarRef.current?.offsetWidth || sidebarWidth;
+
+        const handleMouseMove = (moveEvent: MouseEvent) => {
+            const newWidth = Math.max(320, startWidth - (startX - moveEvent.clientX)); // Min width: 320px (20rem)
+            setSidebarWidth(newWidth);
+        };
+
+        const handleMouseUp = () => {
+            window.removeEventListener("mousemove", handleMouseMove);
+            window.removeEventListener("mouseup", handleMouseUp);
+        };
+
+        window.addEventListener("mousemove", handleMouseMove);
+        window.addEventListener("mouseup", handleMouseUp);
+    };
 
   return (
     <AnimatePresence>
@@ -142,10 +162,12 @@ const SlidingSidebar = () => {
         animate={{ x: 0 }}
         exit={{ x: "100%" }}
         transition={{ duration: 0.5, ease: "easeInOut" }} // Smooth transition
-        className="flex" // Use flex to make it push content
+        className="" // Use flex to make it push content
+        style={{ width: "100%" }} // Dynamic width
+
       >
-        <SidebarInset className="border my-2 mr-1 min-h-[0px] max-w-[80rem] min-w-[78rem] rounded-lg p-6 dark:bg-gray-900">
-        <ScrollArea style={{ height: "calc(100vh - 4.5rem)", overflow:"scroll" }}>
+                    <SidebarInset className="border my-2 mr-2 min-h-[0px] w-full min-w-[75rem] rounded-lg p-6 dark:bg-gray-900">
+                    <ScrollArea style={{ height: "calc(100vh - 4.5rem)", overflow:"scroll" }}>
 
     {/* Render content based on contentType */}
     {loading && <p>Loading...</p>}

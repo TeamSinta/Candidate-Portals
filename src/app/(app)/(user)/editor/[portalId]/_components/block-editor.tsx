@@ -140,7 +140,7 @@ function BlockEditor({
         <div
           className={`${
             isSlidingSidebarOpen
-              ? "flex flex-col gap-4 px-6 pt-6" // Column layout when sidebar is open
+              ? "flex flex-col items-center w-full justify-center gap-4 px-6 pt-6" // Column layout when sidebar is open
               : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 pt-6" // Grid layout when sidebar is closed
           }`}
         >
