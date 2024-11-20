@@ -163,10 +163,10 @@ const SlidingSidebar = () => {
         exit={{ x: "100%" }}
         transition={{ duration: 0.5, ease: "easeInOut" }} // Smooth transition
         className="" // Use flex to make it push content
-        style={{ width: "100%" }} // Dynamic width
+        style={{ width: "100%", marginRight:"1rem" }} // Dynamic width
 
       >
-                    <SidebarInset className="border my-2 mr-2 min-h-[0px] w-full min-w-[75rem] rounded-lg p-6 dark:bg-gray-900">
+                    <SidebarInset className="border my-2  min-h-[0px] w-full sm:max-w-[30vw] md:max-w-[40vw] lg:min-w-[50vw] lg:max-w-[55vw] xl:min-w-[65vw] rounded-lg p-6 dark:bg-gray-900">
                     <ScrollArea style={{ height: "calc(100vh - 4.5rem)", overflow:"scroll" }}>
 
     {/* Render content based on contentType */}

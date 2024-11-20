@@ -22,7 +22,7 @@ export function AppLayoutShell({
         <SidebarProvider
             style={
                 {
-                    "--sidebar-width": "14rem",
+                    "--sidebar-width": "10vw",
                 } as React.CSSProperties
             }
         >
@@ -39,7 +39,7 @@ export function AppLayoutShell({
                 </Suspense>
 
 
-                <SidebarInset className="w-full border p-6 dark:bg-gray-900">
+                <SidebarInset className="w-full min-w-[10vw] border p-6 dark:bg-gray-900">
                 <ScrollArea style={{ height: "calc(100vh - 4.5rem)", overflow:"scroll" }}>
 
                   {children}
