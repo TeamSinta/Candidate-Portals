@@ -10,35 +10,40 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Input } from "@/components/ui/input"; // Import your Input component
-import { Button } from "@/components/ui/button"; // Import your Button component
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 interface SectionDialogProps {
   maxWidth: string;
-  onAddLink: (url: string) => void; // Callback function to send the URL to the parent
+  onAddLink: (url: string) => void;
+  onCreatePage: (title: string) => void; // New callback for creating a page
 }
 
-function AddNewSectionDialog({ maxWidth, onAddLink }: SectionDialogProps) {
-  const [isAddingLink, setIsAddingLink] = useState(false); // State to toggle the view
-  const [url, setUrl] = useState(""); // State to store the URL
-  const [isDialogOpen, setIsDialogOpen] = useState(false); // State to manage the dialog open/close
+function AddNewSectionDialog({ maxWidth, onAddLink, onCreatePage }: SectionDialogProps) {
+  const [isAddingLink, setIsAddingLink] = useState(false);
+  const [url, setUrl] = useState("");
+  const [title, setTitle] = useState("New Page"); // Default title for a new page
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  // Function to handle saving the URL and sending it to the parent
   const handleSaveUrl = () => {
     if (url) {
-      onAddLink(url); // Call the parent function with the URL
-      // Reset the view and URL
+      onAddLink(url);
       setIsAddingLink(false);
       setUrl("");
-      setIsDialogOpen(false); // Close the dialog
+      setIsDialogOpen(false);
     }
   };
 
-  // Reset to initial state when the dialog is closed
+  const handleCreatePage = () => {
+    onCreatePage(title); // Call the parent function with the title
+    setTitle("New Page"); // Reset the title
+    setIsDialogOpen(false);
+  };
+
   const handleDialogClose = (open: boolean) => {
     setIsDialogOpen(open);
     if (!open) {
-      setIsAddingLink(false); // Reset to the initial state
+      setIsAddingLink(false);
     }
   };
 
@@ -62,11 +67,10 @@ function AddNewSectionDialog({ maxWidth, onAddLink }: SectionDialogProps) {
       <DialogContent className={`rounded-lg ${maxWidth}`}>
         <DialogHeader>
           <DialogTitle>
-            <h1 className="text-2xl font-semibold font-heading">Add Page</h1>
+            <h1 className="text-2xl font-semibold font-heading">Add Section</h1>
           </DialogTitle>
         </DialogHeader>
         <div className="flex justify-around py-6">
-          {/* Conditional Rendering Based on isAddingLink */}
           {isAddingLink ? (
             <div className="w-full">
               <h3 className="text-lg font-medium text-gray-700 mb-2">
@@ -93,7 +97,7 @@ function AddNewSectionDialog({ maxWidth, onAddLink }: SectionDialogProps) {
                 <Button
                   onClick={() => setIsAddingLink(false)}
                   variant={"outline"}
-                  className="text-gray-600 border border-gray-300 px-4 py-2 rounded hover:bg-gray-100 "
+                  className="text-gray-600 border border-gray-300 px-4 py-2 rounded hover:bg-gray-100"
                 >
                   Cancel
                 </Button>
@@ -107,10 +111,9 @@ function AddNewSectionDialog({ maxWidth, onAddLink }: SectionDialogProps) {
             </div>
           ) : (
             <>
-              {/* Box 1: Link */}
               <div
                 className="flex flex-col items-center cursor-pointer"
-                onClick={() => setIsAddingLink(true)} // Set the state to show the input
+                onClick={() => setIsAddingLink(true)}
               >
                 <div className="flex flex-col items-center justify-center border rounded-lg p-16 hover:shadow-lg transition-shadow duration-300 bg-gray-50">
                   <Link size={24} className="text-gray-500 mb-2" />
@@ -123,8 +126,11 @@ function AddNewSectionDialog({ maxWidth, onAddLink }: SectionDialogProps) {
                   You can add links to external resources or documentation.
                 </p>
               </div>
-              {/* Box 2: Custom Page */}
-              <div className="flex flex-col items-center">
+
+              <div
+                className="flex flex-col items-center cursor-pointer"
+                onClick={handleCreatePage} // Handle creating a new page
+              >
                 <div className="flex flex-col items-center justify-center border rounded-lg p-16 hover:shadow-lg transition-shadow duration-300 bg-gray-50">
                   <FileText size={24} className="text-gray-500 mb-2" />
                   <h3 className="font-semibold text-base">Create a Page</h3>

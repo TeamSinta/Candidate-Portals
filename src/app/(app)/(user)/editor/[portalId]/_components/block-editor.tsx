@@ -32,7 +32,7 @@ function BlockEditor({
     );
     const [portalData, setPortalData] =
         useState<PortalSelect>(initialPortalData);
-    const { isSlidingSidebarOpen } = useSlidingSidebar(); // Access the sidebar state
+    const { setSlidingSidebarOpen, setSectionId, setContentType, isSlidingSidebarOpen } = useSlidingSidebar();
 
     const router = useRouter();
     const fillerGUID = generateGUID();
@@ -92,6 +92,26 @@ function BlockEditor({
       );
     };
 
+    const handleCreatePage = (title: string) => {
+      const newId = generateGUID();
+      const newBlock: SectionSelect = {
+        id: newId,
+        portalId,
+        title: title,
+        content: {}, // Initial content for a new Yoopta page
+        contentType: SectionContentType.YOOPTA,
+        index: blocks.length,
+      };
+      setBlocks((prevBlocks) => [...prevBlocks, newBlock]);
+      saveSection(newBlock)
+        .then(() => {
+          setSectionId(newId);
+          setContentType(SectionContentType.YOOPTA);
+          setSlidingSidebarOpen(true);
+        })
+        .catch((error) => console.error("Error saving section:", error));
+    };
+
 
     async function handleDeleteBlock(sectionId: string) {
         setBlocks((prevBlocks) => {
@@ -140,16 +160,19 @@ function BlockEditor({
               portalId={portalId}
             />
           ))}
-           <AddNewSectionDialog
-            maxWidth="sm:max-w-[700px]"
-            onAddLink={handleAddLink} // Pass the function to AddNewSectionDialog
-          />
+          <AddNewSectionDialog
+        maxWidth="sm:max-w-[700px]"
+        onAddLink={handleAddLink}
+        onCreatePage={handleCreatePage} // Pass the function to AddNewSectionDialog
+      />
+
         </div>
       )}
-      {blocks.length === 0 &&  <AddNewSectionDialog
-            maxWidth="sm:max-w-[700px]"
-            onAddLink={handleAddLink} // Pass the function to AddNewSectionDialog
-          />}
+      {blocks.length === 0 &&   <AddNewSectionDialog
+        maxWidth="sm:max-w-[700px]"
+        onAddLink={handleAddLink}
+        onCreatePage={handleCreatePage} // Pass the function to AddNewSectionDialog
+      />}
     </>
     );
 }
