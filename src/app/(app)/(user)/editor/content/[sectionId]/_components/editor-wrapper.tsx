@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
+import { useSlidingSidebar } from "../../../[portalId]/_components/sliding-sidebar";
 
 interface Props {
     section: SectionSelect;
@@ -27,6 +28,8 @@ function EditorWrapper({ section, portal }: Props) {
     const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
     const sidebar = useSidebar();
     const router = useRouter();
+    const { setSlidingSidebarOpen } = useSlidingSidebar();
+
     async function handleSave() {
         try {
             await updateSectionContent({
@@ -38,7 +41,7 @@ function EditorWrapper({ section, portal }: Props) {
                 index: section.index,
             });
             toast.success("Section saved successfully");
-            router.push(`/editor/${portal.id}`);
+            setSlidingSidebarOpen(false)
         } catch {
             toast.error("Failed to save section");
         }

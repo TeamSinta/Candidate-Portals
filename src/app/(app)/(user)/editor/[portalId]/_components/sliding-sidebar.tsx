@@ -97,13 +97,15 @@ const SlidingSidebar = () => {
 
   useEffect(() => {
     const fetchSectionData = async () => {
-      if (sectionId && isSlidingSidebarOpen) {
+      if (sectionId && isSlidingSidebarOpen && contentType === SectionContentType.YOOPTA) {
         setLoading(true);
         try {
           const [data] = await getSectionQuery(sectionId);
           if (data) {
             setSectionData(data.section);
             setPortalData(data.portal);
+          } else {
+            console.warn("No data found for Section ID:", sectionId);
           }
         } catch (error) {
           console.error("Error fetching section data:", error);
@@ -114,8 +116,7 @@ const SlidingSidebar = () => {
     };
 
     fetchSectionData();
-  }, [sectionId, isSlidingSidebarOpen]);
-
+  }, [sectionId, isSlidingSidebarOpen, contentType]);
 
 
   return (
@@ -148,7 +149,12 @@ const SlidingSidebar = () => {
 
             )}
             {!loading && contentType === SectionContentType.YOOPTA && sectionData && portalData && (
+                sectionData.content ? (
+
               <EditorWrapper section={sectionData} portal={portalData} />
+            ) : (
+              <p>Error: Content is missing or improperly formatted</p>
+            )
             )}
                 </ScrollArea>
 

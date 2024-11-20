@@ -2,24 +2,15 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SectionContentType } from "@/server/db/schema";
 import { YooptaContentValue } from "@yoopta/editor";
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from "@/components/ui/select";
-import UrlInput from "./url-input";
-import { Edit, Edit2Icon, Edit3Icon, FileTextIcon, FolderIcon, LinkIcon, MoreVertical, Router, TrashIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
-import Editor from "@/components/editor";
+
+import { Edit2Icon, MoreVertical, TrashIcon } from "lucide-react";
+
 import {
     ContentDataType,
     isUrlContentData,
     isYooptaContentData,
     UrlContentData,
 } from "../utils/types";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
     AlertDialog,
     AlertDialogAction,
@@ -31,10 +22,8 @@ import {
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
 import { AlertDialogTrigger } from "@radix-ui/react-alert-dialog";
-import AttachmentBlock from "./attachment-block";
 import { useRouter } from "next/navigation";
-import NextLink from "next/link";
-import { NotionLogoIcon } from "@radix-ui/react-icons";
+
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { useSlidingSidebar } from "./sliding-sidebar";
 
@@ -65,66 +54,68 @@ function ContentBlock({
     initialContentData,
     initialTitle,
     onDeleteBlock,
-    editing,
     editBlock,
-    cancelEdit,
 }: ContentBlockProps) {
     const [contentType,] = useState<
         SectionContentType | undefined
     >(initialContentType);
     const [title,] = useState<string>(initialTitle ?? "");
-    const [urlContentData,] = useState<UrlContentData>(
-        isUrlContentData(initialContentData) ? initialContentData : { url: "" },
-    );
-    console.log(initialContentData, "inistal data")
-    const [yooptaContentData, setYooptaContentData] =
-        useState<YooptaContentValue>(
-            isYooptaContentData(initialContentData) ? initialContentData : {},
-        );
+    // const [urlContentData,] = useState<UrlContentData>(
+    //     isUrlContentData(initialContentData) ? initialContentData : { url: "" },
+    // );
+    // const [yooptaContentData, setYooptaContentData] =
+    //     useState<YooptaContentValue>(
+    //         isYooptaContentData(initialContentData) ? initialContentData : {},
+    //     );
 
-    // Backup states for cancel functionality
-    const [backupContentType, setBackupContentType] =
-        useState(initialContentType);
-    const [backupTitle, setBackupTitle] = useState(initialTitle ?? "");
-    const [backupUrlContentData, setBackupUrlContentData] = useState(
-        isUrlContentData(initialContentData) ? initialContentData : { url: "" },
-    );
-    const [backupYooptaContentData, setBackupYooptaContentData] = useState(
-        isYooptaContentData(initialContentData) ? initialContentData : {},
-    );
+    // // Backup states for cancel functionality
+    // const [backupContentType, setBackupContentType] =
+    //     useState(initialContentType);
+    // const [backupTitle, setBackupTitle] = useState(initialTitle ?? "");
+    // const [backupUrlContentData, setBackupUrlContentData] = useState(
+    //     isUrlContentData(initialContentData) ? initialContentData : { url: "" },
+    // );
+    // const [backupYooptaContentData, setBackupYooptaContentData] = useState(
+    //     isYooptaContentData(initialContentData) ? initialContentData : {},
+    // );
 
     // Toggle Sidebar
-    const { toggleSlidingSidebar, setContentType, setTitle, setSectionId, setUrlContentData } = useSlidingSidebar();
+    const { isSlidingSidebarOpen, toggleSlidingSidebar, setContentType, setTitle, setSectionId, setUrlContentData } = useSlidingSidebar();
 
 
     const router = useRouter();
 
-    function handleUrlContentDataChange(key: string, value: string) {
-        setUrlContentData((prevData) => ({
-            ...prevData,
-            [key]: value,
-        }));
-    }
+    // function handleUrlContentDataChange(key: string, value: string) {
+    //     setUrlContentData((prevData) => ({
+    //         ...prevData,
+    //         [key]: value,
+    //     }));
+    // }
 
 
-    function handleCancel() {
-        // Revert to backup data
-        setContentType(backupContentType);
-        setTitle(backupTitle);
-        setUrlContentData(backupUrlContentData);
-        setYooptaContentData(backupYooptaContentData);
+    // function handleCancel() {
+    //     // Revert to backup data
+    //     setContentType(backupContentType);
+    //     setTitle(backupTitle);
+    //     setUrlContentData(backupUrlContentData);
+    //     setYooptaContentData(backupYooptaContentData);
 
-        cancelEdit();
-    }
+    //     cancelEdit();
+    // }
 
 
-    function handleViewClick() {
+    const handleViewClick = () => {
+      if (!isSlidingSidebarOpen) {
+        toggleSlidingSidebar(); // Only open the sidebar if it's closed
+      }
+      // Always set the content data
       setContentType(initialContentType);
       setTitle(initialTitle);
-      setSectionId(id); // Pass the section ID
-      setUrlContentData(urlContentData);
-      toggleSlidingSidebar();
-    }
+      setSectionId(id);
+      if (initialContentType === SectionContentType.URL) {
+        setUrlContentData(isUrlContentData(initialContentData) ? initialContentData : { url: "" });
+      }
+    };
 
     return (
       <div className="relative group">
