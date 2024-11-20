@@ -33,8 +33,38 @@ import Link from "@yoopta/link";
 import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
 import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
+import { Transforms } from "slate";
+import { ConsoleLogWriter } from "drizzle-orm";
 export const plugins = [
-    Paragraph,
+    Paragraph.extend({
+        renders: {
+            paragraph: ({ attributes, children, element }) => {
+                const isEmpty =
+                    element.children.length === 1 &&
+                    element.children[0].text === "";
+                return (
+                    <p {...attributes} {...element}>
+                        {isEmpty && (
+                            <span
+                                contentEditable={false}
+                                style={{
+                                    position: "absolute",
+                                    left: 0,
+                                    top: 0,
+                                    opacity: 0.5,
+                                    pointerEvents: "none",
+                                    fontStyle: "italic",
+                                }}
+                            >
+                                {"Type / to open menu"}
+                            </span>
+                        )}
+                        {children}
+                    </p>
+                );
+            },
+        },
+    }),
     Table,
     NumberedList,
     BulletedList,
@@ -87,6 +117,14 @@ export default function Editor({
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
     const titleRef = useRef<HTMLTextAreaElement>(null);
 
+    // useEffect(() => {
+    //     editor.on("path-change", (path) => {
+    //         const index = editor.path.current;
+    //         const block = editor.getBlock({ at: index });
+
+    //         console.log("PATH CHANGE", block);
+    //     });
+    // }, []);
     useEffect(() => {
         // If the last content block is deleted, go back to the title
         if (Object.keys(content).length === 0) {
@@ -176,7 +214,7 @@ export default function Editor({
                 <YooptaEditor
                     key={editable ? "editable" : "readOnly"}
                     editor={editor}
-                    placeholder="Type / to open menu"
+                    placeholder=""
                     value={content}
                     onChange={onChange}
                     // here we go
