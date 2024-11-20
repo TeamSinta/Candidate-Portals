@@ -91,7 +91,11 @@ function EditorWrapper({ section, portal }: Props) {
                     onTitleChange={(newTitle: string) => {
                         setTitle(newTitle);
                     }}
-                    title={title ?? ""}
+                    title={
+                        isPreviewing
+                            ? replaceText(title, sampleDictionary)
+                            : (title ?? "")
+                    }
                 />
             </div>
             </div>

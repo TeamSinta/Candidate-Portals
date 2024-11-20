@@ -22,7 +22,7 @@ function EditorPageButtons({ data }: { data: string }) {
             {/* <Link href={`/dashboard/portal/${portalId}?createLink=true`}>
                 <Button className="flex gap-1 rounded-full ">
                     <Upload className="h-4 w-4" />
-                   Publish
+                    Publish
                 </Button>
             </Link> */}
                 <PreviewDialog portalData={data} isPreviewOpen={isPreviewOpen} setIsPreviewOpen={setIsPreviewOpen} />

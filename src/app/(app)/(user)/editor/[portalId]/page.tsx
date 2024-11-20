@@ -14,7 +14,6 @@ import EditorPageButtons from "./editor-page-buttons";
 async function PortalEditPage({ params }: { params: { portalId: string } }) {
   const data = await getPortalQuery(params.portalId);
   if (!data.portal) return notFound();
-  console.log("PORTAL DATA", data);
 
   return (
 <div className="flex h-full w-full flex-col space-y-4">
