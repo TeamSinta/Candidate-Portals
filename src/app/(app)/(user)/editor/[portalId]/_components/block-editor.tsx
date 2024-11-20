@@ -137,6 +137,7 @@ function BlockEditor({
               editing={selectedBlock === section.id}
               editBlock={() => setSelectedBlock(section.id)}
               cancelEdit={() => setSelectedBlock(undefined)}
+              portalId={portalId}
             />
           ))}
            <AddNewSectionDialog

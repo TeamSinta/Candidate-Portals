@@ -45,11 +45,13 @@ interface ContentBlockProps {
     editBlock: () => void;
     cancelEdit: () => void;
     initialTitle: string;
+    portalId: string;
 }
 
 function ContentBlock({
     index,
     id,
+    portalId,
     initialContentType,
     initialContentData,
     initialTitle,
@@ -80,7 +82,7 @@ function ContentBlock({
     // );
 
     // Toggle Sidebar
-    const { isSlidingSidebarOpen, toggleSlidingSidebar, setContentType, setTitle, setSectionId, setUrlContentData } = useSlidingSidebar();
+    const { isSlidingSidebarOpen, setPortalId ,toggleSlidingSidebar, setContentType, setTitle, setSectionId, setUrlContentData } = useSlidingSidebar();
 
 
     const router = useRouter();
@@ -112,6 +114,7 @@ function ContentBlock({
       setContentType(initialContentType);
       setTitle(initialTitle);
       setSectionId(id);
+      setPortalId(portalId)
       if (initialContentType === SectionContentType.URL) {
         setUrlContentData(isUrlContentData(initialContentData) ? initialContentData : { url: "" });
       }

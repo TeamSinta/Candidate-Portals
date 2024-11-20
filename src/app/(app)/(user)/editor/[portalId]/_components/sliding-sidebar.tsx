@@ -10,6 +10,8 @@ import UrlInput from "./url-input";
 import EditorWrapper from "../../content/[sectionId]/_components/editor-wrapper";
 import { getSectionQuery } from "@/server/actions/portal/queries";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { updateSectionContent } from "@/server/actions/portal/mutations";
+import { toast } from "sonner";
 
 type SlidingSidebarContextType = {
   isSlidingSidebarOpen: boolean;
@@ -23,6 +25,8 @@ type SlidingSidebarContextType = {
   setUrlContentData: Dispatch<SetStateAction<{ url: string }>>;
   sectionId: string | null; // Add sectionId
   setSectionId: Dispatch<SetStateAction<string | null>>; // Function to set sectionId
+  portalId: string | null; // Add sectionId
+  setPortalId: Dispatch<SetStateAction<string | null>>;
 };
 
 // Create the context with a default value
@@ -43,12 +47,16 @@ export const SlidingSidebarProvider = ({ children }) => {
   const [title, setTitle] = useState<string>("");
   const [urlContentData, setUrlContentData] = useState<{ url: string }>({ url: "" });
   const [sectionId, setSectionId ] = useState<string | null>(null); // Add state for sectionId
+  const [portalId, setPortalId ] = useState<string | null>(null); // Add state for sectionId
 
   const pathname = usePathname(); // Get the current pathname
 
   const toggleSlidingSidebar = () => {
     setSlidingSidebarOpen((prev) => !prev);
   };
+
+
+
 
   // Close the sidebar on pathname change
   useEffect(() => {
@@ -68,7 +76,10 @@ export const SlidingSidebarProvider = ({ children }) => {
       urlContentData,
       setUrlContentData,
       sectionId,
-      setSectionId
+      setSectionId,
+      portalId,
+      setPortalId
+
     }}
   >
       <div className="flex w-full">{children}</div>
@@ -87,6 +98,7 @@ const SlidingSidebar = () => {
     setTitle,
     urlContentData,
     setUrlContentData,
+    portalId,
     sectionId, // Assuming sectionId is passed to the context
   } = useSlidingSidebar();
 
@@ -119,6 +131,8 @@ const SlidingSidebar = () => {
   }, [sectionId, isSlidingSidebarOpen, contentType]);
 
 
+
+
   return (
     <AnimatePresence>
       {isSlidingSidebarOpen && (
@@ -142,7 +156,8 @@ const SlidingSidebar = () => {
                 onChange={(key, value) => setUrlContentData({ ...urlContentData, [key]: value })}
                 onTitleChange={setTitle}
                 editable={true}
-                onSave={() => { /* Define what happens when Save is clicked */ }}
+                portalId={portalId}
+                sectionId={sectionId}
                 isSlidingSidebarOpen={isSlidingSidebarOpen}
                 setSlidingSidebarOpen={setSlidingSidebarOpen}
               />

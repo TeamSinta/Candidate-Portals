@@ -2,25 +2,30 @@ import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PanelRight, Pencil, AlertCircle } from "lucide-react";
+import { toast } from "sonner"; // Assuming you're using the 'sonner' toast library
+import { updateSectionContent } from "@/server/actions/portal/mutations";
+import { SectionContentType } from "@/server/db/schema";
 
 interface UrlInputProps {
+  sectionId: string;
+  portalId: string | null; // Add sectionId
   title: string;
   url: string;
   onChange: (key: string, value: string) => void;
   onTitleChange: (newTitle: string) => void;
   editable: boolean;
-  onSave: () => void;
   isSlidingSidebarOpen: boolean;
   setSlidingSidebarOpen: (open: boolean) => void;
 }
 
 const UrlInput: React.FC<UrlInputProps> = ({
+  sectionId,
+  portalId,
   title,
   url,
   onChange,
   onTitleChange,
   editable,
-  onSave,
   isSlidingSidebarOpen,
   setSlidingSidebarOpen,
 }) => {
@@ -31,6 +36,24 @@ const UrlInput: React.FC<UrlInputProps> = ({
   const handleTitleSave = () => {
     onTitleChange(newTitle);
     setIsEditingTitle(false);
+  };
+
+  // Save function moved into UrlInput
+  const handleSave = async () => {
+    try {
+      await updateSectionContent({
+        id: sectionId,
+        portalId: portalId,
+        title: newTitle,
+        content: { url }, // Assuming content is just the URL for this section
+        contentType: SectionContentType.URL,
+        index: 0, // Adjust index based on your needs
+      });
+      toast.success("Section saved successfully");
+      setSlidingSidebarOpen(false);
+    } catch {
+      toast.error("Failed to save section");
+    }
   };
 
   return (
@@ -80,7 +103,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
         <div className="flex items-center space-x-2">
           {/* Publish Button */}
           <Button
-            onClick={onSave}
+            onClick={handleSave}
             variant="outline"
             className="border-indigo-500 hover:bg-indigo-500 hover:text-white text-indigo-600 border-2 rounded"
           >
@@ -106,7 +129,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
       {url && !iframeError ? (
         <iframe
           src={url}
-          className="w-full h-[80vh]  border rounded-lg"
+          className="w-full h-[80vh] border rounded-lg"
           onError={() => setIframeError(true)}
         ></iframe>
       ) : (
