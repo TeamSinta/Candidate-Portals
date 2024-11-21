@@ -7,11 +7,11 @@ import { SidebarInset } from "@/components/ui/sidebar"; // Adjust the import pat
 import { usePathname } from "next/navigation"; // Use usePathname from next/navigation
 import { SectionContentType } from "@/server/db/schema"; // Import SectionContentType
 import UrlInput from "./url-input";
-import EditorWrapper from "../../content/[sectionId]/_components/editor-wrapper";
 import { getSectionQuery } from "@/server/actions/portal/queries";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
+import EditorWrapperHeaders from "../../content/[sectionId]/_components/editor-wrapper-headers";
 
 type SlidingSidebarContextType = {
   isSlidingSidebarOpen: boolean;
@@ -188,7 +188,7 @@ const SlidingSidebar = () => {
             {!loading && contentType === SectionContentType.YOOPTA && sectionData && portalData && (
                 sectionData.content ? (
 
-              <EditorWrapper section={sectionData} portal={portalData} />
+              <EditorWrapperHeaders section={sectionData} portal={portalData} />
             ) : (
               <p>Error: Content is missing or improperly formatted</p>
             )

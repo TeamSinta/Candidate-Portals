@@ -1,5 +1,4 @@
 "use client";
-import { AppPageShell } from "@/app/(app)/_components/page-shell";
 import Editor from "@/components/editor";
 import {
     PortalSelect,
@@ -15,13 +14,13 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
 import { useSlidingSidebar } from "../../../[portalId]/_components/sliding-sidebar";
-import EditorHeader from "./editor-headers";
+import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
 
 interface Props {
     section: SectionSelect;
     portal: PortalSelect;
 }
-function EditorWrapper({ section, portal }: Props) {
+function EditorWrapperHeaders({ section, portal }: Props) {
     const [sectionContent, setSectionContent] = useState<YooptaContentValue>(
         section.content as YooptaContentValue,
     );
@@ -31,24 +30,37 @@ function EditorWrapper({ section, portal }: Props) {
     const router = useRouter();
     const { setSlidingSidebarOpen } = useSlidingSidebar();
 
+    const { setBlocks } = useBlockEditor();
+
     async function handleSave() {
         try {
-            await updateSectionContent({
+            const updatedSection = {
                 id: section.id,
                 portalId: portal.id,
                 title: title ?? "",
                 content: sectionContent,
                 contentType: SectionContentType.YOOPTA,
                 index: section.index,
-            });
-            toast.success("Section saved successfully");
-            setSlidingSidebarOpen(false)
+            };
 
+            // Update the section in the database
+            await updateSectionContent(updatedSection);
+
+            // Update the shared blocks state
+            setBlocks((prevBlocks) =>
+                prevBlocks.map((block) =>
+                    block.id === section.id ? { ...block, ...updatedSection } : block                )
+
+
+            );
+
+            toast.success("Section saved successfully");
+            setSlidingSidebarOpen(false);
+            router.refresh();
         } catch {
             toast.error("Failed to save section");
         }
     }
-
     function handleTogglePreview() {
         sidebar.setOpen(isPreviewing);
         setIsPreviewing(!isPreviewing);
@@ -60,15 +72,24 @@ function EditorWrapper({ section, portal }: Props) {
       {/* Sticky Toolbar */}
 
       <div className="sticky top-0 z-10 p-4">
-         <EditorHeader
+         <ContentEditorPageButtons
                     key={0}
                     onSave={handleSave}
-
+                    onTogglePreview={handleTogglePreview}
+                    isPreviewing={isPreviewing}
+                    sectionid={section.id}
                 />
                   </div>
 
             <div >
                 <Editor
+                    // key={isPreviewing ? "preview" : "edit"}
+                    // content={JSON.parse(
+                    //     replaceText(
+                    //         JSON.stringify(sectionContent),
+                    //         sampleDictionary,
+                    //     ),
+                    // )}
                     content={
                         isPreviewing
                             ? JSON.parse(
@@ -96,4 +117,4 @@ function EditorWrapper({ section, portal }: Props) {
     );
 }
 
-export default EditorWrapper;
+export default EditorWrapperHeaders;
