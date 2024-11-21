@@ -15,6 +15,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
 import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
 import { useSlidingSidebar } from "../../../[portalId]/_components/sliding-sidebar";
+import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
 
 interface Props {
     section: SectionSelect;
@@ -30,23 +31,37 @@ function EditorWrapper({ section, portal }: Props) {
     const router = useRouter();
     const { setSlidingSidebarOpen } = useSlidingSidebar();
 
+    const { setBlocks } = useBlockEditor();
+
     async function handleSave() {
         try {
-            await updateSectionContent({
+            const updatedSection = {
                 id: section.id,
                 portalId: portal.id,
                 title: title ?? "",
                 content: sectionContent,
                 contentType: SectionContentType.YOOPTA,
                 index: section.index,
-            });
+            };
+
+            // Update the section in the database
+            await updateSectionContent(updatedSection);
+
+            // Update the shared blocks state
+            setBlocks((prevBlocks) =>
+                prevBlocks.map((block) =>
+                    block.id === section.id ? { ...block, ...updatedSection } : block                )
+
+
+            );
+
             toast.success("Section saved successfully");
-            setSlidingSidebarOpen(false)
+            setSlidingSidebarOpen(false);
+            router.refresh();
         } catch {
             toast.error("Failed to save section");
         }
     }
-
     function handleTogglePreview() {
         sidebar.setOpen(isPreviewing);
         setIsPreviewing(!isPreviewing);

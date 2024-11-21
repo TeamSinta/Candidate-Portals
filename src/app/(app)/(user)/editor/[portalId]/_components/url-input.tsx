@@ -5,6 +5,8 @@ import { PanelRight, Pencil, AlertCircle } from "lucide-react";
 import { toast } from "sonner"; // Assuming you're using the 'sonner' toast library
 import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { SectionContentType } from "@/server/db/schema";
+import { useRouter } from "next/navigation";
+import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
 
 interface UrlInputProps {
   sectionId: string;
@@ -32,6 +34,8 @@ const UrlInput: React.FC<UrlInputProps> = ({
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [iframeError, setIframeError] = useState(false);
   const [newTitle, setNewTitle] = useState(title);
+  const router = useRouter();
+  const { setBlocks } = useBlockEditor();
 
   const handleTitleSave = () => {
     onTitleChange(newTitle);
@@ -41,21 +45,33 @@ const UrlInput: React.FC<UrlInputProps> = ({
   // Save function moved into UrlInput
   const handleSave = async () => {
     try {
-      await updateSectionContent({
-        id: sectionId,
-        portalId: portalId,
-        title: newTitle,
-        content: { url }, // Assuming content is just the URL for this section
-        contentType: SectionContentType.URL,
-        index: 0, // Adjust index based on your needs
-      });
-      toast.success("Section saved successfully");
-      setSlidingSidebarOpen(false);
-    } catch {
-      toast.error("Failed to save section");
-    }
-  };
+        const updatedSection = {
+            id: sectionId,
+            portalId: portalId,
+            title: newTitle,
+            content: { url }, // Assuming content is just the URL for this section
+            contentType: SectionContentType.URL,
+            index: 0, // Adjust index based on your needs
+        };
 
+        // Update the section in the database
+        await updateSectionContent(updatedSection);
+
+        // Update the shared blocks state
+        setBlocks((prevBlocks) => {
+          const updatedBlocks = prevBlocks.map((block) =>
+              block.id === sectionId ? { ...block, ...updatedSection } : block
+          );
+          return updatedBlocks;
+      });
+
+        toast.success("Section saved successfully");
+        setSlidingSidebarOpen(false);
+        router.refresh();
+    } catch {
+        toast.error("Failed to save section");
+    }
+};
   return (
     <div className="flex flex-col space-y-8">
       {/* Header Bar with Title and Buttons */}
