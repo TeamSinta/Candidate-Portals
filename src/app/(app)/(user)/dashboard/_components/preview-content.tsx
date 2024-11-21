@@ -69,7 +69,7 @@ export default function PortalContentPreview({
             case "Link":
                 console.log(section, "section");
                 return <LinkComponent urlData={section.content} />;
-            case "Yoopta":
+            case "Editor":
                 console.log(section, "section");
 
                 return (
