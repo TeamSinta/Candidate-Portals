@@ -1,13 +1,16 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { SectionContentType } from "@/server/db/schema";
 import LinkComponent from "@/app/(view-pages)/view/[token]/_components/url-reader";
-import YooptaReader from "@/app/(view-pages)/view/[token]/_components/yoopta-reader";
 import CardNavigatorMenu from "@/app/(view-pages)/view/[token]/_components/card-navigator-nenu";
 import { Badge } from "@/components/ui/badge";
-
+import Editor from "@/components/editor";
+import {
+    replaceText,
+    sampleDictionary,
+} from "../../editor/utils/yoopta-config";
+import { useSidebar } from "@/components/ui/sidebar";
+import { YooptaContentValue } from "@yoopta/editor";
 
 type Section = {
     contentType: string;
@@ -28,9 +31,13 @@ type PortalContentPreviewProps = {
     };
 };
 
-export default function PortalContentPreview({ portalData }: PortalContentPreviewProps) {
+export default function PortalContentPreview({
+    portalData,
+}: PortalContentPreviewProps) {
     const [selectedSectionIndex, setSelectedSectionIndex] = useState(0);
     const [isCardCollapsed, setIsCardCollapsed] = useState(false);
+    const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+    const sidebar = useSidebar();
 
     const toggleCardCollapse = () => {
         setIsCardCollapsed(!isCardCollapsed);
@@ -41,58 +48,98 @@ export default function PortalContentPreview({ portalData }: PortalContentPrevie
     }
 
     const { sections } = portalData;
-    console.log(sections)
+    console.log(sections);
     const selectedSection = sections[selectedSectionIndex];
-
+    const [title, setTitle] = useState<string>(selectedSection?.title ?? "");
+    const [sectionContent, setSectionContent] = useState<YooptaContentValue>(
+        selectedSection?.content as YooptaContentValue,
+    );
     const handleSectionSelect = (index: number) => {
         setSelectedSectionIndex(index);
         setIsCardCollapsed(false);
     };
 
+    function handleTogglePreview() {
+        sidebar.setOpen(isPreviewing);
+        setIsPreviewing(!isPreviewing);
+    }
+
     const renderSectionContent = (section: Section) => {
         switch (section.contentType) {
             case "Link":
-                return (
-
-                <LinkComponent urlData={section.content} />
-                );
+                console.log(section, "section");
+                return <LinkComponent urlData={section.content} />;
             case "Yoopta":
-                return (
-                  <div className="max-h-[55%] overflow-scroll w-full rounded">
+                console.log(section, "section");
 
-                    <YooptaReader
-                        sectionId={section.section_id}
-                        content={section.content}
-                        portalData={portalData}
-                    />
-                     </div>
+                return (
+                    <div className="max-h-[55%] w-full overflow-scroll rounded">
+                        <Editor
+                            content={
+                                isPreviewing
+                                    ? JSON.parse(
+                                          replaceText(
+                                              JSON.stringify(section.content),
+                                              sampleDictionary,
+                                          ),
+                                      )
+                                    : section.content
+                            }
+                            editable={false}
+                            onChange={setSectionContent}
+                            onTitleChange={(newTitle: string) => {
+                                setTitle(newTitle);
+                            }}
+                            title={
+                               (section.title ?? "")
+                            }
+                        />
+                    </div>
                 );
             case "Notion Editor":
-              return (
-                <div className="max-h-[45rem] overflow-scroll w-full rounded">
-                <YooptaReader
-                    sectionId={section.section_id}
-                    content={section.content}
-                    portalData={portalData}
-                />
-                </div>
-              )
-                ;
+                console.log(section, "section");
+
+                return (
+                    <div className="max-h-[45rem] w-full overflow-scroll rounded">
+                        <Editor
+                            content={
+                                isPreviewing
+                                    ? JSON.parse(
+                                          replaceText(
+                                              JSON.stringify(section.content),
+                                              sampleDictionary,
+                                          ),
+                                      )
+                                    : section.content
+                            }
+                            editable={false}
+                            onChange={setSectionContent}
+                            onTitleChange={(newTitle: string) => {
+                                setTitle(newTitle);
+                            }}
+                            title={
+                               (section.title ?? "")
+                            }
+                        />
+                    </div>
+                );
             default:
                 return <p>Content not available</p>;
         }
     };
 
     return (
-        <div className="h-full pb-4 rounded">
+        <div className="h-full rounded pb-4">
             <div className="h-full w-full rounded">
                 {selectedSection ? (
                     <>
-                    <div className="flex gap-2 items-center pb-2">
-                    <Badge className="text-sm font-medium text-blue-700 dark:text-blue-300 bg-blue-100 dark:bg-blue-900 rounded-full px-3 py-1 tracking-wide hover:bg-blue-100 hover:text-blue-700">
-                    Preview Mode
-</Badge><h1 className="text-lg font-bold">{selectedSection.title} </h1>
-
+                        <div className="flex items-center gap-2 pb-2">
+                            <Badge className="rounded-full bg-blue-100 px-3 py-1 text-sm font-medium tracking-wide text-blue-700 hover:bg-blue-100 hover:text-blue-700 dark:bg-blue-900 dark:text-blue-300">
+                                Preview Mode
+                            </Badge>
+                            <h1 className="text-lg font-bold">
+                                {selectedSection.title}{" "}
+                            </h1>
                         </div>
 
                         {renderSectionContent(selectedSection)}

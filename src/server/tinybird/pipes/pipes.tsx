@@ -55,17 +55,16 @@ export const getTopEngaged = tb.buildPipe({
     data: topEngagedSchemaTB, // Schema to validate the returned data
 });
 
-
 export const uniqueViewsSchemaTB = z.object({
-  portal_id: z.string(),
-  unique_views: z.number(), // Number of unique views as a count
+    portal_id: z.string(),
+    unique_views: z.number(), // Number of unique views as a count
 });
 
 // Define the new Tinybird pipe for unique views
 export const getUniqueViews = tb.buildPipe({
-  pipe: "unique_views", // Name of your Tinybird pipe for unique views
-  parameters: z.object({
-      portal_id: z.string().optional(), // Optional parameter to filter by portal ID
-  }),
-  data: uniqueViewsSchemaTB, // The schema to validate the returned data
+    pipe: "unique_views", // Name of your Tinybird pipe for unique views
+    parameters: z.object({
+        portal_id: z.string().optional(), // Optional parameter to filter by portal ID
+    }),
+    data: uniqueViewsSchemaTB, // The schema to validate the returned data
 });

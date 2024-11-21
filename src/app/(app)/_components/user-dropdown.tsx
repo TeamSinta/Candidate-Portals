@@ -114,14 +114,12 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
 
                 {/* Upgrade Section */}
                 <DropdownMenuGroup>
-                <Link href={siteUrls.organization.plansAndBilling}>
-
-                    <DropdownMenuItem>
-                        <Sparkles className="mr-2 h-4 w-4" />
-                        Upgrade to Pro
-                    </DropdownMenuItem>
+                    <Link href={siteUrls.organization.plansAndBilling}>
+                        <DropdownMenuItem>
+                            <Sparkles className="mr-2 h-4 w-4" />
+                            Upgrade to Pro
+                        </DropdownMenuItem>
                     </Link>
-
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 

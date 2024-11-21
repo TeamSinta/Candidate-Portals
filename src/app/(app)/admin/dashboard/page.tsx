@@ -40,7 +40,6 @@ export default async function AdminDashPage() {
             title={adminDashConfig.title}
             description={adminDashConfig.description}
         >
-
             <div className="grid w-full gap-8">
                 <p className="text-sm">
                     This a simple dashboard with Analytics, to see detailed

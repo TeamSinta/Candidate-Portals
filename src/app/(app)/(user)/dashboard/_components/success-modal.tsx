@@ -44,7 +44,7 @@ export default function ClientModal({ portalData }: ClientModalProps) {
     };
 
     return (
-        <Dialog  open={isModalOpen} onOpenChange={handleOpenChange}>
+        <Dialog open={isModalOpen} onOpenChange={handleOpenChange}>
             <DialogContent>
                 <DialogHeader>
                     {/* <DialogTitle>Create Link</DialogTitle> */}

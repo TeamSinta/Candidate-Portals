@@ -129,7 +129,7 @@ export default function CreateLinkSheetContent({
 
                 {/* Optional Fields */}
                 <Accordion
-                  type="single"
+                    type="single"
                     collapsible
                     defaultValue="optional-fields"
                 >
