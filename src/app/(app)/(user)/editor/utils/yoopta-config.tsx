@@ -18,14 +18,7 @@ export function replaceText(
 }
 
 
-  // Iterate through the dictionary entries and replace placeholders in the text
-  for (const [key, value] of Object.entries(dictionary)) {
-      // Create a regular expression to match the placeholder
-      const regex = new RegExp(`{{${key}}}`, "g");
-      text = text.replace(regex, value);
-  }
-  return text;
-}
+
 // OBSOLETE
 // export function getExtendedParagraph(
 //     replacementDictionary: Record<string, string>,
