@@ -6,9 +6,17 @@ export function replaceText(
   text: string,
   dictionary?: Record<string, string>, // Make dictionary optional
 ): string {
-  if (!dictionary) {
-      return text; // Return the original text if no dictionary is provided
-  }
+
+    if (!dictionary) return text;
+    // Iterate through the dictionary entries and replace placeholders in the text
+    for (const [key, value] of Object.entries(dictionary)) {
+        // Create a regular expression to match the placeholder
+        const regex = new RegExp(`{{${key}}}`, "g");
+        text = text.replace(regex, value);
+    }
+    return text;
+}
+
 
   // Iterate through the dictionary entries and replace placeholders in the text
   for (const [key, value] of Object.entries(dictionary)) {
