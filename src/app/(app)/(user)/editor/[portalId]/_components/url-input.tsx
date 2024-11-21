@@ -125,7 +125,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
                         variant="outline"
                         className="rounded border-2 border-indigo-500 text-indigo-600 hover:bg-indigo-500 hover:text-white"
                     >
-                        Publish
+                        Save
                     </Button>
 
                     {/* Close Sidebar Button */}

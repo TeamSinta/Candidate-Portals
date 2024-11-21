@@ -25,7 +25,7 @@ function EditorHeader({ onSave }: Props) {
                     variant="outline"
                     className="rounded border-2 border-indigo-500 p-5 text-indigo-600 hover:bg-indigo-500 hover:text-white"
                 >
-                    Publish
+                    Save
                 </Button>
 
                 {/* Close Sidebar Button with Active/Highlighted State */}
