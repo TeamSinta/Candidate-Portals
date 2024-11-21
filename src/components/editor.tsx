@@ -38,7 +38,10 @@ import { ConsoleLogWriter } from "drizzle-orm";
 export const plugins = [
     Paragraph.extend({
         renders: {
-            paragraph: ({ attributes, children, element }) => {
+            paragraph: ({ extendRender, attributes, children, element }) => {
+                // console.log("attributes", attributes);
+                // console.log("children", children);
+                // console.log("element", element);
                 const isEmpty =
                     element.children.length === 1 &&
                     element.children[0].text === "";
