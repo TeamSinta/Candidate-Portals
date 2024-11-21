@@ -18,7 +18,6 @@ import { useRouter } from "next/navigation";
 import AddNewSectionDialog from "./add-new-section";
 import { useSlidingSidebar } from "./sliding-sidebar";
 
-
 import { useEffect } from "react";
 import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
 
@@ -35,8 +34,13 @@ function BlockEditor({
     const [selectedBlock, setSelectedBlock] = useState<string | undefined>(
         undefined,
     );
-        useState<PortalSelect>(initialPortalData);
-    const { setSlidingSidebarOpen, setSectionId, setContentType, isSlidingSidebarOpen } = useSlidingSidebar();
+    useState<PortalSelect>(initialPortalData);
+    const {
+        setSlidingSidebarOpen,
+        setSectionId,
+        setContentType,
+        isSlidingSidebarOpen,
+    } = useSlidingSidebar();
 
     const router = useRouter();
 
@@ -46,8 +50,8 @@ function BlockEditor({
     }, []);
 
     useEffect(() => {
-      console.log("Rendering BlockEditor with blocks:", blocks);
-  }, [blocks]);
+        console.log("Rendering BlockEditor with blocks:", blocks);
+    }, [blocks]);
 
     async function handleSaveBlock(
         index: number,
@@ -122,8 +126,8 @@ function BlockEditor({
                 <div
                     className={`${
                         isSlidingSidebarOpen
-                            ? "flex flex-col items-center w-full justify-center gap-4 px-6 pt-6"
-                            : "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 px-6 pt-6"
+                            ? "flex w-full flex-col items-center justify-center gap-4 px-6 pt-6"
+                            : "grid grid-cols-1 gap-8 px-6 pt-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"
                     }`}
                 >
                     {blocks.map((section, index) => (
@@ -131,7 +135,9 @@ function BlockEditor({
                             key={section.id}
                             id={section.id}
                             index={index + 1}
-                            initialContentData={section.content as ContentDataType}
+                            initialContentData={
+                                section.content as ContentDataType
+                            }
                             initialTitle={section.title ?? ""}
                             initialContentType={section.contentType}
                             onSaveBlock={(data) => handleSaveBlock(index, data)}

@@ -6,20 +6,20 @@ import { siteConfig } from "@/config/site";
 import { siteUrls } from "@/config/urls";
 
 interface SendVerificationEmailProps {
-  params: SendVerificationRequestParams;
+    params: SendVerificationRequestParams;
 }
 
 // Send a verification email to the user
 export async function sendVerificationEmail({
-  params,
+    params,
 }: SendVerificationEmailProps) {
-  try {
-    // Send email to user via resend
-    await resend.emails.send({
-      from: siteConfig.noReplyEmail,
-      to: params.identifier,
-      subject: `Verify | Sign into ${siteConfig.name}`,
-      html: `
+    try {
+        // Send email to user via resend
+        await resend.emails.send({
+            from: siteConfig.noReplyEmail,
+            to: params.identifier,
+            subject: `Verify | Sign into ${siteConfig.name}`,
+            html: `
          <div style="font-family: Arial, sans-serif; max-width: 500px; margin: 0 auto; padding: 40px; background-color: #ffffff;">
           <div style="margin-bottom: 30px; text-align: start;">
             <a href="${siteUrls.teamsinta}" style="text-decoration: none;">
@@ -47,15 +47,15 @@ export async function sendVerificationEmail({
           </p>
         </div>
       `,
-      text: `Sign in to ${siteConfig.name} using this link: ${params.url}`,
-      tags: [
-        {
-          name: "category",
-          value: "confirm_email",
-        },
-      ],
-    });
-  } catch (error) {
-    throw new Error("Failed to send verification email");
-  }
+            text: `Sign in to ${siteConfig.name} using this link: ${params.url}`,
+            tags: [
+                {
+                    name: "category",
+                    value: "confirm_email",
+                },
+            ],
+        });
+    } catch (error) {
+        throw new Error("Failed to send verification email");
+    }
 }

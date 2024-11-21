@@ -49,9 +49,10 @@ function EditorWrapperHeaders({ section, portal }: Props) {
             // Update the shared blocks state
             setBlocks((prevBlocks) =>
                 prevBlocks.map((block) =>
-                    block.id === section.id ? { ...block, ...updatedSection } : block                )
-
-
+                    block.id === section.id
+                        ? { ...block, ...updatedSection }
+                        : block,
+                ),
             );
 
             toast.success("Section saved successfully");
@@ -68,50 +69,50 @@ function EditorWrapperHeaders({ section, portal }: Props) {
 
     return (
         <>
-          <div className="relative">
-      {/* Sticky Toolbar */}
+            <div className="relative">
+                {/* Sticky Toolbar */}
 
-      <div className="sticky top-0 z-10 p-4">
-         <ContentEditorPageButtons
-                    key={0}
-                    onSave={handleSave}
-                    onTogglePreview={handleTogglePreview}
-                    isPreviewing={isPreviewing}
-                    sectionid={section.id}
-                />
-                  </div>
+                <div className="sticky top-0 z-10 p-4">
+                    <ContentEditorPageButtons
+                        key={0}
+                        onSave={handleSave}
+                        onTogglePreview={handleTogglePreview}
+                        isPreviewing={isPreviewing}
+                        sectionid={section.id}
+                    />
+                </div>
 
-            <div >
-                <Editor
-                    // key={isPreviewing ? "preview" : "edit"}
-                    // content={JSON.parse(
-                    //     replaceText(
-                    //         JSON.stringify(sectionContent),
-                    //         sampleDictionary,
-                    //     ),
-                    // )}
-                    content={
-                        isPreviewing
-                            ? JSON.parse(
-                                  replaceText(
-                                      JSON.stringify(sectionContent),
-                                      sampleDictionary,
-                                  ),
-                              )
-                            : sectionContent
-                    }
-                    editable={!isPreviewing}
-                    onChange={setSectionContent}
-                    onTitleChange={(newTitle: string) => {
-                        setTitle(newTitle);
-                    }}
-                    title={
-                        isPreviewing
-                            ? replaceText(title, sampleDictionary)
-                            : (title ?? "")
-                    }
-                />
-            </div>
+                <div>
+                    <Editor
+                        // key={isPreviewing ? "preview" : "edit"}
+                        // content={JSON.parse(
+                        //     replaceText(
+                        //         JSON.stringify(sectionContent),
+                        //         sampleDictionary,
+                        //     ),
+                        // )}
+                        content={
+                            isPreviewing
+                                ? JSON.parse(
+                                      replaceText(
+                                          JSON.stringify(sectionContent),
+                                          sampleDictionary,
+                                      ),
+                                  )
+                                : sectionContent
+                        }
+                        editable={!isPreviewing}
+                        onChange={setSectionContent}
+                        onTitleChange={(newTitle: string) => {
+                            setTitle(newTitle);
+                        }}
+                        title={
+                            isPreviewing
+                                ? replaceText(title, sampleDictionary)
+                                : (title ?? "")
+                        }
+                    />
+                </div>
             </div>
         </>
     );

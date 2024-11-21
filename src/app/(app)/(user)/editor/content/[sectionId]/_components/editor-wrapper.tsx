@@ -42,8 +42,7 @@ function EditorWrapper({ section, portal }: Props) {
                 index: section.index,
             });
             toast.success("Section saved successfully");
-            setSlidingSidebarOpen(false)
-
+            setSlidingSidebarOpen(false);
         } catch {
             toast.error("Failed to save section");
         }
@@ -56,41 +55,37 @@ function EditorWrapper({ section, portal }: Props) {
 
     return (
         <>
-          <div className="relative">
-      {/* Sticky Toolbar */}
+            <div className="relative">
+                {/* Sticky Toolbar */}
 
-      <div className="sticky top-0 z-10 p-4">
-         <EditorHeader
-                    key={0}
-                    onSave={handleSave}
+                <div className="sticky top-0 z-10 p-4">
+                    <EditorHeader key={0} onSave={handleSave} />
+                </div>
 
-                />
-                  </div>
-
-            <div >
-                <Editor
-                    content={
-                        isPreviewing
-                            ? JSON.parse(
-                                  replaceText(
-                                      JSON.stringify(sectionContent),
-                                      sampleDictionary,
-                                  ),
-                              )
-                            : sectionContent
-                    }
-                    editable={!isPreviewing}
-                    onChange={setSectionContent}
-                    onTitleChange={(newTitle: string) => {
-                        setTitle(newTitle);
-                    }}
-                    title={
-                        isPreviewing
-                            ? replaceText(title, sampleDictionary)
-                            : (title ?? "")
-                    }
-                />
-            </div>
+                <div>
+                    <Editor
+                        content={
+                            isPreviewing
+                                ? JSON.parse(
+                                      replaceText(
+                                          JSON.stringify(sectionContent),
+                                          sampleDictionary,
+                                      ),
+                                  )
+                                : sectionContent
+                        }
+                        editable={!isPreviewing}
+                        onChange={setSectionContent}
+                        onTitleChange={(newTitle: string) => {
+                            setTitle(newTitle);
+                        }}
+                        title={
+                            isPreviewing
+                                ? replaceText(title, sampleDictionary)
+                                : (title ?? "")
+                        }
+                    />
+                </div>
             </div>
         </>
     );

@@ -46,29 +46,29 @@ export const Icons = {
         );
     },
     circleLogo: ({
-      iconProps,
-      as,
-      className,
-      hideTextOnMobile = true,
-  }: {
-      iconProps?: IconProps;
-      as?: ElementType;
-      className?: string;
-      hideTextOnMobile?: boolean;
-  }) => {
-      const Comp = as ?? "div";
-      return (
-          <Comp
-              className={cn("flex items-center space-x-1 text-lg", className)}
-          >
-              <Image
-                  src={CircleLogo}
-                  alt="Company Logo"
-                  width={88} // Adjust size as needed
-                  height={80}
-                  className=""
-              />
-              {/* <span
+        iconProps,
+        as,
+        className,
+        hideTextOnMobile = true,
+    }: {
+        iconProps?: IconProps;
+        as?: ElementType;
+        className?: string;
+        hideTextOnMobile?: boolean;
+    }) => {
+        const Comp = as ?? "div";
+        return (
+            <Comp
+                className={cn("flex items-center space-x-1 text-lg", className)}
+            >
+                <Image
+                    src={CircleLogo}
+                    alt="Company Logo"
+                    width={88} // Adjust size as needed
+                    height={80}
+                    className=""
+                />
+                {/* <span
                   className={cn(
                       "font-bold",
                       "text-xl",
@@ -78,9 +78,9 @@ export const Icons = {
               >
                   {siteConfig.name}
               </span> */}
-          </Comp>
-      );
-  },
+            </Comp>
+        );
+    },
 
     logoIcon: (props: IconProps) => (
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" {...props}>

@@ -69,29 +69,30 @@ export default async function DashboardPage() {
 
     // Fetch unique views for each portal
     const portalsWithViews = await Promise.all(
-      portals.map(async (portal) => {
-          // Fetch unique views data for the current portal
-          const response = await getUniqueViews({ portal_id: portal.portalId });
+        portals.map(async (portal) => {
+            // Fetch unique views data for the current portal
+            const response = await getUniqueViews({
+                portal_id: portal.portalId,
+            });
 
-          // Find the matching data for the current portal
-          const viewData = response.data.find(
-              (item) => item.portal_id === portal.portalId
-          );
+            // Find the matching data for the current portal
+            const viewData = response.data.find(
+                (item) => item.portal_id === portal.portalId,
+            );
 
-          return {
-              ...portal,
-              views: viewData ? viewData.unique_views : 0, // Use unique views or default to 0 if not found
-          };
-      })
-  );
-
+            return {
+                ...portal,
+                views: viewData ? viewData.unique_views : 0, // Use unique views or default to 0 if not found
+            };
+        }),
+    );
 
     return (
         <AppPageShell
             title={dashboardPageConfig.title}
             description={dashboardPageConfig.description}
         >
-            <div  className=" mx-2 sticky bg-white p-4 pb-0 dark:bg-gray-900">
+            <div className=" sticky mx-2 bg-white p-4 pb-0 dark:bg-gray-900">
                 <div className="mb-4 flex items-center justify-between">
                     <div className="space-y-0 sm:space-y-1">
                         <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
@@ -116,7 +117,7 @@ export default async function DashboardPage() {
                         </Button>
                     </div>
                 </div>
-{/*
+                {/*
                 <div className="mb-2 flex justify-end gap-x-2">
                     <div className="relative w-full sm:max-w-xs">
                         <input
