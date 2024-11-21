@@ -6,6 +6,7 @@ export function replaceText(
     text: string,
     dictionary: Record<string, string>,
 ): string {
+    if (!dictionary) return text;
     // Iterate through the dictionary entries and replace placeholders in the text
     for (const [key, value] of Object.entries(dictionary)) {
         // Create a regular expression to match the placeholder
