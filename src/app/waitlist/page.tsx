@@ -12,16 +12,17 @@ export const metadata: Metadata = {
 export default function Waitlist() {
     return (
         <main className="container flex min-h-screen w-screen flex-col items-center justify-center space-y-4">
-            <Icons.logoIcon className="h-10 w-10 text-foreground sm:h-14 sm:w-14" />
+            <Icons.circleLogo className="h-80 w-80 text-foreground sm:h-20 sm:w-20" />
 
-            <h1 className=" z-10 bg-gradient-to-br from-muted to-foreground bg-clip-text text-center font-heading text-3xl  font-bold text-transparent md:text-7xl">
-                Join the waitlist
+            <h1 className=" z-10 bg-gradient-to-br from-muted to-foreground bg-clip-text text-center font-heading text-4xl  font-bold text-transparent md:text-7xl">
+                Join the Beta
             </h1>
-            <p className=" z-10 mx-auto max-w-lg text-center text-sm text-muted-foreground">
-                Welcome to {siteConfig.name}, a platform which provides
-                resources for building applications faster. We&apos;re currently
-                working on adding more features and improving the user
-                experience. In the meantime, you can join our waitlist!
+            <p className=" z-10 mx-auto max-w-lg text-center text-md text-muted-foreground">
+                Welcome to {siteConfig.name}, effortless create candidate portals
+                to highlight top talent. Get real-time engagement insights to focus on what matters.
+                Sign up now for early access and updates!
+
+
             </p>
 
             <WaitlistForm />
