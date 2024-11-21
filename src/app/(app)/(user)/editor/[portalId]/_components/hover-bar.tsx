@@ -96,7 +96,7 @@ export function HoverBar({ portalData }) {
     };
 
     return (
-        <div className="sticky bottom-0 left-0 right-0 z-50 flex items-center justify-center gap-4 rounded-t-2xl p-4">
+        <div className="fixed bottom-5 left-0 right-0 z-50 flex gap-4 rounded-t-2xl p-4">
             <TooltipProvider>
                 <Dock direction="middle" className="w-1000px shadow-md">
                     <DockIcon size={48} className="w-480 mx-14">
