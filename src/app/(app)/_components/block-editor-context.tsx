@@ -15,13 +15,10 @@ export const BlockEditorProvider = ({ children }: { children: React.ReactNode })
     const [blocks, setBlocks] = useState<SectionSelect[]>([]);
 
     const initializeBlocks = (initialBlocks: SectionSelect[]) => {
-      setBlocks((prevBlocks) => {
-          if (prevBlocks.length > 0) {
-              return prevBlocks; // Prevent overwriting existing blocks
-          }
-          return initialBlocks;
-      });
+      console.log("Initializing blocks with:", initialBlocks); // Debug log
+      setBlocks(initialBlocks);
   };
+
     return (
         <BlockEditorContext.Provider value={{ blocks, setBlocks, initializeBlocks }}>
             {children}
