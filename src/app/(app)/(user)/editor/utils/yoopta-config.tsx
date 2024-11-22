@@ -11,7 +11,7 @@ import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
 import { toast } from "sonner";
 
-export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+export const MAX_FILE_SIZE = 1 * 1024 * 1024; // 1MB
 export const sampleDictionary = {
     name: "James Bob",
     email: "james.bob@teamsinta.com",
@@ -56,9 +56,7 @@ export function getExtendedImage(uploadFunction: any) {
                     return { src: "", alt: "" };
                 }
                 if (file.size > MAX_FILE_SIZE) {
-                    toast.error(
-                        "Image size is too large. Maximum size is 10MB",
-                    );
+                    toast.error("Image size is too large. Maximum size is 1MB");
                     return { src: "", alt: "" };
                 }
                 const formData = new FormData();
