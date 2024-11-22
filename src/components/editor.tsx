@@ -28,13 +28,15 @@ import Divider from "@yoopta/divider";
 import Embed from "@yoopta/embed";
 import File from "@yoopta/file";
 import { HeadingOne, HeadingThree, HeadingTwo } from "@yoopta/headings";
-import Image from "@yoopta/image";
+import Image, { ImageElementProps, ImageUploadResponse } from "@yoopta/image";
 import Link from "@yoopta/link";
 import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
 import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
 import { Transforms } from "slate";
 import { ConsoleLogWriter } from "drizzle-orm";
+import { getUploadFunction } from "@/server/awss3/uploadToS3";
+import { toast } from "sonner";
 export const plugins = [
     Paragraph,
     // Paragraph.extend({
@@ -74,13 +76,22 @@ export const plugins = [
     Blockquote,
     Accordion,
     Divider,
-    Image,
     Link,
     File,
     Callout,
     HeadingOne,
     HeadingTwo,
     HeadingThree,
+    // Image.extend({
+    //     options: {
+    //         onUpload: async (file: File) => {
+
+    //             return {
+    //                 url: "https://via.placeholder.com/150",
+    //             } as ImageElementProps;
+    //         },
+    //     },
+    // }),
 ];
 
 const marks = [Bold, Italic, CodeMark, Underline, Strike, Highlight];
@@ -107,6 +118,7 @@ export default function Editor({
     title,
     onTitleChange,
     className,
+    uploadImageFunction,
 }: {
     content: YooptaContentValue;
     editable: boolean;
@@ -114,6 +126,7 @@ export default function Editor({
     title: string;
     onTitleChange: (newTitle: string) => void;
     className?: string;
+    uploadImageFunction?: (formData: FormData) => Promise<any>;
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
     const titleRef = useRef<HTMLTextAreaElement>(null);
@@ -219,7 +232,38 @@ export default function Editor({
                     value={content}
                     onChange={onChange}
                     // here we go
-                    plugins={plugins}
+                    plugins={[
+                        ...plugins,
+                        Image.extend({
+                            options: {
+                                onUpload: async (file: File) => {
+                                    if (!uploadImageFunction) {
+                                        toast.error(
+                                            "Image could not be uploaded",
+                                        );
+                                        return { src: "", alt: "" };
+                                    }
+                                    const formData = new FormData();
+                                    formData.append(
+                                        "file",
+                                        new Blob([file], { type: file.type }),
+                                    );
+                                    formData.append("fileName", file.name);
+                                    formData.append(
+                                        "size",
+                                        file.size.toString(),
+                                    );
+                                    formData.append("type", file.type);
+                                    const { url, id, title } =
+                                        await uploadImageFunction(formData);
+                                    return {
+                                        src: url,
+                                        alt: title,
+                                    } as ImageUploadResponse;
+                                },
+                            },
+                        }),
+                    ]}
                     tools={tools}
                     readOnly={!editable}
                     marks={marks}

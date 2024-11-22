@@ -11,6 +11,7 @@ import { SectionContentType } from "@/server/db/schema";
 import { PortalReaderData } from "@/types/portal";
 import CardNavigatorMenu from "./card-navigator-nenu";
 import LinkComponent from "./url-reader";
+import { getUploadFunction } from "@/server/awss3/uploadToS3";
 
 type Section = {
     sectionId: string;
@@ -157,6 +158,10 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                             return null;
                         }}
                         title={replaceText(section.title, replaceData)}
+                        uploadImageFunction={getUploadFunction(
+                            portalId,
+                            section.sectionId,
+                        )}
                     />
                 );
             case SectionContentType.URL:
