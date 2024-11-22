@@ -5,7 +5,7 @@ import Image from "next/image";
 import { type ElementType } from "react";
 import CompanyLogo from "../../../public/SintaNameLogo.png";
 import CircleLogo from "../../../public/SintaLogoCircle.png";
-import CompanyLogoWhite from "../../../public/Sinta(white)Logo.png";
+import CompanyLogoWhite from "../../../public/sintaWhitelogo.png
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
