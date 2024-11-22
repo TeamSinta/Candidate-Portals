@@ -1,3 +1,4 @@
+"use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SectionContentType } from "@/server/db/schema";
@@ -76,16 +77,36 @@ function ContentBlock({
         isSlidingSidebarOpen,
         setPortalId,
         toggleSlidingSidebar,
+        contentType: sidebarContentType,
+        sectionId: sidebarSectionId,
         setContentType,
         setTitle,
         setSectionId,
         setUrlContentData,
+        editorContentChanged,
+        setEditorContentChanged,
     } = useSlidingSidebar();
     // Fallback to FileTextIcon if contentType is undefined
     const IconComponent = initialContentType
         ? contentTypeIcons[initialContentType] || FileTextIcon
         : FileTextIcon;
+    const [displaySaveModal, setDisplaySaveModal] = useState(false);
 
+    function promptSaveModal() {
+        if (sidebarSectionId === id && isSlidingSidebarOpen) {
+            return;
+        }
+        if (
+            sidebarContentType === SectionContentType.YOOPTA &&
+            sidebarSectionId !== id &&
+            isSlidingSidebarOpen &&
+            editorContentChanged
+        ) {
+            setDisplaySaveModal(true);
+        } else {
+            handleViewClick();
+        }
+    }
     const handleViewClick = () => {
         if (!isSlidingSidebarOpen) {
             toggleSlidingSidebar(); // Only open the sidebar if it's closed
@@ -94,6 +115,7 @@ function ContentBlock({
         setContentType(initialContentType);
         setTitle(initialTitle);
         setSectionId(id);
+        setEditorContentChanged(false);
         setPortalId(portalId);
         if (initialContentType === SectionContentType.URL) {
             setUrlContentData(
@@ -138,12 +160,33 @@ function ContentBlock({
                         </AlertDialogFooter>
                     </AlertDialogContent>
                 </AlertDialog>
+                <AlertDialog
+                    open={displaySaveModal}
+                    onOpenChange={setDisplaySaveModal}
+                >
+                    <AlertDialogContent>
+                        <AlertDialogHeader>
+                            <AlertDialogTitle>
+                                Are you sure you want to navigate away?
+                            </AlertDialogTitle>
+                            <AlertDialogDescription>
+                                Unsaved changes will be lost.
+                            </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                            <AlertDialogCancel>Cancel</AlertDialogCancel>
+                            <AlertDialogAction onClick={handleViewClick}>
+                                Proceed
+                            </AlertDialogAction>
+                        </AlertDialogFooter>
+                    </AlertDialogContent>
+                </AlertDialog>
 
                 {/* Grayed-out Effect and View Button on Hover */}
                 <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                     <Button
                         variant="ghost"
-                        onClick={handleViewClick}
+                        onClick={promptSaveModal}
                         className="rounded bg-white px-4 py-2 text-black"
                     >
                         View

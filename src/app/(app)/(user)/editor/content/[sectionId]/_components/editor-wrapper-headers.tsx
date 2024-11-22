@@ -19,8 +19,13 @@ import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
 interface Props {
     section: SectionSelect;
     portal: PortalSelect;
+    setEditorContentChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
-function EditorWrapperHeaders({ section, portal }: Props) {
+function EditorWrapperHeaders({
+    section,
+    portal,
+    setEditorContentChanged,
+}: Props) {
     const [sectionContent, setSectionContent] = useState<YooptaContentValue>(
         section.content as YooptaContentValue,
     );
@@ -102,7 +107,10 @@ function EditorWrapperHeaders({ section, portal }: Props) {
                                 : sectionContent
                         }
                         editable={!isPreviewing}
-                        onChange={setSectionContent}
+                        onChange={(data: YooptaContentValue) => {
+                            setSectionContent(data);
+                            setEditorContentChanged(true);
+                        }}
                         onTitleChange={(newTitle: string) => {
                             setTitle(newTitle);
                         }}
