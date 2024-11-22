@@ -36,38 +36,36 @@ import Table from "@yoopta/table";
 import { Transforms } from "slate";
 import { ConsoleLogWriter } from "drizzle-orm";
 export const plugins = [
-    Paragraph.extend({
-        renders: {
-            paragraph: ({ extendRender, attributes, children, element }) => {
-                // console.log("attributes", attributes);
-                // console.log("children", children);
-                // console.log("element", element);
-                const isEmpty =
-                    element.children.length === 1 &&
-                    element.children[0].text === "";
-                return (
-                    <p {...attributes} {...element}>
-                        {isEmpty && (
-                            <span
-                                contentEditable={false}
-                                style={{
-                                    position: "absolute",
-                                    left: 0,
-                                    top: 0,
-                                    opacity: 0.5,
-                                    pointerEvents: "none",
-                                    fontStyle: "italic",
-                                }}
-                            >
-                                {"Type / to open menu"}
-                            </span>
-                        )}
-                        {children}
-                    </p>
-                );
-            },
-        },
-    }),
+    Paragraph,
+    // Paragraph.extend({
+    //     renders: {
+    //         paragraph: ({ attributes, children, element }) => {
+    //             const isEmpty =
+    //                 element.children.length === 1 &&
+    //                 element.children[0].text === "";
+    //             return (
+    //                 <p {...attributes} {...element}>
+    //                     {isEmpty && (
+    //                         <span
+    //                             contentEditable={false}
+    //                             style={{
+    //                                 position: "absolute",
+    //                                 left: 0,
+    //                                 top: 0,
+    //                                 opacity: 0.5,
+    //                                 pointerEvents: "none",
+    //                                 fontStyle: "italic",
+    //                             }}
+    //                         >
+    //                             {"Type / to open menu"}
+    //                         </span>
+    //                     )}
+    //                     {children}
+    //                 </p>
+    //             );
+    //         },
+    //     },
+    // }),
     Table,
     NumberedList,
     BulletedList,
@@ -217,7 +215,7 @@ export default function Editor({
                 <YooptaEditor
                     key={editable ? "editable" : "readOnly"}
                     editor={editor}
-                    placeholder=""
+                    placeholder="Start typing..."
                     value={content}
                     onChange={onChange}
                     // here we go
