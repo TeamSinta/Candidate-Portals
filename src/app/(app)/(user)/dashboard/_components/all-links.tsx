@@ -153,8 +153,8 @@ export default function LinksCard({ portalData }: LinksCardProps) {
                                                     );
                                                 }}
                                             >
-                                                <div className="w-[400px] truncate text-ellipsis rounded bg-blue-50 p-2 text-center	 transition hover:border-blue-400 group-hover:border group-hover:bg-white">
-                                                    <span className="max-w-[380px] text-ellipsis px-3 text-sm text-black group-hover:hidden">
+                                                <div className="w-[400px] truncate text-ellipsis rounded dark:bg-black dark:border dark:border-gray-700   bg-blue-50 p-2 text-center	 transition hover:border-blue-400 group-hover:border group-hover:bg-white">
+                                                    <span className="max-w-[380px] text-ellipsis  dark:text-white  px-3 text-sm text-black group-hover:hidden">
                                                         {siteUrls.prod +
                                                             siteUrls.view +
                                                             link.url}

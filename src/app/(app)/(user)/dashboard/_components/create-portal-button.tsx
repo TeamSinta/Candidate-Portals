@@ -40,7 +40,7 @@ export default function CreatePortalButton() {
         <Dialog>
             <DialogTrigger asChild>
                 <Button className="group flex items-center gap-x-1 rounded px-3 text-left">
-                    <span className="text-sm">Create Portal</span>
+                    <span className="text-sm ">Create Portal</span>
                     <PlusIcon className="h-5 w-5" aria-hidden="true" />
                 </Button>
             </DialogTrigger>

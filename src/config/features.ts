@@ -16,37 +16,39 @@ export type Feature = {
     imageDark?: string;
 };
 
+
 export const features: Feature[] = [
-    {
-        title: "Dashboard",
-        description:
-            "Rapidlaunch provides a powerful dashboard that allows you to manage your SaaS project. With our starterkits, components, and building guides, you can quickly set up a robust dashboard for your project.",
-        image: "https://utfs.io/f/43bbc3c8-cf3c-4fae-a0eb-9183f1779489-294m81.png",
-        imageDark:
-            "https://utfs.io/f/fddea366-51c6-45f4-bd54-84d273ad9fb9-1ly324.png",
-    },
-    {
-        title: "Authentication",
-        description:
-            "Rapidlaunch provides a secure authentication system that allows users to sign up and log in to your SaaS. With our starterkits, components, and building guides, you can quickly set up a robust authentication system for your project.",
-        image: "https://utfs.io/f/805616c1-22b8-4508-9890-9ba9e2867a41-p24dnn.png",
-        imageDark:
-            "https://utfs.io/f/9074c0de-d9ea-4c0b-9d49-55dca1253a3f-6ig3yq.png",
-    },
-    {
-        title: "Organizational level Payments",
-        description:
-            "Rapidlaunch provides a flexible payment system that allows you to manage your SaaS project's payments. With our starterkits, components, and building guides, you can quickly set up a robust payment system for your project.",
-        image: "https://utfs.io/f/43bbc3c8-cf3c-4fae-a0eb-9183f1779489-294m81.png",
-        imageDark:
-            "https://utfs.io/f/fddea366-51c6-45f4-bd54-84d273ad9fb9-1ly324.png",
-    },
-    {
-        title: "User Management",
-        description:
-            "Rapidlaunch provides a user management system that allows you to manage your SaaS project's users. With our starterkits, components, and building guides, you can quickly set up a robust user management system for your project.",
-        image: "https://utfs.io/f/72a2c035-69e0-46ca-84a8-446e4dabf77c-3koi6e.png",
-        imageDark:
-            "https://utfs.io/f/89099112-4273-4375-9e44-1b3394600e21-c6ikq1.png",
-    },
-];
+  {
+      title: "Personalized Candidate Portals",
+      description:
+          "Easily create tailored portals for every candidate. Embed job details, interview schedules, and onboarding documents to provide a seamless candidate experience.",
+      image: "https://utfs.io/f/NyiNiWCHmEc4Y6J2Iqw1A7r2hZy65zd4Is9XVeG0SaHcltxY",
+      imageDark:
+          "https://utfs.io/f/NyiNiWCHmEc4Y6J2Iqw1A7r2hZy65zd4Is9XVeG0SaHcltxY",
+  },
+  {
+      title: "Engagement Tracking",
+      description:
+          "Monitor how candidates interact with your portal. Track views, clicks, and time spent to measure engagement and adjust your strategy.",
+      image: "https://utfs.io/f/NyiNiWCHmEc4qXySzcTpZIDGdHSjMJoVy182UetvsT6baQ9u",
+      imageDark:
+          "https://utfs.io/f/NyiNiWCHmEc4BfCLYM5LzSmdU0E2ntbsy4KfquR31DiJCkcT",
+  },
+  {
+    title: "Effortless Content Management",
+    description:
+        "Create beautiful candidate portals in minutes by adding links, embedding docs, uploading PDFs, or crafting content directly in our intuitive markdown editor. No technical skills required.",
+    image: "https://utfs.io/f/NyiNiWCHmEc4MJaC77uXjCc2YNSxlTnFMIE6Jdr5wVopPa7W",
+    imageDark:
+        "https://utfs.io/f/NyiNiWCHmEc4VxnWQar5Ro809z7LvWTFwgdOPhsrkfqeEa3b",
+},
+{
+  title: "Effortless Collaboration",
+  description:
+      "Work together seamlessly by creating shared spaces for candidates and colleagues. Share updates, notes, and actions directly within portals, making teamwork and alignment easier than ever.",
+  image: "https://utfs.io/f/72a2c035-69e0-46ca-84a8-446e4dabf77c-3koi6e.png",
+  imageDark:
+      "https://utfs.io/f/72a2c035-69e0-46ca-84a8-446e4dabf77c-3koi6e.png",
+},
+
+]

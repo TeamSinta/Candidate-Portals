@@ -54,9 +54,9 @@ function AddNewSectionDialog({
     return (
         <Dialog open={isDialogOpen} onOpenChange={handleDialogClose}>
             <DialogTrigger asChild>
-                <div className="group relative h-[15rem] min-w-[19rem] max-w-[24rem] cursor-pointer ">
-                    <Card className="flex h-[15rem] max-w-[24rem] flex-col items-center justify-center overflow-hidden rounded-sm border-2 border-dashed border-gray-300 shadow-sm transition-transform duration-300 hover:scale-105 hover:shadow-md">
-                        <div className="flex h-full w-full items-center justify-center rounded-t bg-gray-100">
+                <div className="group relative h-[15rem]  min-w-[19rem] max-w-[24rem] cursor-pointer ">
+                    <Card className="flex h-[15rem] max-w-[24rem] flex-col items-center justify-center overflow-hidden rounded-sm border-2  dark:border-gray-800 border-dashed border-gray-300 shadow-sm transition-transform duration-300 hover:scale-105 hover:shadow-md">
+                        <div className="flex h-full w-full dark:bg-gray-700 items-center justify-center rounded-t bg-gray-100">
                             <PlusIcon
                                 size={32}
                                 className="text-gray-400 transition-colors duration-300 group-hover:text-gray-600"

@@ -25,7 +25,7 @@ export default async function DashboardPage() {
                 title={dashboardPageConfig.title}
                 description={dashboardPageConfig.description}
             >
-                <div className="sticky bg-white p-4 pb-0 dark:bg-gray-900">
+                <div className="sticky bg-white p-4 pb-0 ">
                     <div className="mb-4 flex items-center justify-between">
                         <div className="space-y-0 sm:space-y-1">
                             <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
@@ -92,7 +92,7 @@ export default async function DashboardPage() {
             title={dashboardPageConfig.title}
             description={dashboardPageConfig.description}
         >
-            <div className=" sticky mx-2 bg-white p-4 pb-0 dark:bg-gray-900">
+            <div className=" sticky mx-2 bg-white p-4 pb-0 dark:bg-black">
                 <div className="mb-4 flex items-center justify-between">
                     <div className="space-y-0 sm:space-y-1">
                         <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">

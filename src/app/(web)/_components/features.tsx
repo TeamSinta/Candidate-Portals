@@ -8,14 +8,14 @@ export default function Features() {
         <section className="flex flex-col items-center justify-center gap-20 py-20">
             <div className="grid gap-3">
                 <h2 className="text-center text-2xl font-bold text-foreground sm:text-3xl">
-                    Starterkit Features
+                  🎁 Features
                 </h2>
                 <Balancer
                     as="p"
                     className="max-w-2xl text-center text-base text-muted-foreground sm:text-xl"
                 >
-                    Starterkit features are designed to help you build a robust
-                    and scalable SaaS project.
+                  Features  designed to help you
+                  engage, track, and communicate effortlessly. All in one place..
                 </Balancer>
             </div>
             <div className="grid max-w-6xl grid-cols-1 gap-4 md:grid-cols-2">

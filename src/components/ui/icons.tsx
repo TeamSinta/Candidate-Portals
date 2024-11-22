@@ -5,6 +5,7 @@ import Image from "next/image";
 import { type ElementType } from "react";
 import CompanyLogo from "../../../public/SintaNameLogo.png";
 import CircleLogo from "../../../public/SintaLogoCircle.png";
+import CompanyLogoWhite from "../../../public/Sinta(white)Logo.png";
 
 export type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -30,7 +31,14 @@ export const Icons = {
                     alt="Company Logo"
                     width={88} // Adjust size as needed
                     height={80}
-                    className=""
+                    className="dark:hidden"
+                />
+                    <Image
+                    src={CompanyLogoWhite}
+                    alt="Company Logo"
+                    width={88} // Adjust size as needed
+                    height={80}
+                    className="dark:block hidden"
                 />
                 {/* <span
                     className={cn(
