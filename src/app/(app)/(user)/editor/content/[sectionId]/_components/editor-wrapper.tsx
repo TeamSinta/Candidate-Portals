@@ -13,9 +13,15 @@ import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
-import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
+import {
+    getExtendedImage,
+    plugins,
+    replaceText,
+    sampleDictionary,
+} from "../../../utils/yoopta-config";
 import { useSlidingSidebar } from "../../../[portalId]/_components/sliding-sidebar";
 import EditorHeader from "./editor-headers";
+import { getUploadFunction } from "@/lib/utils";
 
 interface Props {
     section: SectionSelect;
@@ -53,6 +59,7 @@ function EditorWrapper({ section, portal }: Props) {
         setIsPreviewing(!isPreviewing);
     }
 
+    const uploadFunction = getUploadFunction(portal.id, section.id);
     return (
         <>
             <div className="relative">
@@ -84,6 +91,7 @@ function EditorWrapper({ section, portal }: Props) {
                                 ? replaceText(title, sampleDictionary)
                                 : (title ?? "")
                         }
+                        plugins={[...plugins, getExtendedImage(uploadFunction)]}
                     />
                 </div>
             </div>

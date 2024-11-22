@@ -6,11 +6,14 @@ import CardNavigatorMenu from "@/app/(view-pages)/view/[token]/_components/card-
 import { Badge } from "@/components/ui/badge";
 import Editor from "@/components/editor";
 import {
+    getExtendedImage,
+    plugins,
     replaceText,
     sampleDictionary,
 } from "../../editor/utils/yoopta-config";
 import { useSidebar } from "@/components/ui/sidebar";
 import { YooptaContentValue } from "@yoopta/editor";
+import { getUploadFunction } from "@/lib/utils";
 
 type Section = {
     contentType: string;
@@ -63,8 +66,11 @@ export default function PortalContentPreview({
         sidebar.setOpen(isPreviewing);
         setIsPreviewing(!isPreviewing);
     }
-
     const renderSectionContent = (section: Section) => {
+        const uploadFunction = getUploadFunction(
+            portalData.portal.portalId,
+            section.section_id,
+        );
         switch (section.contentType) {
             case "Link":
                 console.log(section, "section");
@@ -90,9 +96,11 @@ export default function PortalContentPreview({
                             onTitleChange={(newTitle: string) => {
                                 setTitle(newTitle);
                             }}
-                            title={
-                               (section.title ?? "")
-                            }
+                            title={section.title ?? ""}
+                            plugins={[
+                                ...plugins,
+                                getExtendedImage(uploadFunction),
+                            ]}
                         />
                     </div>
                 );
@@ -117,9 +125,11 @@ export default function PortalContentPreview({
                             onTitleChange={(newTitle: string) => {
                                 setTitle(newTitle);
                             }}
-                            title={
-                               (section.title ?? "")
-                            }
+                            title={section.title ?? ""}
+                            plugins={[
+                                ...plugins,
+                                getExtendedImage(uploadFunction),
+                            ]}
                         />
                     </div>
                 );
