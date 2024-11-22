@@ -69,7 +69,7 @@ export default async function HomePage() {
               />
 
               <Image
-                  src="https://utfs.io/f/NyiNiWCHmEc48tGvFd0I2kl6YtjiUApum4fQc7wDbMP8oSXR"
+                  src="https://utfs.io/f/NyiNiWCHmEc4p99juRUcWMOb5pFNtqeG4ruHKQzyLfZlPdYR"
                   alt="Sinta Candidate Portal Preview (Dark Mode)"
                   fill
                   className="hidden rounded-md border border-border dark:block"
