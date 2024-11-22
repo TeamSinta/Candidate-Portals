@@ -33,8 +33,39 @@ import Link from "@yoopta/link";
 import { BulletedList, NumberedList, TodoList } from "@yoopta/lists";
 import Paragraph from "@yoopta/paragraph";
 import Table from "@yoopta/table";
+import { Transforms } from "slate";
+import { ConsoleLogWriter } from "drizzle-orm";
 export const plugins = [
     Paragraph,
+    // Paragraph.extend({
+    //     renders: {
+    //         paragraph: ({ attributes, children, element }) => {
+    //             const isEmpty =
+    //                 element.children.length === 1 &&
+    //                 element.children[0].text === "";
+    //             return (
+    //                 <p {...attributes} {...element}>
+    //                     {isEmpty && (
+    //                         <span
+    //                             contentEditable={false}
+    //                             style={{
+    //                                 position: "absolute",
+    //                                 left: 0,
+    //                                 top: 0,
+    //                                 opacity: 0.5,
+    //                                 pointerEvents: "none",
+    //                                 fontStyle: "italic",
+    //                             }}
+    //                         >
+    //                             {"Type / to open menu"}
+    //                         </span>
+    //                     )}
+    //                     {children}
+    //                 </p>
+    //             );
+    //         },
+    //     },
+    // }),
     Table,
     NumberedList,
     BulletedList,
@@ -85,8 +116,16 @@ export default function Editor({
     className?: string;
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
-    const titleRef = useRef<HTMLInputElement>(null);
+    const titleRef = useRef<HTMLTextAreaElement>(null);
 
+    // useEffect(() => {
+    //     editor.on("path-change", (path) => {
+    //         const index = editor.path.current;
+    //         const block = editor.getBlock({ at: index });
+
+    //         console.log("PATH CHANGE", block);
+    //     });
+    // }, []);
     useEffect(() => {
         // If the last content block is deleted, go back to the title
         if (Object.keys(content).length === 0) {
@@ -94,10 +133,24 @@ export default function Editor({
         }
     }, [content]);
 
+    useEffect(() => {
+        if (titleRef.current) {
+            const textarea = titleRef.current;
+            textarea.style.height = "auto"; // Reset height to auto for correct calculation
+            textarea.style.height = `${textarea.scrollHeight}px`; // Adjust height to fit content
+        }
+    }, [title]);
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        onTitleChange(e.target.value);
+    };
+
     function createFirstBlock() {
         ParagraphCommands.insertParagraph(editor, { focus: true });
     }
-    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleEnterPress = (
+        event: React.KeyboardEvent<HTMLTextAreaElement>,
+    ) => {
         if (event.key === "Enter") {
             event.preventDefault();
             // If there's no content on the editor, you're unable to focus. So you gotta create a Content Block first.
@@ -121,15 +174,18 @@ export default function Editor({
             )}
         >
             <div className="w-1/2">
-                <input
-                    type="text"
+                <textarea
+                    // type="text"
                     placeholder={"Section Title"}
-                    className="border-0 p-0 text-4xl font-semibold focus:border-0 focus:outline-none"
-                    onChange={(e) => onTitleChange(e.target.value)}
+                    className="w-full resize-none overflow-hidden text-pretty border-0 p-0 text-4xl font-semibold focus:border-0 focus:outline-none"
+                    // onChange={(e) => onTitleChange(e.target.value)}
+                    onChange={handleInputChange}
                     value={title}
                     onKeyDown={handleEnterPress}
                     autoFocus={Object.keys(content).length === 0}
-                    ref={titleRef}
+                    ref={(el) => {
+                        titleRef.current = el;
+                    }}
                 />
                 {Object.keys(content).length === 0 && (
                     <div className="my-4 text-sm  text-gray-700">
@@ -159,7 +215,7 @@ export default function Editor({
                 <YooptaEditor
                     key={editable ? "editable" : "readOnly"}
                     editor={editor}
-                    placeholder="Type / to open menu"
+                    placeholder="Start typing..."
                     value={content}
                     onChange={onChange}
                     // here we go

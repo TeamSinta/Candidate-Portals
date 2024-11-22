@@ -129,7 +129,7 @@ export default function CreateLinkSheetContent({
 
                 {/* Optional Fields */}
                 <Accordion
-                  type="single"
+                    type="single"
                     collapsible
                     defaultValue="optional-fields"
                 >
@@ -199,10 +199,10 @@ export default function CreateLinkSheetContent({
                 </Accordion>
 
                 {/* Line Separator */}
-                <div className="my-4 border-t"></div>
+                {/* <div className="my-4 border-t"></div> */}
 
                 {/* Manage File Access & Extra Security Settings */}
-                <Accordion type="single" collapsible>
+                {/* <Accordion type="single" collapsible>
                     <AccordionItem value="manage-access">
                         <AccordionTrigger className="flex items-center justify-between text-sm font-medium text-gray-800">
                             <div className="flex items-center space-x-2">
@@ -235,7 +235,7 @@ export default function CreateLinkSheetContent({
                             </div>
                         </AccordionContent>
                     </AccordionItem>
-                </Accordion>
+                </Accordion> */}
             </div>
 
             {/* Buttons at the Bottom */}

@@ -5,7 +5,7 @@ import { EyeIcon, Upload } from "lucide-react";
 import React, { useState } from "react";
 import PreviewDialog from "../../dashboard/_components/preview-page";
 
-function EditorPageButtons({ data }: { data: string }) {
+function PreviewButton({ portalData }: { portalData: string }) {
     const [isPreviewOpen, setIsPreviewOpen] = useState(false);
 
     const handleOpenChange = (
@@ -16,21 +16,14 @@ function EditorPageButtons({ data }: { data: string }) {
 
     return (
         <div className="flex items-center space-x-2">
-            <Button
-                className="rounded-sm border-gray-600"
-                variant={"outline"}
+            <button
                 onClick={() => handleOpenChange(true)} // Open the preview dialog
             >
-                Preview <EyeIcon className="ml-2 h-4 w-4" />
-            </Button>
-            {/* <Link href={`/dashboard/portal/${portalId}?createLink=true`}>
-                <Button className="flex gap-1 rounded-full ">
-                    <Upload className="h-4 w-4" />
-                    Publish
-                </Button>
-            </Link> */}
+                <EyeIcon className="ml-2 h-4 w-4" />
+            </button>
+
             <PreviewDialog
-                portalData={data}
+                portalData={portalData}
                 isPreviewOpen={isPreviewOpen}
                 setIsPreviewOpen={setIsPreviewOpen}
             />
@@ -38,4 +31,4 @@ function EditorPageButtons({ data }: { data: string }) {
     );
 }
 
-export default EditorPageButtons;
+export default PreviewButton;

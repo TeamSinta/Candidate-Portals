@@ -79,7 +79,7 @@ export function OrgSelectDropdown({
                     <DropdownMenuTrigger asChild>
                         <SidebarMenuButton
                             size="lg"
-                            className="flex items-center justify-start p-0 pr-2 rounded gap-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                            className="flex items-center justify-start gap-2 rounded p-0 pr-2 data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
                         >
                             <Avatar className="h-8 w-8 rounded-sm">
                                 {currentOrg?.image ? (

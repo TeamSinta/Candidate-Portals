@@ -14,6 +14,29 @@ import {
 } from "lucide-react";
 import { NotionLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { Input } from "@/components/ui/input";
+import { deletePortal } from "@/server/actions/portal/mutations";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type Section = {
     title: string;
@@ -54,45 +77,116 @@ const PortalCard: React.FC<PortalCardProps> = ({
     linkCount,
     views,
 }) => {
+    const [deleteModalOpen, setDeleteModalOpen] = React.useState(false);
+    const [deleteModalText, setDeleteModalText] = React.useState("");
+    const router = useRouter();
+    async function handleDeletePortal() {
+        await deletePortal(url);
+        toast.success("Portal deleted successfully");
+        router.refresh();
+    }
     return (
-        <Link href={`dashboard/portal/${url}`} passHref>
-            <div
-                className="mb-3 flex cursor-pointer items-center justify-between rounded-lg border p-5 transition-shadow hover:bg-gray-50 hover:shadow-md dark:hover:bg-gray-800"
-                style={{ minHeight: "80px" }} // Adjusts the card height slightly
+        <>
+            <AlertDialog
+                open={deleteModalOpen}
+                onOpenChange={setDeleteModalOpen}
             >
-                {/* Left Section with Icon and Info */}
-                <div className="flex items-center space-x-4">
-                    {/* Icon */}
-                    {getIcon(sections[0]?.contentType || "doc")}
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>
+                            {`Delete Candidate Portal "${title}"?`}
+                        </AlertDialogTitle>
+                        <AlertDialogDescription>
+                            This will permanently delete this candidate portal.
+                            To confirm deletion, type the name of the candidate
+                            portal.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <Input
+                        value={deleteModalText}
+                        onChange={(e) => setDeleteModalText(e.target.value)}
+                        placeholder={`Type "${title}" to confirm deletion`}
+                    />
+                    <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                            className="bg-red-500 text-white"
+                            onClick={handleDeletePortal}
+                            disabled={deleteModalText !== title}
+                        >
+                            Continue
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
+            <Link href={`dashboard/portal/${url}`} passHref>
+                <div
+                    className="mb-3 flex cursor-pointer items-center justify-between rounded-lg border p-5 transition-shadow hover:bg-gray-50 hover:shadow-md dark:hover:bg-gray-800"
+                    style={{ minHeight: "80px" }} // Adjusts the card height slightly
+                >
+                    {/* Left Section with Icon and Info */}
+                    <div className="flex items-center space-x-4">
+                        {/* Icon */}
+                        {getIcon(sections[0]?.contentType ?? "doc")}
 
-                    {/* Title and Meta */}
-                    <div className="flex flex-col">
-                        <h3 className="text-sm font-semibold leading-tight text-foreground">
-                            {title}
-                        </h3>
-                        <p className="mt-1 text-xs text-muted-foreground">
-                            {date} • {linkCount} Link{linkCount > 1 ? "s" : ""}
-                        </p>
+                        {/* Title and Meta */}
+                        <div className="flex flex-col">
+                            <h3 className="text-sm font-semibold leading-tight text-foreground">
+                                {title}
+                            </h3>
+                            <p className="mt-1 text-xs text-muted-foreground">
+                                {date} • {linkCount} Link
+                                {linkCount > 1 ? "s" : ""}
+                            </p>
+                        </div>
+                    </div>
+
+                    {/* Right Section with Views and Options */}
+                    <div className="flex items-center space-x-4">
+                        {/* Views Count */}
+                        <div className="flex min-w-24 items-center gap-2 rounded bg-gray-100 px-2 py-2 text-xs text-gray-500">
+                            <BarChartIcon />
+                            <span>
+                                {views} view{views !== 1 ? "s" : ""}
+                            </span>
+                        </div>
+
+                        {/* Options Button */}
+                        <DropdownMenu>
+                            <DropdownMenuTrigger
+                                onClick={(e) => {
+                                    e.preventDefault();
+                                }}
+                                className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                            >
+                                <EllipsisVertical className="h-4 w-4" />
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent>
+                                <DropdownMenuItem
+                                    onClick={() => {
+                                        console.log("edit");
+                                    }}
+                                >
+                                    <Link href={`/editor/${url}`}>
+                                        Edit Portal
+                                    </Link>
+                                </DropdownMenuItem>
+
+                                <DropdownMenuItem
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        setDeleteModalOpen(true);
+                                    }}
+                                    className="text-red-600"
+                                >
+                                    Delete Portal
+                                </DropdownMenuItem>
+                            </DropdownMenuContent>
+                        </DropdownMenu>
                     </div>
                 </div>
-
-                {/* Right Section with Views and Options */}
-                <div className="flex items-center space-x-4">
-                    {/* Views Count */}
-                    <div className="flex items-center rounded bg-gray-100 min-w-24 px-2 gap-2 py-2 text-xs text-gray-500">
-                        <BarChartIcon />
-                        <span>
-                            {views} view{views !== 1 ? "s" : ""}
-                        </span>
-                    </div>
-
-                    {/* Options Button */}
-                    <button className="text-gray-400 hover:text-gray-600 focus:outline-none">
-                        <EllipsisVertical className="h-4 w-4" />
-                    </button>
-                </div>
-            </div>
-        </Link>
+            </Link>
+        </>
     );
 };
 

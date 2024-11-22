@@ -3,9 +3,11 @@ export const sampleDictionary = {
     email: "james.bob@teamsinta.com",
 };
 export function replaceText(
-    text: string,
-    dictionary: Record<string, string>,
+  text: string,
+  dictionary?: Record<string, string>, // Make dictionary optional
 ): string {
+
+    if (!dictionary) return text;
     // Iterate through the dictionary entries and replace placeholders in the text
     for (const [key, value] of Object.entries(dictionary)) {
         // Create a regular expression to match the placeholder
@@ -14,6 +16,8 @@ export function replaceText(
     }
     return text;
 }
+
+
 
 // OBSOLETE
 // export function getExtendedParagraph(

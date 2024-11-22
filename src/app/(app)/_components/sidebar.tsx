@@ -80,7 +80,7 @@ export async function AppSidebar({
                     </div>
                 )}
                 {showOrgSwitcher && (
-                    <div className="mt-1 py-2 rounded">
+                    <div className="mt-1 rounded py-2">
                         <OrgSelectDropdown
                             userOrgs={urgOrgsData}
                             currentOrg={currentOrg}
