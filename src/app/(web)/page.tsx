@@ -32,9 +32,9 @@ export default async function HomePage() {
       >
           <Balancer
               as="p"
-              className="text-center text-base text-muted-foreground sm:text-lg"
+              className="text-center text-base text-muted-foreground sm:text-lg "
           >
-              Transform your hiring experience with personalized candidate portals.
+              Transform your hiring experience with personalized candidate portals. <br/>
               Engage, track, and communicate effortlessly. All in one place.
           </Balancer>
 
