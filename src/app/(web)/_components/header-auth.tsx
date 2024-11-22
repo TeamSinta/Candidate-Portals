@@ -21,12 +21,12 @@ export async function HeaderAuth() {
             ) : (
                 <Fragment>
                     <Link
-                        href={siteUrls.auth.signup}
+                        href={siteUrls.waitlist}
                         className={buttonVariants({
                             className: "flex items-center space-x-1",
                         })}
                     >
-                        <span>Sign Up</span>
+                        <span>Join Beta</span>
                         <span className="font-light italic">
                             {" "}
                             — it&apos;s free

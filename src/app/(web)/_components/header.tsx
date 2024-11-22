@@ -19,7 +19,7 @@ export function WebHeader() {
 
                     <Link href={siteUrls.home}>
                         <Icons.logo />
-                        <span className="sr-only">Rapidlaunch logo</span>
+                        <span className="sr-only">Sinta logo</span>
                     </Link>
                 </div>
 

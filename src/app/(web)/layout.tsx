@@ -12,7 +12,7 @@ export default function WebLayout({ children }: WebLayoutProps) {
             <Background>
                 <WebHeader />
                 {children}
-                <WebFooter />
+                {/* <WebFooter /> */}
             </Background>
         </div>
     );
