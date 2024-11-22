@@ -11,6 +11,7 @@ import { protectedProcedure } from "@/server/procedures";
 import { getOrganizations } from "../organization/queries";
 import { YooptaContentValue } from "@yoopta/editor";
 import { asc, eq } from "drizzle-orm";
+import { deleteS3Images } from "@/server/awss3/uploadToS3";
 
 // portal should be initialized with an initial section
 interface CreatePortalParams {
@@ -36,6 +37,8 @@ export async function createPortal({ title }: CreatePortalParams) {
 
 export async function deletePortal(portalId: string) {
     await db.delete(portal).where(eq(portal.id, portalId));
+    // Clean up s3Bucket
+    await deleteS3Images(portalId);
 }
 
 export async function updateSectionContent({
@@ -131,5 +134,6 @@ export async function saveSection(data: SectionInsert | undefined) {
 
 export async function deleteSection(sectionId: string, portalId: string) {
     await db.delete(section).where(eq(section.id, sectionId));
+    await deleteS3Images(portalId, sectionId);
     await reIndexSections(portalId);
 }
