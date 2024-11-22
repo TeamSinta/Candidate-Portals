@@ -9,11 +9,12 @@
 
 export const siteUrls = {
     publicUrl: "https://app.sintahr.com",
-    github: "https://github.com/alifarooq9/msinta",
+    github: "https://github.com/msinta",
     home: "/",
     dev: "https://5bc1e5fa5023dc7a.ngrok.app",
-    prod: "https://sinta-candidate-portals.vercel.app",
     calender:"https://cal.com/mohamed-sinta/30min",
+    // prod: "https://sinta-candidate-portals.vercel.app",
+    prod: "https://app.sintahr.com",
     pricing: "/pricing",
     features: "/features",
     support: "/support",

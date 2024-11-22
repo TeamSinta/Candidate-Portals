@@ -28,6 +28,7 @@ function ContentEditorPageButtons({
                 <Button
                     aria-label="Close Sidebar"
                     variant={"outline"}
+                    onClick={onSave}
                     className="rounded border-2 border-gray-400 px-2 py-5 text-gray-500 hover:bg-gray-200 hover:text-black"
                 >
                     <Link href={`/editor/content/${sectionid}`}>

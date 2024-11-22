@@ -12,15 +12,29 @@ import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useSidebar } from "@/components/ui/sidebar";
 import { useRouter } from "next/navigation";
-import { replaceText, sampleDictionary } from "../../../utils/yoopta-config";
+import {
+    getExtendedImage,
+    MAX_FILE_SIZE,
+    plugins,
+    replaceText,
+    sampleDictionary,
+} from "../../../utils/yoopta-config";
 import { useSlidingSidebar } from "../../../[portalId]/_components/sliding-sidebar";
 import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
+import { getUploadFunction } from "@/lib/utils";
+import Image, { ImageElementProps, ImageUploadResponse } from "@yoopta/image";
+import Paragraph from "@yoopta/paragraph";
 
 interface Props {
     section: SectionSelect;
     portal: PortalSelect;
+    setEditorContentChanged: React.Dispatch<React.SetStateAction<boolean>>;
 }
-function EditorWrapperHeaders({ section, portal }: Props) {
+function EditorWrapperHeaders({
+    section,
+    portal,
+    setEditorContentChanged,
+}: Props) {
     const [sectionContent, setSectionContent] = useState<YooptaContentValue>(
         section.content as YooptaContentValue,
     );
@@ -67,6 +81,8 @@ function EditorWrapperHeaders({ section, portal }: Props) {
         setIsPreviewing(!isPreviewing);
     }
 
+    const uploadFunction = getUploadFunction(portal.id, section.id);
+
     return (
         <>
             <div className="relative">
@@ -102,7 +118,10 @@ function EditorWrapperHeaders({ section, portal }: Props) {
                                 : sectionContent
                         }
                         editable={!isPreviewing}
-                        onChange={setSectionContent}
+                        onChange={(data: YooptaContentValue) => {
+                            setSectionContent(data);
+                            setEditorContentChanged(true);
+                        }}
                         onTitleChange={(newTitle: string) => {
                             setTitle(newTitle);
                         }}
@@ -111,6 +130,8 @@ function EditorWrapperHeaders({ section, portal }: Props) {
                                 ? replaceText(title, sampleDictionary)
                                 : (title ?? "")
                         }
+                        uploadImageFunction={uploadFunction}
+                        plugins={[...plugins, getExtendedImage(uploadFunction)]}
                     />
                 </div>
             </div>

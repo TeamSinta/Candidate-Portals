@@ -4,6 +4,8 @@ import { MergedSectionData } from "@/types/portal";
 import { type ClassValue, clsx } from "clsx";
 import { format } from "date-fns";
 import { twMerge } from "tailwind-merge";
+import { z } from "zod";
+import { uploadItem } from "@/server/awss3/uploadToS3";
 
 export function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));
@@ -79,4 +81,19 @@ export function calculateTotalAverageDuration(
         // Return in seconds if it's less than 60 seconds
         return `${Math.floor(averageDuration)} seconds`;
     }
+}
+
+export function getUploadFunction(
+    // orgId: string,
+    portalId: string,
+    sectionId: string,
+) {
+    return async function (formData: FormData) {
+        try {
+            return await uploadItem(formData, portalId, sectionId);
+        } catch (error) {
+            console.error("Error uploading file:", error);
+            throw error; // Re-throw the error for further handling if needed
+        }
+    };
 }

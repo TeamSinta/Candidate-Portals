@@ -65,69 +65,93 @@ const contentTypeIcons = {
 };
 
 function ContentBlock({
-  index,
-  id,
-  portalId,
-  initialContentType,
-  initialContentData,
-  initialTitle,
-  onDeleteBlock,
-  editBlock,
+    index,
+    id,
+    portalId,
+    initialContentType,
+    initialContentData,
+    initialTitle,
+    onDeleteBlock,
+    editBlock,
 }: ContentBlockProps) {
-  const [image, setImage] = useState<string | null>(null);
-  const [loading, setLoading] = useState<boolean>(false);
+    const [image, setImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
 
-  const {
-      isSlidingSidebarOpen,
-      setPortalId,
-      toggleSlidingSidebar,
-      setContentType,
-      setTitle,
-      setSectionId,
-      setUrlContentData,
-  } = useSlidingSidebar();
+    const {
+        isSlidingSidebarOpen,
+        setPortalId,
+        toggleSlidingSidebar,
+        contentType: sidebarContentType,
+        sectionId: sidebarSectionId,
+        setContentType,
+        setTitle,
+        setSectionId,
+        setUrlContentData,
+        editorContentChanged,
+        setEditorContentChanged,
+    } = useSlidingSidebar();
 
-  const IconComponent = initialContentType
-      ? contentTypeIcons[initialContentType] || FileTextIcon
-      : FileTextIcon;
+    const IconComponent = initialContentType
+        ? contentTypeIcons[initialContentType] || FileTextIcon
+        : FileTextIcon;
+    const [displaySaveModal, setDisplaySaveModal] = useState(false);
 
-  useEffect(() => {
-      if (initialContentType === SectionContentType.URL && isUrlContentData(initialContentData)) {
-          const fetchOpenGraphImage = async () => {
-              setLoading(true);
-              try {
-                  const response = await fetch(
-                      `/api/images?url=${encodeURIComponent(initialContentData.url)}`
-                  );
-                  const { image: fetchedImage } = await response.json();
-                  setImage(fetchedImage || "/path-to-fallback-image.jpg");
-              } catch (error) {
-                  console.error("Error fetching OpenGraph image:", error);
-                  setImage("/path-to-fallback-image.jpg");
-              } finally {
-                  setLoading(false);
-              }
-          };
-          fetchOpenGraphImage();
-      }
-  }, [initialContentType, initialContentData]);
+    function promptSaveModal() {
+        if (sidebarSectionId === id && isSlidingSidebarOpen) {
+            return;
+        }
+        if (
+            sidebarContentType === SectionContentType.YOOPTA &&
+            sidebarSectionId !== id &&
+            isSlidingSidebarOpen &&
+            editorContentChanged
+        ) {
+            setDisplaySaveModal(true);
+        } else {
+            handleViewClick();
+        }
+    }
+    useEffect(() => {
+        if (
+            initialContentType === SectionContentType.URL &&
+            isUrlContentData(initialContentData)
+        ) {
+            const fetchOpenGraphImage = async () => {
+                setLoading(true);
+                try {
+                    const response = await fetch(
+                        `/api/images?url=${encodeURIComponent(initialContentData.url)}`,
+                    );
+                    const { image: fetchedImage } = await response.json();
+                    setImage(fetchedImage || "/path-to-fallback-image.jpg");
+                } catch (error) {
+                    console.error("Error fetching OpenGraph image:", error);
+                    setImage("/path-to-fallback-image.jpg");
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchOpenGraphImage();
+        }
+    }, [initialContentType, initialContentData]);
 
-  const handleViewClick = () => {
-      if (!isSlidingSidebarOpen) {
-          toggleSlidingSidebar();
-      }
-      setContentType(initialContentType);
-      setTitle(initialTitle);
-      setSectionId(id);
-      setPortalId(portalId);
-      if (initialContentType === SectionContentType.URL) {
-          setUrlContentData(
-              isUrlContentData(initialContentData)
-                  ? initialContentData
-                  : { url: "" },
-          );
-      }
-  };
+    const handleViewClick = () => {
+        if (!isSlidingSidebarOpen) {
+            toggleSlidingSidebar();
+        }
+        setContentType(initialContentType);
+        setTitle(initialTitle);
+        setSectionId(id);
+        setEditorContentChanged(false);
+        setPortalId(portalId);
+        if (initialContentType === SectionContentType.URL) {
+            setUrlContentData(
+                isUrlContentData(initialContentData)
+                    ? initialContentData
+                    : { url: "" },
+            );
+        }
+    };
 
   return (
     <div className="group relative">

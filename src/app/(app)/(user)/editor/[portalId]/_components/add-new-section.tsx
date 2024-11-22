@@ -31,7 +31,14 @@ function AddNewSectionDialog({
 
     const handleSaveUrl = () => {
         if (url) {
-            onAddLink(url);
+            let formattedUrl = url.trim();
+
+            if (
+                !formattedUrl.startsWith("http://") &&
+                !formattedUrl.startsWith("https://")
+            )
+                formattedUrl = `https://${formattedUrl}`;
+            onAddLink(formattedUrl);
             setIsAddingLink(false);
             setUrl("");
             setIsDialogOpen(false);
