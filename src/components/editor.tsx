@@ -119,6 +119,7 @@ export default function Editor({
     onTitleChange,
     className,
     uploadImageFunction,
+    plugins,
 }: {
     content: YooptaContentValue;
     editable: boolean;
@@ -127,6 +128,7 @@ export default function Editor({
     onTitleChange: (newTitle: string) => void;
     className?: string;
     uploadImageFunction?: (formData: FormData) => Promise<any>;
+    plugins: any[];
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
     const titleRef = useRef<HTMLTextAreaElement>(null);
@@ -232,38 +234,7 @@ export default function Editor({
                     value={content}
                     onChange={onChange}
                     // here we go
-                    plugins={[
-                        ...plugins,
-                        Image.extend({
-                            options: {
-                                onUpload: async (file: File) => {
-                                    if (!uploadImageFunction) {
-                                        toast.error(
-                                            "Image could not be uploaded",
-                                        );
-                                        return { src: "", alt: "" };
-                                    }
-                                    const formData = new FormData();
-                                    formData.append(
-                                        "file",
-                                        new Blob([file], { type: file.type }),
-                                    );
-                                    formData.append("fileName", file.name);
-                                    formData.append(
-                                        "size",
-                                        file.size.toString(),
-                                    );
-                                    formData.append("type", file.type);
-                                    const { url, id, title } =
-                                        await uploadImageFunction(formData);
-                                    return {
-                                        src: url,
-                                        alt: title,
-                                    } as ImageUploadResponse;
-                                },
-                            },
-                        }),
-                    ]}
+                    plugins={plugins}
                     tools={tools}
                     readOnly={!editable}
                     marks={marks}

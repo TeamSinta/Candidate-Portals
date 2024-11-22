@@ -1,12 +1,25 @@
+import Accordion from "@yoopta/accordion";
+import Blockquote from "@yoopta/blockquote";
+import Callout from "@yoopta/callout";
+import Divider from "@yoopta/divider";
+import Embed from "@yoopta/embed";
+import { HeadingOne, HeadingTwo, HeadingThree } from "@yoopta/headings";
+import Image, { ImageUploadResponse } from "@yoopta/image";
+import Link from "@yoopta/link";
+import { NumberedList, BulletedList, TodoList } from "@yoopta/lists";
+import Paragraph from "@yoopta/paragraph";
+import Table from "@yoopta/table";
+import { toast } from "sonner";
+
+export const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 export const sampleDictionary = {
     name: "James Bob",
     email: "james.bob@teamsinta.com",
 };
 export function replaceText(
-  text: string,
-  dictionary?: Record<string, string>, // Make dictionary optional
+    text: string,
+    dictionary?: Record<string, string>, // Make dictionary optional
 ): string {
-
     if (!dictionary) return text;
     // Iterate through the dictionary entries and replace placeholders in the text
     for (const [key, value] of Object.entries(dictionary)) {
@@ -17,8 +30,56 @@ export function replaceText(
     return text;
 }
 
+export const plugins = [
+    Paragraph,
+    Table,
+    NumberedList,
+    BulletedList,
+    TodoList,
+    Embed,
+    Blockquote,
+    Accordion,
+    Divider,
+    Link,
+    Callout,
+    HeadingOne,
+    HeadingTwo,
+    HeadingThree,
+];
 
-
+export function getExtendedImage(uploadFunction: any) {
+    return Image.extend({
+        options: {
+            onUpload: async (file: File) => {
+                if (!uploadFunction) {
+                    toast.error("Image could not be uploaded");
+                    return { src: "", alt: "" };
+                }
+                if (file.size > MAX_FILE_SIZE) {
+                    toast.error(
+                        "Image size is too large. Maximum size is 10MB",
+                    );
+                    return { src: "", alt: "" };
+                }
+                const formData = new FormData();
+                formData.append(
+                    "file",
+                    new Blob([file], {
+                        type: file.type,
+                    }),
+                );
+                formData.append("fileName", file.name);
+                formData.append("size", file.size.toString());
+                formData.append("type", file.type);
+                const { url, id, title } = await uploadFunction(formData);
+                return {
+                    src: url,
+                    alt: title,
+                } as ImageUploadResponse;
+            },
+        },
+    });
+}
 // OBSOLETE
 // export function getExtendedParagraph(
 //     replacementDictionary: Record<string, string>,

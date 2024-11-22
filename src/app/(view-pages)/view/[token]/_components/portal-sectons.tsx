@@ -5,14 +5,17 @@ import { useEffect, useRef, useState } from "react";
 // import LinkComponent from "@/components/LinkComponent";
 // import DocumentComponent from "@/components/DocumentComponent";
 // import PdfViewer from "@/components/PdfViewer";
-import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
+import {
+    plugins,
+    replaceText,
+    getExtendedImage,
+} from "@/app/(app)/(user)/editor/utils/yoopta-config";
 import Editor from "@/components/editor";
 import { SectionContentType } from "@/server/db/schema";
 import { PortalReaderData } from "@/types/portal";
 import CardNavigatorMenu from "./card-navigator-nenu";
 import LinkComponent from "./url-reader";
-import { getUploadFunction } from "@/server/awss3/uploadToS3";
-
+import { getUploadFunction } from "@/lib/utils";
 type Section = {
     sectionId: string;
     title: string;
@@ -140,6 +143,7 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         email: portalData.candidateEmail,
     } as Record<string, string>;
     const renderSectionContent = (section: Section) => {
+        const uploadFunction = getUploadFunction(portalId, section.sectionId);
         switch (section.contentType) {
             case SectionContentType.YOOPTA:
                 return (
@@ -158,10 +162,10 @@ export default function PortalContent({ portalData }: PortalContentProps) {
                             return null;
                         }}
                         title={replaceText(section.title, replaceData)}
-                        uploadImageFunction={getUploadFunction(
-                            portalId,
-                            section.sectionId,
-                        )}
+                        plugins={[
+                            ...plugins,
+                            getExtendedImage(getUploadFunction),
+                        ]}
                     />
                 );
             case SectionContentType.URL:

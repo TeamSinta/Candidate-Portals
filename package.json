@@ -16,6 +16,7 @@
     },
     "dependencies": {
         "@auth/drizzle-adapter": "^0.7.0",
+        "@aws-sdk/client-s3": "^3.698.0",
         "@chronark/zod-bird": "^0.3.10",
         "@hookform/resolvers": "^3.3.4",
         "@lemonsqueezy/lemonsqueezy.js": "^2.2.0",
