@@ -130,14 +130,14 @@ export function AuthForm({ type }: AuthFormProps) {
                     </Button>
                 </div>
 
-                <div className="relative flex items-center justify-center">
+                {/* <div className="relative flex items-center justify-center">
                     <Separator className="w-full" />
                     <p className="absolute bg-background px-2 text-sm font-medium text-muted-foreground">
                         OR
                     </p>
                 </div>
 
-                <SocialLogins />
+                <SocialLogins /> */}
             </form>
         </Form>
     );
