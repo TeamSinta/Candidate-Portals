@@ -13,7 +13,7 @@ export default function AnalyticsPage() {
             title="Analytics"
             description="View and manage analytics for your content."
         >
-            <div className="sticky top-0  bg-white  pb-0 dark:bg-gray-900 sm:mx-4 sm:pt-4">
+            <div className="sticky top-0  bg-white  pb-0 dark:bg-black sm:mx-4 sm:pt-4">
                 <section className="mb-4 flex items-center justify-between space-x-2 sm:space-x-0">
                     <div className="space-y-0 sm:space-y-1">
                         <h2 className="mx-28 text-xl font-semibold tracking-tight text-foreground sm:text-2xl">

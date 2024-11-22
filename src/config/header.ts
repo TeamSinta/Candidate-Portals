@@ -23,30 +23,30 @@ interface NavigationItem {
 }
 
 export const navigation: NavigationItem[] = [
-    {
-        id: "pricing",
-        href: siteUrls.pricing,
-        label: "Pricing",
-        badge: "Beta",
-    },
-    {
-        id: "support",
-        href: siteUrls.support,
-        label: "Support",
-    },
-    {
-        id: "blogs",
-        href: siteUrls.blogs,
-        label: "Blogs",
-    },
-    {
-        id: "docs",
-        href: siteUrls.docs,
-        label: "Docs",
-    },
-    {
-        id: "changelogs",
-        href: siteUrls.changelogs,
-        label: "Changelogs",
-    },
+    // {
+    //     id: "pricing",
+    //     href: siteUrls.pricing,
+    //     label: "Pricing",
+    //     badge: "Beta",
+    // },
+    // {
+    //     id: "support",
+    //     href: siteUrls.support,
+    //     label: "Support",
+    // // },
+    // {
+    //     id: "Waitlist",
+    //     href: siteUrls.waitlist,
+    //     label: "Waitlist",
+    // },
+    // {
+    //     id: "docs",
+    //     href: siteUrls.docs,
+    //     label: "Docs",
+    // },
+    // {
+    //     id: "changelogs",
+    //     href: siteUrls.changelogs,
+    //     label: "Changelogs",
+    // },
 ];

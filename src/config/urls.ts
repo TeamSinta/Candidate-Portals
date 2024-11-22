@@ -8,10 +8,11 @@
  */
 
 export const siteUrls = {
-    publicUrl: "https://app.teamsinta.com",
-    github: "https://github.com/alifarooq9/rapidlaunch",
+    publicUrl: "https://app.sintahr.com",
+    github: "https://github.com/msinta",
     home: "/",
     dev: "https://5bc1e5fa5023dc7a.ngrok.app",
+    calender:"https://cal.com/mohamed-sinta/30min",
     // prod: "https://sinta-candidate-portals.vercel.app",
     prod: "https://app.sintahr.com",
     pricing: "/pricing",
@@ -22,7 +23,7 @@ export const siteUrls = {
     changelogs: "/changelogs",
     maintenance: "/maintenance",
     waitlist: "/waitlist",
-    teamsinta: "https://www.teamsinta.com",
+    teamsinta: "https://app.sintahr.com",
     analytics: "/analytics",
     dashboard: {
         home: "/dashboard",

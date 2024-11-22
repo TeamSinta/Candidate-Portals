@@ -1,5 +1,5 @@
 export const waitlistPageConfig = {
     title: "Join the waitlist",
     description:
-        "Welcome to Rapidlaunch, a platform which provides resources for building applications faster. We're currently working on adding more features and improving the user experience. In the meantime, you can join our waitlist!",
+        "Welcome to Sinta, Sinta Portals simplify your hiring process by bringing everything candidates need into one place. Personalize experiences, track engagement, and collaborate seamlessly—all while saving time and effort. Designed for Recruiters.",
 } as const;
