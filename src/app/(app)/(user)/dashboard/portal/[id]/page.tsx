@@ -83,7 +83,9 @@ export default async function PortalView({ params }: Props) {
                         <Breadcrumb>
                             <BreadcrumbList>
                                 <BreadcrumbItem className="hidden md:block">
-                                    <BreadcrumbLink>Portals</BreadcrumbLink>
+                                    <BreadcrumbLink href="/dashboard">
+                                        Portals
+                                    </BreadcrumbLink>
                                 </BreadcrumbItem>
                                 <BreadcrumbSeparator className="hidden md:block" />
                                 <BreadcrumbItem>
