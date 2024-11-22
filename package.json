@@ -72,6 +72,7 @@
         "@yoopta/table": "^4.9.1",
         "@yoopta/toolbar": "^4.9.1",
         "autoprefixer": "^10.4.19",
+        "cheerio": "^1.0.0",
         "class-variance-authority": "^0.7.0",
         "clsx": "^2.1.0",
         "cmdk": "^0.2.1",

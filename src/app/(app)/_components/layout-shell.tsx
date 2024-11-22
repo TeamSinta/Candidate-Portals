@@ -33,7 +33,7 @@ export function AppLayoutShell({
         <SidebarProvider
             style={
                 {
-                    "--sidebar-width": "10vw",
+                    "--sidebar-width": "12vw",
                 } as React.CSSProperties
             }
         >

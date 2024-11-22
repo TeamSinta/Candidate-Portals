@@ -1,5 +1,6 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { SectionContentType } from "@/server/db/schema";
 
@@ -32,6 +33,7 @@ import {
     CardHeader,
 } from "@/components/ui/card";
 import { useSlidingSidebar } from "./sliding-sidebar";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export interface SaveBlockArgs {
     content: ContentDataType;
@@ -72,7 +74,9 @@ function ContentBlock({
     onDeleteBlock,
     editBlock,
 }: ContentBlockProps) {
-    // Toggle Sidebar
+    const [image, setImage] = useState<string | null>(null);
+    const [loading, setLoading] = useState<boolean>(false);
+
     const {
         isSlidingSidebarOpen,
         setPortalId,
@@ -86,7 +90,7 @@ function ContentBlock({
         editorContentChanged,
         setEditorContentChanged,
     } = useSlidingSidebar();
-    // Fallback to FileTextIcon if contentType is undefined
+
     const IconComponent = initialContentType
         ? contentTypeIcons[initialContentType] || FileTextIcon
         : FileTextIcon;
@@ -107,11 +111,34 @@ function ContentBlock({
             handleViewClick();
         }
     }
+    useEffect(() => {
+        if (
+            initialContentType === SectionContentType.URL &&
+            isUrlContentData(initialContentData)
+        ) {
+            const fetchOpenGraphImage = async () => {
+                setLoading(true);
+                try {
+                    const response = await fetch(
+                        `/api/images?url=${encodeURIComponent(initialContentData.url)}`,
+                    );
+                    const { image: fetchedImage } = await response.json();
+                    setImage(fetchedImage || "/path-to-fallback-image.jpg");
+                } catch (error) {
+                    console.error("Error fetching OpenGraph image:", error);
+                    setImage("/path-to-fallback-image.jpg");
+                } finally {
+                    setLoading(false);
+                }
+            };
+            fetchOpenGraphImage();
+        }
+    }, [initialContentType, initialContentData]);
+
     const handleViewClick = () => {
         if (!isSlidingSidebarOpen) {
-            toggleSlidingSidebar(); // Only open the sidebar if it's closed
+            toggleSlidingSidebar();
         }
-        // Always set the content data
         setContentType(initialContentType);
         setTitle(initialTitle);
         setSectionId(id);
@@ -195,11 +222,22 @@ function ContentBlock({
 
                 {/* Card Header with Image */}
                 <CardHeader className="rounded-t bg-gray-200 px-4 sm:px-12 sm:pb-0">
-                    <img
-                        src="https://s3.us-west-2.amazonaws.com/public.notion-static.com/template/416ca37a-c1e7-4ac5-b0f7-4766bcd7356a/desktop.png"
-                        alt={`Preview of ${initialTitle}`}
-                        className="h-32 w-full rounded object-cover"
-                    />
+                    {loading ? (
+                        <Skeleton className="h-32 w-full rounded" />
+                    ) : (
+                        <img
+                            src={
+                                image ||
+                                "https://cdn.dribbble.com/userupload/14196667/file/original-431017da41cec525ed9af4115905b503.png?resize=2048x1536&vertical=center"
+                            }
+                            alt={`Preview of ${initialTitle}`}
+                            className="h-32 w-full rounded object-cover"
+                            onError={(e) =>
+                                (e.currentTarget.src =
+                                    "https://s3.us-west-2.amazonaws.com/public.notion-static.com/template/416ca37a-c1e7-4ac5-b0f7-4766bcd7356a/desktop.png")
+                            }
+                        />
+                    )}
                 </CardHeader>
 
                 {/* Card Content */}
@@ -214,7 +252,7 @@ function ContentBlock({
                         <h3 className="max-w-52 overflow-hidden truncate text-lg font-semibold">
                             {initialTitle || `Page ${index}`}
                         </h3>
-                        <div className="mt-1 truncate text-xs text-gray-500">{`${initialContentType} `}</div>
+                        <div className="mt-1 truncate text-xs text-gray-500">{`${initialContentType}`}</div>
                     </div>
                 </CardContent>
 
