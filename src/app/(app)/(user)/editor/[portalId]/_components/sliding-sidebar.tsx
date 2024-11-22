@@ -35,6 +35,8 @@ type SlidingSidebarContextType = {
     setSectionId: Dispatch<SetStateAction<string | null>>; // Function to set sectionId
     portalId: string | null; // Add sectionId
     setPortalId: Dispatch<SetStateAction<string | null>>;
+    editorContentChanged: boolean;
+    setEditorContentChanged: Dispatch<SetStateAction<boolean>>;
 };
 
 // Create the context with a default value
@@ -64,7 +66,7 @@ export const SlidingSidebarProvider = ({ children }) => {
     });
     const [sectionId, setSectionId] = useState<string | null>(null); // Add state for sectionId
     const [portalId, setPortalId] = useState<string | null>(null); // Add state for sectionId
-
+    const [editorContentChanged, setEditorContentChanged] = useState(false);
     const pathname = usePathname(); // Get the current pathname
 
     const toggleSlidingSidebar = () => {
@@ -92,6 +94,8 @@ export const SlidingSidebarProvider = ({ children }) => {
                 setSectionId,
                 portalId,
                 setPortalId,
+                editorContentChanged,
+                setEditorContentChanged,
             }}
         >
             <div className="flex w-full">{children}</div>
@@ -111,6 +115,7 @@ const SlidingSidebar = () => {
         setUrlContentData,
         portalId,
         sectionId, // Assuming sectionId is passed to the context
+        setEditorContentChanged,
     } = useSlidingSidebar();
 
     const [sectionData, setSectionData] = useState<any>(null); // Replace `any` with the appropriate type
@@ -222,6 +227,9 @@ const SlidingSidebar = () => {
                                     <EditorWrapperHeaders
                                         section={sectionData}
                                         portal={portalData}
+                                        setEditorContentChanged={
+                                            setEditorContentChanged
+                                        }
                                     />
                                 ) : (
                                     <p>
