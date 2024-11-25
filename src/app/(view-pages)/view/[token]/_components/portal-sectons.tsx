@@ -105,7 +105,9 @@ export default function PortalContent({ portalData }: PortalContentProps) {
             }
         };
         const handleBeforeUnload = async () => {
-            await sendDurationData(); // Ensure the final session is captured before the window/tab is closed
+            if (document.visibilityState === "visible") {
+                await sendDurationData(); // Ensure the final session is captured before the window/tab is closed
+            }
         };
 
         document.addEventListener("visibilitychange", handleVisibilityChange);
