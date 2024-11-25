@@ -33,6 +33,7 @@ function EditorWrapper({ section, portal }: Props) {
     );
     const [title, setTitle] = useState<string>(section.title ?? "");
     const [isPreviewing, setIsPreviewing] = useState<boolean>(false);
+    const [contentChanged, setContentChanged] = useState<boolean>(false);
     const sidebar = useSidebar();
     const router = useRouter();
     const { setSlidingSidebarOpen } = useSlidingSidebar();
@@ -49,6 +50,7 @@ function EditorWrapper({ section, portal }: Props) {
             });
             toast.success("Section saved successfully");
             setSlidingSidebarOpen(false);
+            setContentChanged(false);
         } catch {
             toast.error("Failed to save section");
         }
@@ -66,7 +68,12 @@ function EditorWrapper({ section, portal }: Props) {
                 {/* Sticky Toolbar */}
 
                 <div className="sticky top-0 z-10 p-4">
-                    <EditorHeader key={0} onSave={handleSave} />
+                    <EditorHeader
+                        key={0}
+                        onSave={handleSave}
+                        portalId={portal.id}
+                        contentChanged={contentChanged}
+                    />
                 </div>
 
                 <div>
@@ -82,7 +89,10 @@ function EditorWrapper({ section, portal }: Props) {
                                 : sectionContent
                         }
                         editable={!isPreviewing}
-                        onChange={setSectionContent}
+                        onChange={(data: YooptaContentValue) => {
+                            setSectionContent(data);
+                            setContentChanged(true);
+                        }}
                         onTitleChange={(newTitle: string) => {
                             setTitle(newTitle);
                         }}

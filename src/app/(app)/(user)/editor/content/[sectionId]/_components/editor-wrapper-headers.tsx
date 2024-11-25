@@ -95,6 +95,7 @@ function EditorWrapperHeaders({
                         onTogglePreview={handleTogglePreview}
                         isPreviewing={isPreviewing}
                         sectionid={section.id}
+                        portalTitle={portal.title}
                     />
                 </div>
 
