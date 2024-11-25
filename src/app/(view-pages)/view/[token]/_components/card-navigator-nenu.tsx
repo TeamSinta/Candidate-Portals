@@ -19,11 +19,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { Section } from "@/types/portal";
 import { replaceText } from "@/app/(app)/(user)/editor/utils/yoopta-config";
+import Link from "next/link";
 
 type PortalData = {
     candidateName: string;
     roleTitle?: string;
     orgName: string;
+    email: string;
     userName: string;
     sections: Section[];
 };
@@ -120,9 +122,11 @@ const CardNavigatorMenu: React.FC<CardNavigatorMenuProps> = ({
                 <CardFooter>
                     <div className="flex w-full flex-col">
                         {!isCardCollapsed && (
-                            <Button className="w-full rounded">
-                                Message {userName}
-                            </Button>
+                            <Link href={`mailto:${portalData.email}`}>
+                                <Button className="w-full rounded">
+                                    Message {userName}
+                                </Button>
+                            </Link>
                         )}
                         <p className="mt-2 text-center text-xs text-gray-400 underline">
                             Powered by Sinta
