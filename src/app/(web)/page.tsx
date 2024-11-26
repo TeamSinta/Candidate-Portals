@@ -60,7 +60,7 @@ export default async function HomePage() {
 
       <div className="-m-2 w-full rounded-xl bg-foreground/5 p-2 ring-1 ring-inset ring-foreground/10 lg:-m-4 lg:rounded-2xl lg:p-4">
           <div className="relative aspect-video w-full rounded-md bg-muted">
-              <Image
+              {/* <Image
                   src="https://utfs.io/f/NyiNiWCHmEc4z08OipjZOdvRm5YClyws7nXD6H32upZQP1Vi"
                   alt="Sinta Candidate Portal Preview"
                   fill
@@ -74,7 +74,12 @@ export default async function HomePage() {
                   fill
                   className="hidden rounded-md border border-border dark:block"
                   priority
-              />
+              /> */}
+              <div className="relative pb-[56.25%] h-0">
+                <iframe className="absolute top-0 left-0 w-full h-full border-none rounded-sm"
+                src="https://www.tella.tv/video/cm3xie6ey000k03ladqkzb64c/embed?b=0&title=0&a=1&loop=0&autoPlay=true&t=0&muted=1&wt=0" allowfullscreen allowtransparency>
+                </iframe>
+                </div>
           </div>
       </div>
 
