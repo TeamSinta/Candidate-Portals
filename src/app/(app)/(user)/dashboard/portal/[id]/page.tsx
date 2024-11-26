@@ -25,7 +25,11 @@ import { MarqueeCardVertical } from "../../_components/demo";
 import { BarChartComponent } from "@/app/(app)/_components/bar-chart";
 import { TopEngagingUsersChart } from "@/app/(app)/_components/side-bar-chart";
 import { MergedEngagedData, MergedSectionData } from "@/types/portal";
-import { averageDurationData, topEngagedData } from "@/server/tinybird/utils";
+import {
+    averageDurationData,
+    topEngagedData,
+    averageCandidateDuration,
+} from "@/server/tinybird/utils";
 import {
     getAverageDuration,
     getTopEngaged,
@@ -67,7 +71,8 @@ export default async function PortalView({ params }: Props) {
             engagedTinybirdData,
         );
         const averageDurationText = calculateTotalAverageDuration(AverageData);
-
+        const averageCandidateDurationText =
+            averageCandidateDuration(EngagedData);
         // Check if there is chart data
         const hasChartData = AverageData.length > 0 || EngagedData.length > 0;
 
@@ -156,10 +161,10 @@ export default async function PortalView({ params }: Props) {
                         </div>
 
                         {/* Statistics Section */}
-                        <div className="mt-6 grid grid-cols-2 gap-4">
+                        <div className="mt-6 grid grid-cols-3 gap-4">
                             <Card className="rounded-sm shadow-none">
                                 <CardHeader>
-                                    <CardTitle>Number of Visits</CardTitle>
+                                    <CardTitle>Total Portals Created</CardTitle>
                                 </CardHeader>
                                 <CardContent className="text-center">
                                     <p className="text-2xl">
@@ -171,12 +176,24 @@ export default async function PortalView({ params }: Props) {
                             <Card className="rounded-sm shadow-none">
                                 <CardHeader>
                                     <CardTitle>
-                                        Total Average View Duration
+                                        Average Time Spent per Page
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="text-center">
                                     <p className="text-2xl">
                                         {averageDurationText}
+                                    </p>
+                                </CardContent>
+                            </Card>
+                            <Card className="rounded-sm shadow-none">
+                                <CardHeader>
+                                    <CardTitle>
+                                        Average Time Spent per Portal
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="text-center">
+                                    <p className="text-2xl">
+                                        {averageCandidateDurationText}
                                     </p>
                                 </CardContent>
                             </Card>
