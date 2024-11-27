@@ -37,7 +37,7 @@ import {
 import ClientModal from "../../_components/success-modal";
 import PreviewButton from "../../_components/preview-button";
 
-import PortalOptionsDropdown from "./_components/portal-options-dropdown";
+import PortalOptions from "./_components/portal-options";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 interface Props {
     params: { id: string };
@@ -104,13 +104,13 @@ export default async function PortalView({ params }: Props) {
                     <div className="flex items-center gap-2">
                         <PreviewButton portalData={portalData} />
                         <Separator orientation="vertical" className="h-6" />
-                        <PortalOptionsDropdown
+                        <PortalOptions
                             portalId={params.id}
                             portalTitle={portalData.portal.title ?? ""}
                             redirect={true}
                         >
                             <MoreHorizontalIcon className="h-5 w-5 cursor-pointer rounded-full bg-gray-100 p-1 dark:bg-gray-700" />
-                        </PortalOptionsDropdown>
+                        </PortalOptions>
                         <ClientSheet portalData={portalData} />
                         <ClientModal portalData={portalData} />
                     </div>

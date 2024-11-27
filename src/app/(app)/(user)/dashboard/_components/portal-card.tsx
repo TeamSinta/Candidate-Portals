@@ -11,8 +11,16 @@ import {
     BookOpenTextIcon,
     BarChartIcon,
     EllipsisVertical,
+    Pencil,
+    Trash,
+    Trash2,
+    Edit,
 } from "lucide-react";
-import { NotionLogoIcon } from "@radix-ui/react-icons";
+import {
+    NotionLogoIcon,
+    Pencil1Icon,
+    Pencil2Icon,
+} from "@radix-ui/react-icons";
 import Link from "next/link";
 import {
     DropdownMenu,
@@ -37,6 +45,11 @@ import { Input } from "@/components/ui/input";
 import { deletePortal } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type Section = {
     title: string;
@@ -144,45 +157,38 @@ const PortalCard: React.FC<PortalCardProps> = ({
                     {/* Right Section with Views and Options */}
                     <div className="flex items-center space-x-4">
                         {/* Views Count */}
-                        <div className="flex min-w-24 items-center gap-2 rounded bg-gray-100 px-2 py-2 text-xs text-gray-500">
+                        <div className="flex min-w-20 items-center gap-2 rounded bg-gray-100 px-2 py-2 text-xs text-gray-500">
                             <BarChartIcon />
                             <span>
-                                {views} view{views !== 1 ? "s" : ""}
+                                {views} link{views !== 1 ? "s" : ""}
                             </span>
                         </div>
 
-                        {/* Options Button */}
-                        <DropdownMenu>
-                            <DropdownMenuTrigger
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Link href={`/editor/${url}`}>
+                                    <Edit
+                                        size={20}
+                                        className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                                    />
+                                </Link>
+                            </TooltipTrigger>
+                            <TooltipContent>Edit Portal</TooltipContent>
+                        </Tooltip>
+                        <Tooltip>
+                            <TooltipTrigger
                                 onClick={(e) => {
                                     e.preventDefault();
+                                    setDeleteModalOpen(true);
                                 }}
-                                className="text-gray-400 hover:text-gray-600 focus:outline-none"
                             >
-                                <EllipsisVertical className="h-4 w-4" />
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent>
-                                <DropdownMenuItem
-                                    onClick={() => {
-                                        console.log("edit");
-                                    }}
-                                >
-                                    <Link href={`/editor/${url}`}>
-                                        Edit Portal
-                                    </Link>
-                                </DropdownMenuItem>
-
-                                <DropdownMenuItem
-                                    onClick={(e) => {
-                                        e.preventDefault();
-                                        setDeleteModalOpen(true);
-                                    }}
-                                    className="text-red-600"
-                                >
-                                    Delete Portal
-                                </DropdownMenuItem>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
+                                <Trash2
+                                    size={20}
+                                    className="text-red-300 hover:text-red-600 focus:outline-none"
+                                />
+                            </TooltipTrigger>
+                            <TooltipContent>Delete Portal</TooltipContent>
+                        </Tooltip>
                     </div>
                 </div>
             </Link>
