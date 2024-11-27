@@ -284,7 +284,16 @@ export async function getPortalQuery(portalId: string) {
         where: eq(section.portalId, portalId),
         orderBy: [asc(section.index)],
     });
-    return { portal: portalObject, sections };
+
+    const links = await db
+        .select({
+            id: link.id,
+        })
+        .from(link)
+        .where(eq(link.portalId, portalId))
+        .execute();
+
+    return { portal: portalObject, sections, links };
 }
 
 export async function getPortalByURLQuery(url: string) {
