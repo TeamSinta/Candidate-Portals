@@ -112,3 +112,23 @@ export function millisecondsToTime(milliseconds: number): string {
         return `${secondsRemaining} second${secondsRemaining > 1 ? "s" : ""}`;
     }
 }
+
+type DebouncedFunction<T extends (...args: any[]) => any> = (
+    ...args: Parameters<T>
+) => void;
+
+export function debounce<T extends (...args: any[]) => any>(
+    func: T,
+    delay: number,
+): DebouncedFunction<T> & { cancel: () => void } {
+    let timer: NodeJS.Timeout;
+
+    const debounced = (...args: Parameters<T>) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+    };
+
+    debounced.cancel = () => clearTimeout(timer);
+
+    return debounced;
+}
