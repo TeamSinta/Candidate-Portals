@@ -114,12 +114,15 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
 
                 {/* Upgrade Section */}
                 <DropdownMenuGroup>
-                    <Link href={siteUrls.organization.plansAndBilling}>
-                        <DropdownMenuItem>
+                    <DropdownMenuItem>
+                        <Link
+                            href={siteUrls.organization.plansAndBilling}
+                            className="flex w-full cursor-pointer items-center"
+                        >
                             <Sparkles className="mr-2 h-4 w-4" />
                             Upgrade to Pro
-                        </DropdownMenuItem>
-                    </Link>
+                        </Link>
+                    </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
 
@@ -146,7 +149,7 @@ function UserDropdownContent({ user, navItems }: UserDropdownContentProps) {
 
                 {/* Logout Button */}
                 <SignoutTrigger callbackUrl={siteUrls.auth.login} asChild>
-                    <DropdownMenuItem className="text-red-500">
+                    <DropdownMenuItem className="cursor-pointer text-red-500">
                         <LogOut className="mr-2 h-4 w-4" />
                         Log out
                     </DropdownMenuItem>
