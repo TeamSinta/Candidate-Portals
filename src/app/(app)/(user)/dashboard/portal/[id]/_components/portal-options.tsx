@@ -23,8 +23,13 @@ import { Input } from "@/components/ui/input";
 import { deletePortal } from "@/server/actions/portal/mutations";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-import { EllipsisVertical } from "lucide-react";
+import { Edit, EllipsisVertical, Trash2 } from "lucide-react";
 import Link from "next/link";
+import {
+    Tooltip,
+    TooltipContent,
+    TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface Props {
     portalId: string;
@@ -32,7 +37,7 @@ interface Props {
     children?: React.ReactNode;
     redirect?: boolean;
 }
-function PortalOptionsDropdown({
+function PortalOptions({
     portalId,
     portalTitle,
     children,
@@ -86,52 +91,35 @@ function PortalOptionsDropdown({
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
-
-            <DropdownMenu>
-                <DropdownMenuTrigger
-                    onClick={(e) => {
-                        e.stopPropagation();
-                    }}
-                    className="text-gray-400 hover:text-gray-600 focus:outline-none"
-                >
-                    {children ? (
-                        children
-                    ) : (
-                        <EllipsisVertical
-                            className="h-4 w-4"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                            }}
-                        />
-                    )}
-                </DropdownMenuTrigger>
-                <DropdownMenuContent
-                    onClick={(e) => {
-                        e.stopPropagation();
-                    }}
-                >
-                    <DropdownMenuItem
+            <div className="mx-2 flex flex-row gap-4">
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Link href={`/editor/${portalId}`}>
+                            <Edit
+                                size={20}
+                                className="text-gray-400 hover:text-gray-600 focus:outline-none"
+                            />
+                        </Link>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">Edit Portal</TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                    <TooltipTrigger
                         onClick={(e) => {
-                            e.stopPropagation();
-                        }}
-                    >
-                        <Link href={`/editor/${portalId}`}>Edit Portal</Link>
-                    </DropdownMenuItem>
-
-                    <DropdownMenuItem
-                        onClick={(e) => {
-                            e.stopPropagation();
                             e.preventDefault();
                             setDeleteModalOpen(true);
                         }}
-                        className="text-red-600"
                     >
-                        Delete Portal
-                    </DropdownMenuItem>
-                </DropdownMenuContent>
-            </DropdownMenu>
+                        <Trash2
+                            size={20}
+                            className="text-red-300 hover:text-red-600 focus:outline-none"
+                        />
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">Delete Portal</TooltipContent>
+                </Tooltip>
+            </div>
         </>
     );
 }
 
-export default PortalOptionsDropdown;
+export default PortalOptions;
