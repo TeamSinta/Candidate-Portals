@@ -70,7 +70,7 @@ export function calculateTotalAverageDuration(
 
     // Calculate the average duration
     const averageDuration = totalDuration / data.length;
-
+    return millisecondsToTime(averageDuration * 1000);
     // Format the duration based on its value
     if (averageDuration >= 60) {
         // Convert to minutes and seconds if it's 60 seconds or more

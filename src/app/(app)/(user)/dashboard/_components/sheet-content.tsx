@@ -95,7 +95,7 @@ export default function CreateLinkSheetContent({
     };
 
     return (
-        <div className="flex h-full flex-col justify-between space-y-6 overflow-scroll">
+        <div className="flex h-full flex-col justify-between space-y-6 overflow-x-hidden px-1">
             {/* Header */}
             <SheetHeader>
                 <SheetTitle className="text-xl font-semibold text-gray-900">
@@ -145,7 +145,7 @@ export default function CreateLinkSheetContent({
                                 Add these fields to use custom variables in your
                                 portals.
                             </SheetDescription>
-                            <div>
+                            <div className="px-1">
                                 <Label
                                     htmlFor="email"
                                     className="text-sm font-medium text-gray-700"
@@ -160,7 +160,7 @@ export default function CreateLinkSheetContent({
                                     className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
                                 />
                             </div>
-                            <div>
+                            <div className="px-1">
                                 <Label
                                     htmlFor="roleTitle"
                                     className="text-sm font-medium text-gray-700"
@@ -177,7 +177,7 @@ export default function CreateLinkSheetContent({
                                     className="mt-2 w-full rounded-sm border-gray-300 focus:border-black focus:ring-black"
                                 />
                             </div>
-                            <div>
+                            <div className="p-1">
                                 <Label
                                     htmlFor="linkedProfile"
                                     className="text-sm font-medium text-gray-700"
