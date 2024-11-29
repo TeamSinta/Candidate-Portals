@@ -254,7 +254,7 @@ export default function Editor({
                     style={{
                         width: "100%",
                     }}
-                    selectionBoxRoot={editorRef}
+                    // selectionBoxRoot={editorRef}
                 />
                 {/* {JSON.stringify(content)} */}
             </div>

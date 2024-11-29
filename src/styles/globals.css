@@ -75,10 +75,10 @@
         --chart-4: 210 98% 78%;
         --chart-5: 212 97% 87%;
 
-        & .yoopta-block-actions button {
-            color: #fff !important;
+        .yoopta-action-menu-list-content {
+            background-color: #666;
+            color: black;
         }
-
         & .yoopta-toolbar-root {
             background-color: #1f1f1f;
             box-shadow: 0 4px 12px #0f0f0f;
