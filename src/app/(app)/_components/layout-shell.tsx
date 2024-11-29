@@ -49,7 +49,7 @@ export function AppLayoutShell({
                             />
                         </Suspense>
 
-                        <SidebarInset className="w-full min-w-[10vw] border p-6 dark:bg-gray-900">
+                        <SidebarInset className="w-full min-w-[10vw] border p-6 dark:bg-neutral-800">
                             <ScrollArea
                                 style={{
                                     height: "calc(100vh - 4.5rem)",

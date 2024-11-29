@@ -187,7 +187,7 @@ const SlidingSidebar = () => {
                     className="" // Use flex to make it push content
                     style={{ width: "100%", marginRight: "1rem" }} // Dynamic width
                 >
-                    <SidebarInset className="my-2 min-h-[0px]  w-full rounded-lg border p-6 dark:bg-gray-900 sm:max-w-[30vw] md:max-w-[40vw] lg:min-w-[50vw] lg:max-w-[55vw] xl:min-w-[65vw]">
+                    <SidebarInset className="my-2 min-h-[0px]  w-full rounded-lg border p-6 dark:bg-neutral-800 sm:max-w-[30vw] md:max-w-[40vw] lg:min-w-[50vw] lg:max-w-[55vw] xl:min-w-[65vw]">
                         <ScrollArea
                             style={{
                                 height: "calc(100vh - 4.5rem)",

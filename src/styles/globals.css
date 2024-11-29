@@ -74,6 +74,20 @@
         --chart-3: 216 92% 60%;
         --chart-4: 210 98% 78%;
         --chart-5: 212 97% 87%;
+
+        & .yoopta-block-actions button {
+            color: #fff !important;
+        }
+
+        & .yoopta-toolbar-root {
+            background-color: #1f1f1f;
+            box-shadow: 0 4px 12px #0f0f0f;
+            color: white;
+        }
+
+        & .yoopta-table td[data-cell-selected="true"] {
+            background-color: #1f1f1f;
+        }
     }
 }
 
@@ -96,4 +110,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+#highlight-color-portal,
+#toolbar-portal,
+#action-menu-list-portal,
+.yoopta-mark-code,
+.yoopta-extended-block-actions {
+    color: #000;
 }

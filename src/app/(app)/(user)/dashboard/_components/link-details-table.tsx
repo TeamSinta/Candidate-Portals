@@ -153,7 +153,7 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
                                 <TableRow>
                                     <TableCell
                                         colSpan={4}
-                                        className="rounded bg-gray-50 p-6"
+                                        className=" rounded bg-gray-50 p-6 dark:bg-neutral-900 dark:text-white"
                                     >
                                         <Table className="w-full">
                                             <TableHeader>
@@ -174,12 +174,12 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
                                                                 session.session_id
                                                             }
                                                         >
-                                                            <TableCell className="text-sm text-gray-700">
+                                                            <TableCell className="text-sm text-gray-700 dark:text-neutral-200">
                                                                 {formatDuration(
                                                                     session.total_duration,
                                                                 )}
                                                             </TableCell>
-                                                            <TableCell className="text-sm text-gray-700">
+                                                            <TableCell className="text-sm text-gray-700 dark:text-neutral-200">
                                                                 {new Date(
                                                                     session.last_view_timestamp,
                                                                 ).toLocaleString()}

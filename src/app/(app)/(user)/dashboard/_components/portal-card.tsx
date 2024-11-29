@@ -134,7 +134,7 @@ const PortalCard: React.FC<PortalCardProps> = ({
             </AlertDialog>
             <Link href={`dashboard/portal/${url}`} passHref>
                 <div
-                    className="mb-3 flex cursor-pointer items-center justify-between rounded-lg border p-5 transition-shadow hover:bg-gray-50 hover:shadow-md dark:hover:bg-gray-800"
+                    className="mb-3 flex cursor-pointer items-center justify-between rounded-lg border p-5 transition-shadow hover:bg-gray-50 hover:shadow-md dark:hover:bg-neutral-800"
                     style={{ minHeight: "80px" }} // Adjusts the card height slightly
                 >
                     {/* Left Section with Icon and Info */}

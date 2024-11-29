@@ -130,7 +130,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
     return (
         <div className="flex flex-col space-y-8">
             {/* Header Bar with Title and Buttons */}
-            <div className="flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow-sm">
+            <div className="flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow-sm dark:bg-neutral-800">
                 {/* Title Editing on the Left */}
                 <div className="flex items-center space-x-2">
                     {isEditingTitle ? (
