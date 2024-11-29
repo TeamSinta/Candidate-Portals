@@ -36,6 +36,7 @@ function ContentEditorPageButtons({
                         {/* Lucide icon with a size of 24px */}
                     </Link>
                 </Button>
+
                 <div className=" flex justify-end space-x-2 ">
                     {/* Save/Publish Button */}
                     <Button

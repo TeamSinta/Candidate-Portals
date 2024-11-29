@@ -27,7 +27,7 @@ const ReviewCard = ({
             className={cn(
                 "relative flex h-16 w-full max-w-sm items-center justify-between p-4",
                 "rounded-lg border border-gray-200 bg-white shadow-md",
-                "dark:border-gray-800 dark:bg-gray-900 dark:shadow-none",
+                "dark:border-gray-800 dark:bg-neutral-800 dark:shadow-none",
             )}
         >
             <div className="flex items-center gap-4">

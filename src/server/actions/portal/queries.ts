@@ -61,6 +61,7 @@ export async function getPublicPortalData(token: string) {
         .select({
             userName: users.name,
             userId: users.id, // Fetch user name
+            email: users.email,
         })
         .from(users)
         .where(eq(users.id, organizationData.ownerId))
@@ -86,6 +87,7 @@ export async function getPublicPortalData(token: string) {
         roleTitle: candidateData.roleTitle, // Include role title
         orgName: organizationData.orgName, // Include organization name
         userName: userData.userName,
+        email: userData.email,
         userId: userData.userId, // Include user name
         portalId: linkData.portalId, // Include portal_id
         linkId: linkData.id, // Include link_id
@@ -282,7 +284,16 @@ export async function getPortalQuery(portalId: string) {
         where: eq(section.portalId, portalId),
         orderBy: [asc(section.index)],
     });
-    return { portal: portalObject, sections };
+
+    const links = await db
+        .select({
+            id: link.id,
+        })
+        .from(link)
+        .where(eq(link.portalId, portalId))
+        .execute();
+
+    return { portal: portalObject, sections, links };
 }
 
 export async function getPortalByURLQuery(url: string) {

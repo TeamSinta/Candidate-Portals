@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { PanelRight, Pencil, AlertCircle } from "lucide-react";
@@ -7,6 +7,13 @@ import { updateSectionContent } from "@/server/actions/portal/mutations";
 import { SectionContentType } from "@/server/db/schema";
 import { useRouter } from "next/navigation";
 import { useBlockEditor } from "@/app/(app)/_components/block-editor-context";
+import { debounce } from "@/lib/utils";
+
+interface CheckResult {
+    status?: string;
+    message?: string;
+    error?: string;
+}
 
 interface UrlInputProps {
     sectionId: string;
@@ -32,7 +39,7 @@ const UrlInput: React.FC<UrlInputProps> = ({
     setSlidingSidebarOpen,
 }) => {
     const [isEditingTitle, setIsEditingTitle] = useState(false);
-    const [iframeError, setIframeError] = useState(false);
+    const [iframeError, setIframeError] = useState<string | null>(null);
     const [newTitle, setNewTitle] = useState(title);
     const router = useRouter();
     const { setBlocks } = useBlockEditor();
@@ -42,6 +49,40 @@ const UrlInput: React.FC<UrlInputProps> = ({
         setIsEditingTitle(false);
     };
 
+    const checkIframe = useCallback(
+        debounce(async (url: string) => {
+            try {
+                const response = await fetch(
+                    `/api/verifyurl?url=${encodeURIComponent(url)}`,
+                );
+                const data: CheckResult = await response.json();
+
+                if (data.status === "blocked") {
+                    setIframeError(data.message);
+                } else if (data.error) {
+                    setIframeError(data.error);
+                } else {
+                    setIframeError(null);
+                }
+            } catch (err) {
+                setIframeError(
+                    "Error: Unable to check iframe URL \n" + err.message,
+                );
+            }
+        }, 500),
+        [],
+    );
+
+    useEffect(() => {
+        if (url) {
+            checkIframe(url);
+        }
+
+        // Cleanup debounce on component unmount
+        return () => {
+            checkIframe.cancel();
+        };
+    }, [url, checkIframe]);
     // Save function moved into UrlInput
     const handleSave = async () => {
         try {
@@ -74,10 +115,22 @@ const UrlInput: React.FC<UrlInputProps> = ({
             toast.error("Failed to save section");
         }
     };
+
+    function formatURL(url: string) {
+        if (
+            url.startsWith("http://") ||
+            url.startsWith("https://") ||
+            "https://".startsWith(url) ||
+            "http://".startsWith(url)
+        ) {
+            return url;
+        }
+        return `https://${url}`;
+    }
     return (
         <div className="flex flex-col space-y-8">
             {/* Header Bar with Title and Buttons */}
-            <div className="flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow-sm">
+            <div className="flex items-center justify-between rounded-lg bg-gray-100 p-4 shadow-sm dark:bg-neutral-800">
                 {/* Title Editing on the Left */}
                 <div className="flex items-center space-x-2">
                     {isEditingTitle ? (
@@ -111,7 +164,10 @@ const UrlInput: React.FC<UrlInputProps> = ({
                     <Input
                         type="url"
                         value={url}
-                        onChange={(e) => onChange("url", e.target.value)}
+                        onChange={(e) => {
+                            onChange("url", formatURL(e.target.value));
+                            setIframeError(null);
+                        }}
                         className="w-full rounded border-gray-300 text-center"
                         placeholder="Enter a URL"
                     />
@@ -148,14 +204,14 @@ const UrlInput: React.FC<UrlInputProps> = ({
                 <iframe
                     src={url}
                     className=" h-[80vh] rounded-lg border"
-                    onError={() => setIframeError(true)}
+                    onError={() => setIframeError("Failed to load the URL")}
                 ></iframe>
             ) : (
                 <div className="mt-6 flex h-[80vh] flex-col items-center justify-center rounded-lg border border-dashed border-gray-300">
                     <AlertCircle size={32} className="mb-2 text-gray-400" />
-                    <p className="text-sm text-gray-500">
+                    <p className="whitespace-pre-wrap text-center text-sm text-gray-500">
                         {iframeError
-                            ? "Failed to load the URL. Please check the link."
+                            ? "Failed to load the URL.\n" + iframeError
                             : "No URL provided. Please enter a valid link."}
                     </p>
                 </div>

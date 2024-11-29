@@ -70,7 +70,7 @@ export function calculateTotalAverageDuration(
 
     // Calculate the average duration
     const averageDuration = totalDuration / data.length;
-
+    return millisecondsToTime(averageDuration * 1000);
     // Format the duration based on its value
     if (averageDuration >= 60) {
         // Convert to minutes and seconds if it's 60 seconds or more
@@ -96,4 +96,42 @@ export function getUploadFunction(
             throw error; // Re-throw the error for further handling if needed
         }
     };
+}
+
+export function millisecondsToTime(milliseconds: number): string {
+    if (!milliseconds || milliseconds === 0) {
+        return "0 seconds";
+    }
+    const seconds = Math.floor(milliseconds / 1000);
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const secondsRemaining = seconds % 60;
+
+    if (hours > 0) {
+        return `${hours} hour${hours !== 1 ? "s" : ""} ${minutes} minute${minutes !== 1 ? "s" : ""}`;
+    } else if (minutes > 0) {
+        return `${minutes} minute${minutes !== 1 ? "s" : ""} ${secondsRemaining} second${secondsRemaining !== 1 ? "s" : ""}`;
+    } else {
+        return `${secondsRemaining} second${secondsRemaining !== 1 ? "s" : ""}`;
+    }
+}
+
+type DebouncedFunction<T extends (...args: any[]) => any> = (
+    ...args: Parameters<T>
+) => void;
+
+export function debounce<T extends (...args: any[]) => any>(
+    func: T,
+    delay: number,
+): DebouncedFunction<T> & { cancel: () => void } {
+    let timer: NodeJS.Timeout;
+
+    const debounced = (...args: Parameters<T>) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => func(...args), delay);
+    };
+
+    debounced.cancel = () => clearTimeout(timer);
+
+    return debounced;
 }

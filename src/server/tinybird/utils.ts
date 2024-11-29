@@ -1,3 +1,4 @@
+import { millisecondsToTime } from "@/lib/utils";
 import { MergedEngagedData, PortalData, SectionData } from "@/types/portal";
 import { ExtendedSectionData, MergedSectionData } from "@/types/portal";
 
@@ -70,12 +71,16 @@ export function averageDurationData(
 
     // Populate the map with Tinybird data and convert duration to seconds
     tinybirdData.data.forEach((item: ExtendedSectionData) => {
-        tinybirdDurationMap[item.section_id] = {
-            section_title: item.section_title,
-            total_duration: item.average_duration
-                ? item.average_duration / 1000
-                : 0, // Convert to seconds
-        };
+        if (!tinybirdDurationMap[item.section_id])
+            tinybirdDurationMap[item.section_id] = {
+                section_title: item.section_title,
+                total_duration: item.average_duration
+                    ? item.average_duration / 1000
+                    : 0, // Convert to seconds
+            };
+        else
+            tinybirdDurationMap[item.section_id].total_duration +=
+                item.average_duration ? item.average_duration / 1000 : 0;
     });
 
     // Iterate over the portal sections to create the merged data
@@ -154,4 +159,20 @@ export function topEngagedData(
         );
 
     return mergedData;
+}
+
+export function averageCandidateDuration(engagedData: MergedEngagedData[]) {
+    // Check if tinybirdData has the 'data' property as an array
+    if (!engagedData || !Array.isArray(engagedData)) {
+        console.error(
+            "Expected an array for engagedData, but received:",
+            engagedData,
+        );
+        engagedData = [];
+    }
+
+    const totalSeconds = engagedData.reduce((a, b) => a + b.total_duration, 0);
+    const totalMS = totalSeconds * 1000;
+    const totalAverageMS = totalMS / engagedData.length;
+    return millisecondsToTime(totalAverageMS);
 }

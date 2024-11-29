@@ -25,7 +25,11 @@ import { MarqueeCardVertical } from "../../_components/demo";
 import { BarChartComponent } from "@/app/(app)/_components/bar-chart";
 import { TopEngagingUsersChart } from "@/app/(app)/_components/side-bar-chart";
 import { MergedEngagedData, MergedSectionData } from "@/types/portal";
-import { averageDurationData, topEngagedData } from "@/server/tinybird/utils";
+import {
+    averageDurationData,
+    topEngagedData,
+    averageCandidateDuration,
+} from "@/server/tinybird/utils";
 import {
     getAverageDuration,
     getTopEngaged,
@@ -33,7 +37,7 @@ import {
 import ClientModal from "../../_components/success-modal";
 import PreviewButton from "../../_components/preview-button";
 
-import PortalOptionsDropdown from "./_components/portal-options-dropdown";
+import PortalOptions from "./_components/portal-options";
 import { ExclamationTriangleIcon } from "@radix-ui/react-icons";
 interface Props {
     params: { id: string };
@@ -67,7 +71,8 @@ export default async function PortalView({ params }: Props) {
             engagedTinybirdData,
         );
         const averageDurationText = calculateTotalAverageDuration(AverageData);
-
+        const averageCandidateDurationText =
+            averageCandidateDuration(EngagedData);
         // Check if there is chart data
         const hasChartData = AverageData.length > 0 || EngagedData.length > 0;
 
@@ -99,13 +104,13 @@ export default async function PortalView({ params }: Props) {
                     <div className="flex items-center gap-2">
                         <PreviewButton portalData={portalData} />
                         <Separator orientation="vertical" className="h-6" />
-                        <PortalOptionsDropdown
+                        <PortalOptions
                             portalId={params.id}
                             portalTitle={portalData.portal.title ?? ""}
                             redirect={true}
                         >
                             <MoreHorizontalIcon className="h-5 w-5 cursor-pointer rounded-full bg-gray-100 p-1 dark:bg-gray-700" />
-                        </PortalOptionsDropdown>
+                        </PortalOptions>
                         <ClientSheet portalData={portalData} />
                         <ClientModal portalData={portalData} />
                     </div>
@@ -156,10 +161,10 @@ export default async function PortalView({ params }: Props) {
                         </div>
 
                         {/* Statistics Section */}
-                        <div className="mt-6 grid grid-cols-2 gap-4">
+                        <div className="mt-6 grid grid-cols-3 gap-4">
                             <Card className="rounded-sm shadow-none">
                                 <CardHeader>
-                                    <CardTitle>Number of Visits</CardTitle>
+                                    <CardTitle>Total Portals Created</CardTitle>
                                 </CardHeader>
                                 <CardContent className="text-center">
                                     <p className="text-2xl">
@@ -171,12 +176,24 @@ export default async function PortalView({ params }: Props) {
                             <Card className="rounded-sm shadow-none">
                                 <CardHeader>
                                     <CardTitle>
-                                        Total Average View Duration
+                                        Average Time Spent per Page
                                     </CardTitle>
                                 </CardHeader>
                                 <CardContent className="text-center">
                                     <p className="text-2xl">
                                         {averageDurationText}
+                                    </p>
+                                </CardContent>
+                            </Card>
+                            <Card className="rounded-sm shadow-none">
+                                <CardHeader>
+                                    <CardTitle>
+                                        Average Time Spent per Portal
+                                    </CardTitle>
+                                </CardHeader>
+                                <CardContent className="text-center">
+                                    <p className="text-2xl">
+                                        {averageCandidateDurationText}
                                     </p>
                                 </CardContent>
                             </Card>

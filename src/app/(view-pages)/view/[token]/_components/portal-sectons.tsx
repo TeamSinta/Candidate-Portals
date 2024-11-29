@@ -40,14 +40,10 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         setIsCardCollapsed(!isCardCollapsed);
     };
 
-    if (!portalData) {
-        return <div>Loading...</div>;
-    }
-
     const { sections, portalId, linkId } = portalData;
     const selectedSection = sections[selectedSectionIndex];
-    // Function to send duration data to Tinybird
-    const sendDurationData = async () => {
+
+    const sendDurationData = () => {
         const currentSection = sections[sectionIndexRef.current];
         if (!currentSection || startTimeRef.current === null) return;
 
@@ -57,56 +53,50 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         if (duration >= 100) {
             cumulativeDurationRef.current += duration;
 
-            // Use the new API route to send the event to Tinybird
-            try {
-                const response = await fetch("/api/tinybird", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        eventData: {
-                            event_name: "Section Duration",
-                            section_id: currentSection.sectionId,
-                            user_id: portalData.userId,
-                            portal_id: portalId,
-                            link_id: linkId,
-                            section_title: currentSection.title,
-                            duration: cumulativeDurationRef.current,
-                            timestamp: new Date().toISOString(),
-                            session_id: sessionIdRef.current,
-                        },
-                    }),
-                });
+            // Construct the payload
+            const payload = {
+                eventData: {
+                    event_name: "Section Duration",
+                    section_id: currentSection.sectionId,
+                    user_id: portalData.userId,
+                    portal_id: portalId,
+                    link_id: linkId,
+                    section_title: currentSection.title,
+                    duration: cumulativeDurationRef.current,
+                    timestamp: new Date().toISOString(),
+                    session_id: sessionIdRef.current,
+                },
+            };
 
-                if (!response.ok) {
-                    console.error(
-                        "Failed to send duration data to Tinybird:",
-                        await response.json(),
-                    );
-                } else {
-                    console.log("Duration data sent to Tinybird successfully!");
-                }
-            } catch (error) {
-                console.error(
-                    "Error sending duration data to Tinybird:",
-                    error,
+            // Use sendBeacon for reliable background sending (more reliable than fetch)
+            const endpoint = "/api/tinybird";
+            const success = navigator.sendBeacon(
+                endpoint,
+                JSON.stringify(payload),
+            );
+
+            if (!success) {
+                console.error("Failed to send duration data using sendBeacon.");
+                // Optionally, implement a retry mechanism or local storage fallback here
+            } else {
+                console.log(
+                    "Duration data sent to Tinybird successfully via sendBeacon!",
                 );
             }
         }
     };
 
     useEffect(() => {
-        const handleVisibilityChange = async () => {
+        const handleVisibilityChange = () => {
             if (document.visibilityState === "hidden") {
-                await sendDurationData();
+                sendDurationData();
             } else {
                 startTimeRef.current = Date.now();
             }
         };
-        const handleBeforeUnload = async () => {
+        const handleBeforeUnload = () => {
             if (document.visibilityState === "visible") {
-                await sendDurationData(); // Ensure the final session is captured before the window/tab is closed
+                sendDurationData(); // Ensure the final session is captured before the window/tab is closed
             }
         };
 
@@ -136,6 +126,9 @@ export default function PortalContent({ portalData }: PortalContentProps) {
         cumulativeDurationRef.current = 0;
     }, [selectedSectionIndex]);
 
+    if (!portalData) {
+        return <div>Loading...</div>;
+    }
     const handleSectionSelect = (index: number) => {
         setSelectedSectionIndex(index);
         setIsCardCollapsed(false);

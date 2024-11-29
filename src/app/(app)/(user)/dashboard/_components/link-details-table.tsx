@@ -56,7 +56,7 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
 
     const formatDuration = (milliseconds: number) => {
         const minutes = Math.floor(milliseconds / 60000);
-        const seconds = Math.floor((milliseconds % 60000) / 1000);
+        const seconds = Math.round((milliseconds % 60000) / 1000);
         return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
     };
 
@@ -69,7 +69,10 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
                     const isLastSection =
                         index === Object.entries(groupedSections).length - 1;
                     const isFirstSection = index === 0;
-
+                    const duration = section.sessions.reduce(
+                        (total, item) => (total += item.total_duration),
+                        0,
+                    );
                     return (
                         <React.Fragment key={sectionId}>
                             {/* Main Section Row */}
@@ -110,18 +113,21 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
                                                         variant="secondary"
                                                         className="rounded px-2 text-sm font-medium"
                                                     >
-                                                        <NotionLogoIcon className="mr-3" />
-                                                        {section.section_title}
+                                                        <NotionLogoIcon
+                                                            className="mr-3"
+                                                            fontSize={16}
+                                                        />
+                                                        <div className="max-w-sm truncate">
+                                                            {
+                                                                section.section_title
+                                                            }
+                                                        </div>
                                                     </Badge>
                                                 </div>
 
                                                 <span className="text-sm text-gray-500">
                                                     For{" "}
-                                                    {formatDuration(
-                                                        section.sessions[0]
-                                                            ?.total_duration ||
-                                                            0,
-                                                    )}
+                                                    {formatDuration(duration)}
                                                 </span>
                                             </div>
                                         </div>
@@ -147,7 +153,7 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
                                 <TableRow>
                                     <TableCell
                                         colSpan={4}
-                                        className="rounded bg-gray-50 p-6"
+                                        className=" rounded bg-gray-50 p-6 dark:bg-neutral-900 dark:text-white"
                                     >
                                         <Table className="w-full">
                                             <TableHeader>
@@ -168,12 +174,12 @@ const VisitorsAccordion: React.FC<VisitorsAccordionProps> = ({
                                                                 session.session_id
                                                             }
                                                         >
-                                                            <TableCell className="text-sm text-gray-700">
+                                                            <TableCell className="text-sm text-gray-700 dark:text-neutral-200">
                                                                 {formatDuration(
                                                                     session.total_duration,
                                                                 )}
                                                             </TableCell>
-                                                            <TableCell className="text-sm text-gray-700">
+                                                            <TableCell className="text-sm text-gray-700 dark:text-neutral-200">
                                                                 {new Date(
                                                                     session.last_view_timestamp,
                                                                 ).toLocaleString()}

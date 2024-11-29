@@ -37,6 +37,7 @@ import { Transforms } from "slate";
 import { ConsoleLogWriter } from "drizzle-orm";
 import { getUploadFunction } from "@/server/awss3/uploadToS3";
 import { toast } from "sonner";
+import { useTheme } from "next-themes";
 export const plugins = [
     Paragraph,
     // Paragraph.extend({
@@ -132,6 +133,7 @@ export default function Editor({
 }) {
     const editor: YooEditor = useMemo(() => createYooptaEditor(), []);
     const titleRef = useRef<HTMLTextAreaElement>(null);
+    const { setTheme, theme } = useTheme();
 
     // useEffect(() => {
     //     editor.on("path-change", (path) => {
@@ -141,6 +143,17 @@ export default function Editor({
     //         console.log("PATH CHANGE", block);
     //     });
     // }, []);
+
+    useEffect(() => {
+        setTheme("dark");
+        return () => setTheme("light");
+    }, []);
+
+    const isLightTheme = theme === "light";
+    const onSwitchTheme = () => {
+        setTheme(isLightTheme ? "dark" : "light");
+    };
+
     useEffect(() => {
         // If the last content block is deleted, go back to the title
         if (Object.keys(content).length === 0) {
@@ -192,7 +205,7 @@ export default function Editor({
                 <textarea
                     // type="text"
                     placeholder={"Section Title"}
-                    className="w-full resize-none overflow-hidden text-pretty border-0 p-0 text-4xl font-semibold focus:border-0 focus:outline-none"
+                    className="w-full resize-none overflow-hidden text-pretty border-0 bg-transparent p-0 text-4xl font-semibold focus:border-0 focus:outline-none"
                     // onChange={(e) => onTitleChange(e.target.value)}
                     onChange={handleInputChange}
                     value={title}
@@ -203,7 +216,7 @@ export default function Editor({
                     }}
                 />
                 {Object.keys(content).length === 0 && (
-                    <div className="my-4 text-sm  text-gray-700">
+                    <div className="my-4 text-sm text-gray-700">
                         <div>
                             Press{" "}
                             <b
@@ -241,6 +254,7 @@ export default function Editor({
                     style={{
                         width: "100%",
                     }}
+                    // selectionBoxRoot={editorRef}
                 />
                 {/* {JSON.stringify(content)} */}
             </div>

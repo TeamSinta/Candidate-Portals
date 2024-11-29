@@ -115,14 +115,30 @@ export function HoverBar({ portalData }) {
                             </TooltipContent>
                         </Tooltip>
                     </DockIcon>
+                    {portalData.links.length > 0 && (
+                        <DockIcon size={48} className="w-480 mx-14">
+                            <Tooltip>
+                                <TooltipTrigger asChild className="w-96">
+                                    <Link
+                                        href={`/dashboard/portal/${portalData.portal.id}`}
+                                    >
+                                        <ShinyButton className="rounded-sm bg-black text-sm text-white hover:bg-slate-800">
+                                            View Analytics
+                                        </ShinyButton>
+                                    </Link>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                    <p>Go to Analytics</p>
+                                </TooltipContent>
+                            </Tooltip>
+                        </DockIcon>
+                    )}
                     {/*
-                <Button disabled={true} className="bg-indigo-500 text-white text-sm rounded-sm hover:bg-indigo-600 ">
-                   Share my portal
-                </Button> */}
+              
                     <Separator orientation="vertical" className="h-1/2" />
 
                     {/* Create Page Button */}
-                    <DockIcon>
+                    {/* <DockIcon>
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <button
@@ -139,7 +155,7 @@ export function HoverBar({ portalData }) {
                     </DockIcon>
 
                     {/* Add New Link Popover */}
-                    <DockIcon>
+                    {/* <DockIcon>
                         <Popover
                             open={isPopoverOpen}
                             onOpenChange={setIsPopoverOpen}
@@ -173,7 +189,7 @@ export function HoverBar({ portalData }) {
                                 </div>
                             </PopoverContent>
                         </Popover>
-                    </DockIcon>
+                    </DockIcon> */}
 
                     <Separator orientation="vertical" className="h-1/2 py-2" />
 
