@@ -138,7 +138,7 @@ export function HoverBar({ portalData }) {
                     <Separator orientation="vertical" className="h-1/2" />
 
                     {/* Create Page Button */}
-                    <DockIcon>
+                    {/* <DockIcon>
                         <Tooltip>
                             <TooltipTrigger asChild>
                                 <button
@@ -155,7 +155,7 @@ export function HoverBar({ portalData }) {
                     </DockIcon>
 
                     {/* Add New Link Popover */}
-                    <DockIcon>
+                    {/* <DockIcon>
                         <Popover
                             open={isPopoverOpen}
                             onOpenChange={setIsPopoverOpen}
@@ -189,7 +189,7 @@ export function HoverBar({ portalData }) {
                                 </div>
                             </PopoverContent>
                         </Popover>
-                    </DockIcon>
+                    </DockIcon> */}
 
                     <Separator orientation="vertical" className="h-1/2 py-2" />
 
