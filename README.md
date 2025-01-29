@@ -1,28 +1,63 @@
-# Create T3 App
+# Sinta Candidate Portals  
 
-This is a [T3 Stack](https://create.t3.gg/) project bootstrapped with `create-t3-app`.
+Welcome to **Sinta Candidate Portals**, where we help hiring teams create a seamless, engaging candidate experience. Build and share customized candidate portals effortlessly—keeping candidates informed, engaged, and excited about their next steps.
 
-## What's next? How do I make an app with this?
+## About Sinta Candidate Portals  
 
-We try to keep this project as simple as possible, so you can start with just the scaffolding we set up for you, and add additional things later when they become necessary.
+At Sinta, we believe hiring should be **collaborative, transparent, and frictionless**. Our candidate portals provide recruiters with a simple way to share key details, track engagement, and improve the candidate experience—all without extra admin work.
 
-If you are not familiar with the different technologies used in this project, please refer to the respective docs. If you still are in the wind, please join our [Discord](https://t3.gg/discord) and ask for help.
+### 🚀 Why Sinta Candidate Portals?  
 
--   [Next.js](https://nextjs.org)
--   [NextAuth.js](https://next-auth.js.org)
--   [Prisma](https://prisma.io)
--   [Tailwind CSS](https://tailwindcss.com)
--   [tRPC](https://trpc.io)
+- **Easy-to-Deploy**: Set up a candidate portal in minutes—no technical expertise required.  
+- **Personalized & Customizable**: Embed Notion docs, Google Docs, PDFs, websites, and more to create a tailored experience for every candidate.  
+- **Engagement Tracking**: See when candidates view their portal, so you know who’s engaged and who might need a nudge.  
+- **Seamless Collaboration**: Keep your hiring team aligned with a shared view of candidate interactions and progress.  
 
-## Learn More
+## 🔑 Key Features  
 
-To learn more about the [T3 Stack](https://create.t3.gg/), take a look at the following resources:
+- **One-Click Setup**: Create and share candidate portals in seconds.  
+- **Dynamic Content Embeds**: Add documents, links, and other assets that candidates need.  
+- **Live Engagement Insights**: Track candidate activity and engagement levels.  
+- **Branded Experience**: Ensure your portals match your employer brand.  
+- **No-Code Customization**: Edit and update content without touching code.  
 
--   [Documentation](https://create.t3.gg/)
--   [Learn the T3 Stack](https://create.t3.gg/en/faq#what-learning-resources-are-currently-available) — Check out these awesome tutorials
+## 🌎 Who We Are  
 
-You can check out the [create-t3-app GitHub repository](https://github.com/t3-oss/create-t3-app) — your feedback and contributions are welcome!
+Sinta is on a mission to help hiring teams **automate and simplify** recruiting operations, freeing them from manual tasks while keeping candidates engaged and informed.  
 
-## How do I deploy this?
+## 🔗 Integrations  
 
-Follow our deployment guides for [Vercel](https://create.t3.gg/en/deployment/vercel), [Netlify](https://create.t3.gg/en/deployment/netlify) and [Docker](https://create.t3.gg/en/deployment/docker) for more information.
+Connect your **existing hiring tools** with Sinta for a seamless workflow:  
+
+- **Greenhouse**: Sync candidate data and hiring workflows.  
+- **Lever**: Seamlessly integrate with your ATS.  
+- **Slack**: Share candidate portal links in hiring channels.  
+- **Notion, Google Docs, and PDFs**: Embed key content for candidates.  
+
+## 💰 Pricing  
+
+Simple pricing with no hidden fees:  
+
+| Plan     | Price |
+|----------|---------------------------|
+| **Starter** | $15 per recruiter/month (billed annually) |
+| **Growth**  | $50 per recruiter/month (billed annually) |
+| **Enterprise** | Contact us for custom pricing and full API access |
+
+## ❓ Frequently Asked Questions  
+
+### How long does it take to set up?  
+Sinta Candidate Portals can be **up and running in minutes**, with no engineering required.  
+
+### Can I track candidate engagement?  
+Yes! See when candidates access their portal and monitor engagement to keep your hiring process on track.  
+
+### Do you offer a free trial?  
+We offer a **60-day money-back guarantee**, so you can try it risk-free.  
+
+## 📞 Contact Us  
+
+Ready to create a better hiring experience? Get in touch today!  
+
+📧 **Email**: [support@sinta.io](mailto:support@sinta.io)  
+📅 **Book a Demo**: [Schedule Here](#)  
